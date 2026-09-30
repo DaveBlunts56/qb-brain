@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>QB Brain</title>
+<meta name="description" content="Flag football QB read trainer: coverage recognition, progressions and full drives.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="QB Brain">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#152119">
+<meta name="format-detection" content="telephone=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#152119;
+  --board-2:#1c2b21;
+  --turf:#2f6b45;
+  --turf-dark:#285c3b;
+  --chalk:#f5f3ec;
+  --chalk-dim:rgba(245,243,236,0.5);
+  --offense:#f2c14e;
+  --offense-dim:rgba(242,193,78,0.35);
+  --defense:#e2542b;
+  --defense-dim:rgba(226,84,43,0.35);
+  --good:#5fb87a;
+  --risky:#e8b84e;
+  --bad:#e2542b;
+  --panel:#22332a;
+  --panel-2:#1b2921;
+  --line:rgba(245,243,236,0.14);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0;
+  background:var(--board);
+  color:var(--chalk);
+  font-family:'Inter',system-ui,sans-serif;
+  overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  overscroll-behavior:none;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ /* keep coach-board dark regardless of system theme */ }
+}
+h1,h2,h3,.display{
+  font-family:'Oswald',system-ui,sans-serif;
+  letter-spacing:0.01em;
+  margin:0;
+}
+#app{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+button{
+  font-family:'Inter',system-ui,sans-serif;
+  border:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+
+/* ---------- Setup screen ---------- */
+#setupScreen{
+  flex:1;
+  overflow-y:auto;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  max-width:560px;
+  margin:0 auto;
+  width:100%;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.brand .mark{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--offense);
+  flex:none;
+}
+.brand h1{
+  font-size:28px;
+  color:var(--chalk);
+}
+.brand span{
+  color:var(--chalk-dim);
+  font-size:13px;
+}
+.tagline{
+  color:var(--chalk-dim);
+  font-size:14px;
+  line-height:1.5;
+  max-width:44ch;
+}
+.setup-group{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.setup-group h3{
+  font-size:13px;
+  color:var(--chalk-dim);
+  font-weight:500;
+  text-transform:none;
+}
+.choice-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(0,1fr));
+  gap:8px;
+}
+.choice{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 10px;
+  color:var(--chalk);
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  transition:border-color .15s ease, background .15s ease;
+}
+.choice b{font-size:15px;font-family:'Oswald',sans-serif;font-weight:500;}
+.choice small{color:var(--chalk-dim);font-size:11.5px;line-height:1.35;}
+.choice.active{
+  border-color:var(--offense);
+  background:linear-gradient(180deg, rgba(242,193,78,0.14), rgba(242,193,78,0.05));
+}
+.choice.active b{color:var(--offense);}
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 14px;
+}
+.toggle-row .t-label b{display:block;font-size:14px;font-family:'Oswald',sans-serif;font-weight:500;}
+.toggle-row .t-label span{color:var(--chalk-dim);font-size:11.5px;}
+.switch{
+  width:42px;height:25px;border-radius:20px;
+  background:rgba(245,243,236,0.14);
+  position:relative;flex:none;
+  transition:background .15s ease;
+}
+.switch.on{background:var(--offense);}
+.switch i{
+  position:absolute;top:2px;left:2px;
+  width:21px;height:21px;border-radius:50%;
+  background:var(--chalk);
+  transition:transform .15s ease;
+  display:block;
+}
+.switch.on i{transform:translateX(17px);}
+.start-btn{
+  margin-top:4px;
+  background:var(--offense);
+  color:#241a06;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:17px;
+  letter-spacing:0.02em;
+  padding:16px;
+  border-radius:12px;
+  text-align:center;
+}
+.start-btn:active{transform:scale(0.99);}
+
+/* ---------- Game screen ---------- */
+#gameScreen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  position:relative;
+}
+#hud{
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 14px 8px;
+  background:var(--board-2);
+  border-bottom:1px solid var(--line);
+  gap:8px;
+}
+#hud .hud-left{display:flex;flex-direction:column;gap:1px;}
+#hud .hud-left b{font-family:'Oswald',sans-serif;font-size:14px;font-weight:500;}
+#hud .hud-left span{font-size:10.5px;color:var(--chalk-dim);}
+#hud .hud-mid{
+  display:flex;gap:14px;align-items:center;
+  font-size:11.5px;color:var(--chalk-dim);
+}
+#hud .hud-mid b{color:var(--chalk);font-size:13px;}
+#hud .quit{
+  width:30px;height:30px;border-radius:8px;
+  background:rgba(245,243,236,0.08);
+  color:var(--chalk-dim);
+  font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  flex:none;
+}
+#fieldWrap{
+  flex:1;
+  position:relative;
+  min-height:0;
+  background:var(--turf);
+  overflow:hidden;
+}
+#field{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+}
+#studyBanner{
+  position:absolute;
+  top:10px;left:0;right:0;
+  display:flex;
+  justify-content:center;
+  pointer-events:none;
+}
+#studyBanner .pill{
+  background:rgba(21,33,25,0.82);
+  border:1px solid var(--line);
+  padding:7px 16px;
+  border-radius:100px;
+  font-size:12.5px;
+  color:var(--chalk-dim);
+  display:flex;gap:8px;align-items:center;
+}
+#studyBanner .pill b{color:var(--chalk);font-family:'Oswald',sans-serif;font-weight:500;}
+#timerBarWrap{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:5px;
+  background:rgba(0,0,0,0.25);
+}
+#timerBar{
+  height:100%;
+  width:100%;
+  background:var(--offense);
+  transform-origin:left;
+  transition:background-color .2s ease;
+}
+#rushCue{
+  position:absolute;
+  bottom:14px;left:0;right:0;
+  display:flex;justify-content:center;
+  pointer-events:none;
+}
+#rushCue .pill{
+  background:rgba(226,84,43,0.16);
+  border:1px solid rgba(226,84,43,0.5);
+  color:#ffd8c9;
+  padding:6px 14px;
+  border-radius:100px;
+  font-size:12px;
+  font-family:'Oswald',sans-serif;
+  letter-spacing:0.02em;
+}
+
+/* Coverage question sheet */
+.sheet{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  background:var(--panel);
+  border-top:1px solid var(--line);
+  border-radius:16px 16px 0 0;
+  padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));
+  transform:translateY(0);
+  box-shadow:0 -8px 30px rgba(0,0,0,0.35);
+  max-height:78%;
+  overflow-y:auto;
+}
+.sheet h2{font-size:19px;margin-bottom:4px;}
+.sheet .sub{color:var(--chalk-dim);font-size:13px;margin-bottom:14px;}
+.mcq{display:flex;flex-direction:column;gap:8px;}
+.mcq button{
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  color:var(--chalk);
+  padding:13px 14px;
+  border-radius:10px;
+  text-align:left;
+  font-size:14.5px;
+  display:flex;gap:10px;align-items:baseline;
+}
+.mcq button .k{
+  font-family:'Oswald',sans-serif;
+  color:var(--offense);
+  font-weight:600;
+  flex:none;
+}
+.mcq button:active{background:var(--panel);}
+
+/* Decision result sheet */
+.result-sheet{
+  position:absolute;left:0;right:0;bottom:0;
+  background:var(--panel);
+  border-top:1px solid var(--line);
+  border-radius:16px 16px 0 0;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -8px 30px rgba(0,0,0,0.4);
+  max-height:82%;
+  overflow-y:auto;
+}
+.result-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'Oswald',sans-serif;
+  font-size:21px;
+  font-weight:600;
+  letter-spacing:0.01em;
+  margin-bottom:6px;
+}
+.result-tag .dot{width:11px;height:11px;border-radius:50%;}
+.result-sub{color:var(--chalk-dim);font-size:12.5px;margin-bottom:14px;}
+.explain{
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:13px 14px;
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+.score-row{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:16px;
+}
+.score-chip{
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:7px 11px;
+  font-size:12px;
+  color:var(--chalk-dim);
+}
+.score-chip b{color:var(--offense);font-family:'Oswald',sans-serif;font-size:13px;}
+.next-btn{
+  width:100%;
+  background:var(--offense);
+  color:#241a06;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:16px;
+  padding:15px;
+  border-radius:11px;
+  text-align:center;
+}
+
+/* Controls */
+#controls{
+  flex:none;
+  display:flex;
+  gap:10px;
+  padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+  background:var(--board-2);
+  border-top:1px solid var(--line);
+}
+#controls button{
+  flex:1;
+  background:var(--offense);
+  color:#241a06;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:16px;
+  padding:15px;
+  border-radius:11px;
+  letter-spacing:0.02em;
+}
+#controls button.secondary{
+  background:rgba(245,243,236,0.08);
+  color:var(--chalk);
+  flex:none;
+  width:46px;
+  font-size:15px;
+}
+#controls button:disabled{
+  opacity:0.4;
+}
+
+/* ---------- Summary ---------- */
+#summaryScreen{
+  flex:1;
+  overflow-y:auto;
+  padding:calc(28px + env(safe-area-inset-top,0px)) 18px calc(24px + env(safe-area-inset-bottom,0px));
+  max-width:560px;
+  margin:0 auto;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+#summaryScreen h2{font-size:24px;}
+#summaryScreen .sub{color:var(--chalk-dim);font-size:13px;}
+.stat-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.stat-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+}
+.stat-card .n{font-family:'Oswald',sans-serif;font-size:26px;font-weight:600;color:var(--offense);}
+.stat-card .l{font-size:11.5px;color:var(--chalk-dim);margin-top:2px;}
+.strength-row{display:flex;gap:10px;}
+.strength-card{
+  flex:1;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+}
+.strength-card b{display:block;font-family:'Oswald',sans-serif;font-size:15px;margin-bottom:2px;}
+.strength-card.good b{color:var(--good);}
+.strength-card.work b{color:var(--risky);}
+.strength-card span{font-size:12px;color:var(--chalk-dim);}
+.rep-log{
+  display:flex;flex-direction:column;gap:6px;
+}
+.rep-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:9px 12px;
+  font-size:12.5px;
+}
+.rep-row .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+.rep-row .c{color:var(--chalk-dim);flex:1;}
+.rep-row .pts{font-family:'Oswald',sans-serif;color:var(--offense);}
+
+.hidden{display:none !important;}
+
+/* panels below field so the defense is always visible */
+.sheet,.result-sheet{position:static;left:auto;right:auto;bottom:auto;border-radius:0;box-shadow:none;flex:none;}
+.sheet{padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));max-height:none;overflow:visible;}
+.sheet h2{font-size:16px;margin-bottom:2px;}
+.sheet .sub{font-size:12px;margin-bottom:10px;}
+.mcq{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.mcq button{padding:12px;font-size:14px;}
+.result-sheet{padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px));max-height:48%;overflow-y:auto;}
+.result-tag{font-size:18px;margin-bottom:2px;}
+.result-sub{margin-bottom:8px;font-size:12px;}
+.explain{font-size:13px;padding:10px 12px;margin-bottom:10px;}
+.score-row{margin-bottom:10px;}
+.next-btn{padding:13px;}
+#aimHint{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;}
+#aimHint .pill{background:rgba(21,33,25,0.82);border:1px solid var(--line);padding:6px 14px;border-radius:100px;font-size:12px;color:var(--chalk-dim);}
+#playTag{position:absolute;left:10px;bottom:10px;background:rgba(21,33,25,0.85);border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;color:var(--chalk-dim);pointer-events:none;max-width:70%;}
+#playTag b{font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;color:var(--offense);}
+
+#controls .seg{flex:1;display:flex;gap:8px;}
+#controls .seg button{flex:1;background:rgba(245,243,236,0.08);color:var(--chalk);}
+#controls .seg button.on{background:var(--offense);color:#241a06;}
+#controls .seg button small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:10.5px;opacity:.75;letter-spacing:0;}
+select.play-select{
+  width:100%;appearance:none;-webkit-appearance:none;
+  background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f5f3ec' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 14px center;
+  border:1px solid var(--line);border-radius:10px;color:var(--chalk);
+  font:500 15px 'Inter',system-ui,sans-serif;padding:12px 38px 12px 12px;
+}
+.choice:disabled{opacity:.4;}
+.note-line{font-size:12px;color:var(--chalk-dim);line-height:1.45;margin:-4px 0 10px;}
+.note-line b{color:var(--chalk);font-weight:600;}
+#playTag{top:54px;bottom:auto;left:10px;}
+
+.range-row{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+.range-label{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;}
+.range-label b{font-family:'Oswald',sans-serif;font-weight:500;color:var(--offense);font-size:16px;}
+.range-row small{color:var(--chalk-dim);font-size:11.5px;line-height:1.4;}
+.range-row input[type=range]{width:100%;accent-color:var(--offense);height:28px;}
+.drive-line{font-size:13.5px;line-height:1.45;margin:-2px 0 10px;padding:9px 12px;border-radius:10px;background:rgba(242,193,78,0.10);border:1px solid rgba(242,193,78,0.35);color:var(--chalk);}
+.drive-line b{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:var(--offense);margin-right:4px;}
+.secondary-btn{background:rgba(245,243,236,0.08) !important;color:var(--chalk) !important;}
+
+/* iPhone polish */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+button,.choice,.switch,select{touch-action:manipulation;}
+.install-hint{display:flex;gap:10px;align-items:flex-start;background:rgba(120,190,255,0.10);border:1px solid rgba(120,190,255,0.35);border-radius:12px;padding:12px 12px 12px 14px;font-size:13.5px;line-height:1.45;color:var(--chalk);}
+.install-hint b{color:#cfe6ff;font-weight:600;}
+.install-hint button{flex:none;background:transparent;color:var(--chalk-dim);font-size:16px;width:32px;height:32px;border-radius:8px;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ SETUP ============ -->
+  <div id="setupScreen">
+    <div class="brand">
+      <span class="mark"></span>
+      <h1>QB BRAIN</h1>
+      <span>flag football read trainer</span>
+    </div>
+    <div class="install-hint hidden" id="installHint">
+      <div><b>Put QB Brain on your home screen.</b> Tap <b>Share</b> <span aria-hidden="true">⬆︎</span>, then <b>Add to Home Screen</b>. It opens full-screen like an app and works offline.</div>
+      <button id="installClose" aria-label="Dismiss">✕</button>
+    </div>
+    <p class="tagline">Study the defense, snap it, and find the throw before the rush arrives. Built for pre-snap reads, coverage recognition, and progressions.</p>
+
+    <div class="setup-group">
+      <h3>Playbook</h3>
+      <div class="choice-row" id="bookRow"></div>
+      <select class="play-select" id="playSelect" aria-label="Play"></select>
+    </div>
+
+    <div class="setup-group">
+      <h3>Format</h3>
+      <div class="choice-row" id="squadRow"></div>
+    </div>
+
+    <div class="setup-group">
+      <h3>Difficulty</h3>
+      <div class="choice-row" id="diffRow"></div>
+    </div>
+
+    <div class="setup-group">
+      <h3>Training mode</h3>
+      <div class="choice-row" id="modeRow" style="grid-template-columns:1fr;"></div>
+    </div>
+
+    <div class="setup-group hidden" id="driveGroup">
+      <h3>Drive field</h3>
+      <div class="range-row">
+        <div class="range-label"><span>Field length</span><b><span id="lenVal">50</span> yds</b></div>
+        <input type="range" id="lenRange" min="50" max="100" step="5" value="50" aria-label="Field length in yards">
+        <small>Goal line to goal line, plus a 10-yd end zone at each end. Drive starts at your own 5.</small>
+      </div>
+      <div class="range-row">
+        <div class="range-label"><span>Field width</span><b><span id="widVal">30</span> yds</b></div>
+        <input type="range" id="widRange" min="20" max="53" step="1" value="30" aria-label="Field width in yards">
+      </div>
+      <div class="choice-row" id="fdRow"></div>
+    </div>
+
+    <div class="setup-group">
+      <h3>Throw control</h3>
+      <div class="choice-row" id="throwRow"></div>
+    </div>
+
+    <div class="setup-group">
+      <div class="toggle-row" id="progToggleRow">
+        <div class="t-label">
+          <b>Show progression</b>
+          <span>Flash 1‑2‑3 over the read before the snap</span>
+        </div>
+        <div class="switch" id="progSwitch"><i></i></div>
+      </div>
+    </div>
+
+    <button class="start-btn" id="startBtn">Start session</button>
+  </div>
+
+  <!-- ============ GAME ============ -->
+  <div id="gameScreen" class="hidden">
+    <div id="hud">
+      <div class="hud-left">
+        <b id="hudMode">QB BRAIN</b>
+        <span id="hudSub">5v5 · Rookie</span>
+      </div>
+      <div class="hud-mid">
+        <div><span id="hudRepLbl">REP</span> <b id="hudRep">1</b></div>
+        <div>SCORE <b id="hudScore">0</b></div>
+      </div>
+      <button class="quit" id="quitBtn" aria-label="End session">✕</button>
+    </div>
+
+    <div id="fieldWrap">
+      <canvas id="field"></canvas>
+      <div id="timerBarWrap" class="hidden"><div id="timerBar"></div></div>
+      <div id="studyBanner" class="hidden"><div class="pill">Study the defense — <b id="studyCount">3</b>s</div></div>
+      <div id="rushCue" class="hidden"><div class="pill">RUSHER RELEASES IN <span id="rushCount">3</span></div></div>
+      <div id="aimHint" class="hidden"><div class="pill">Drag back to aim</div></div>
+      <div id="playTag" class="hidden"></div>
+    </div>
+
+    <div class="sheet hidden" id="coverageSheet">
+      <h2>What coverage is this?</h2>
+      <div class="sub">Pick before the snap — the look can still change after it.</div>
+      <div class="mcq" id="mcqOptions"></div>
+    </div>
+
+    <div class="result-sheet hidden" id="resultSheet">
+      <div class="result-tag" id="resultTag"><span class="dot"></span><span id="resultText">GOOD READ</span></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="explain" id="resultExplain"></div>
+      <div class="drive-line hidden" id="driveLine"></div>
+      <div class="note-line hidden" id="playNote"></div>
+      <div class="score-row" id="scoreRow"></div>
+      <button class="next-btn" id="nextRepBtn">Next rep</button>
+    </div>
+
+    <div id="controls">
+      <button id="primaryBtn">SNAP</button>
+      <div class="seg hidden" id="throwType">
+        <button data-k="bullet" class="on">BULLET<small>fast, flat — can be undercut</small></button>
+        <button data-k="lob">LOB<small>floats over — gives time to close</small></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY ============ -->
+  <div id="summaryScreen" class="hidden">
+    <h2 id="summaryTitle">QB BRAIN SESSION</h2>
+    <div class="sub" id="summarySub">0 reps</div>
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="strength-row" id="strengthRow"></div>
+    <div class="setup-group">
+      <h3 id="logTitle">Rep log</h3>
+      <div class="rep-log" id="repLog"></div>
+    </div>
+    <button class="start-btn hidden" id="againBtn">Run another drive</button>
+    <button class="start-btn secondary-btn" id="restartBtn">Back to setup</button>
+  </div>
+
+</div>
+<script>
+window.QB_PWA=true;
+(function(){
+"use strict";
+
+/* ============================================================
+   CONFIG
+============================================================ */
+// Rush: rusher lines up 7 yds off the ball (standard flag rule) and chases whoever holds the ball.
+const DIFFICULTY = {
+  // rusher leaves on the snap; from 7 yds off vs a QB ~4 yds deep about 2.8s / 2.3s / 1.9s to get home
+  rookie:  {label:"Rookie",  study:5.0, rushDelay:0.05, rushSpeed:3.8, reactionDelay:0.40, disguiseChance:0.00},
+  varsity: {label:"Varsity", study:3.5, rushDelay:0.05, rushSpeed:4.8, reactionDelay:0.25, disguiseChance:0.25},
+  elite:   {label:"Elite",   study:2.5, rushDelay:0.05, rushSpeed:5.8, reactionDelay:0.18, disguiseChance:0.50}
+};
+const MODES = {
+  qb_brain:    {label:"QB Brain",    askCoverageChance:0.55, throws:true},
+  coverage_id: {label:"Coverage ID", askCoverageChance:1.00, throws:false},
+  quick_read:  {label:"Quick Read",  askCoverageChance:0.00, throws:true},
+  drive:       {label:"Full Drive",  askCoverageChance:0.30, throws:true}
+};
+const ALL_COVERAGES = ["Man","Cover 1","Cover 2","Cover 3","Underneath Zone"];
+const RUN_SPEED=7.0, QB_SPEED=5.0, CENTER_X=15; // CENTER_X = middle of the 30-yd template plays are drawn on
+
+/* ---- Field geometry ----
+   Plays are authored on a 30-yd-wide template and mapped onto the real field width.
+   y is always measured from the line of scrimmage (LOS = 0, positive = downfield). */
+const GEO = {W:30, CX:15, kx:1, zs:1, yMin:-12, yMax:40};
+function setGeometry(W, yMin, yMax){
+  GEO.W=W; GEO.CX=W/2; GEO.kx=clamp(W/30,0.75,1.35); GEO.zs=W/30; GEO.yMin=yMin; GEO.yMax=yMax;
+}
+function TX(x){ return GEO.CX+(x-CENTER_X)*GEO.kx; }   // template x -> field x (players/routes)
+function ZX(x){ return GEO.CX+(x-CENTER_X)*GEO.zs; }   // template x -> field x (zone landmarks)
+const COLORS={Q:"#f5f3ec",C:"#b8bec6",X:"#ff8c2a",Y:"#b35ce8",Z:"#22b3a6",T:"#7fd1c9",H:"#f2c14e",F:"#5aa0ff",S:"#b8bec6"};
+
+function dist(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+function lerp(a,b,f){ return a+(b-a)*f; }
+function clamp(v,lo,hi){ return Math.max(lo,Math.min(hi,v)); }
+function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ============================================================
+   ROUTE LIBRARY  (depths follow the standard route tree:
+   slant 3-step, hitch/stick 5-6, out any depth, corner/post break ~10 at 45°, dig 10-12)
+============================================================ */
+function sideIn(x){ return x<CENTER_X?1:-1; }
+const R = {
+  go:     (x,y)=>({pts:[[x,y],[x,y+18]],after:"run",name:"go"}),
+  seam:   (x,y)=>({pts:[[x,y],[x+sideIn(x)*0.8,y+18]],after:"run",name:"seam"}),
+  slant:  (x,y)=>({pts:[[x,y],[x,y+1.5],[x+sideIn(x)*6,y+6.5]],after:"run",name:"slant"}),
+  hitch:  (x,y,d=5.5)=>({pts:[[x,y],[x,y+d+0.7],[x+sideIn(x)*0.4,y+d]],after:"sit",name:"hitch"}),
+  stick:  (x,y)=>({pts:[[x,y],[x,y+5.5],[x+sideIn(x)*1.8,y+5.5]],after:"sit",name:"stick"}),
+  sit:    (x,y,d=5)=>({pts:[[x,y],[x,y+d]],after:"sit",name:"sit"}),
+  out:    (x,y,d=6)=>({pts:[[x,y],[x,y+d],[x-sideIn(x)*5,y+d]],after:"run",name:"out"}),
+  flat:   (x,y)=>({pts:[[x,y],[x-sideIn(x)*1.5,y+1.5],[x-sideIn(x)*6,y+2.2]],after:"run",name:"flat"}),
+  corner: (x,y,d=10)=>({pts:[[x,y],[x,y+d],[x-sideIn(x)*5,y+d+5]],after:"run",name:"corner"}),
+  post:   (x,y,d=10)=>({pts:[[x,y],[x,y+d],[x+sideIn(x)*5,y+d+5]],after:"run",name:"post"}),
+  dig:    (x,y,d=10)=>({pts:[[x,y],[x,y+d],[x+sideIn(x)*9,y+d]],after:"run",name:"dig"}),
+  shallow:(x,y,d,dir)=>({pts:[[x,y],[x+dir*1.5,y+d],[x+dir*14,y+d+0.4]],after:"run",name:"shallow cross"}),
+  snag:   (x,y)=>({pts:[[x,y],[x,y+5],[x+sideIn(x)*2,y+5.5]],after:"sit",name:"snag"})
+};
+// custom route from explicit points
+function C_(pts,name,after){ return {pts,after:after||"run",name}; }
+
+/* player: id, start, route; Q/T are passers and not targets unless flagged */
+function pl(id,x,y,route,opts){
+  return Object.assign({id,x,y,route:route||{pts:[[x,y]],after:"stop",name:"stays in"},target:!(id==="Q"||id==="T")},opts||{});
+}
+const QB = (y)=>pl("Q",15,y===undefined?-4.3:y,null);
+
+/* ============================================================
+   STANDARD PLAYBOOK
+   5v5 = QB + center (eligible) + X/Y/Z.  7v7 = QB + 6 eligible.
+============================================================ */
+const STANDARD5 = [
+  {name:"Slant-Flat", form:"Spread", prog:["X","Y","Z","C"], players:[QB(), pl("C",15,0,R.sit(15,0,5)), pl("X",3,0,R.slant(3,0)), pl("Y",9,0,R.flat(9,0)), pl("Z",27,0,R.slant(27,0))]},
+  {name:"Mesh", form:"Spread", prog:["Y","Z","C","X"], players:[QB(), pl("C",15,0,R.sit(15,0,7)), pl("X",3,0,R.corner(3,0)), pl("Y",9,0,R.shallow(9,0,2.5,1)), pl("Z",27,0,R.shallow(27,0,4.5,-1))]},
+  {name:"Drive", form:"Spread", prog:["Y","X","Z","C"], players:[QB(), pl("C",15,0,R.sit(15,0,6)), pl("X",3,0,R.dig(3,0,10)), pl("Y",9,0,R.shallow(9,0,2.5,1)), pl("Z",27,0,R.go(27,0))]},
+  {name:"Smash", form:"Spread", prog:["Y","X","Z","C"], players:[QB(), pl("C",15,0,R.flat(15.1,0)), pl("X",3,0,R.hitch(3,0)), pl("Y",9,0,R.corner(9,0)), pl("Z",27,0,R.go(27,0))]},
+  {name:"Flood", form:"Trips", prog:["Z","Y","X","C"], players:[QB(), pl("C",15,0,R.shallow(15,0,3,-1)), pl("Y",19,0,R.flat(19,0)), pl("Z",23,0,R.out(23,0,8)), pl("X",27,0,R.go(27,0))]},
+  {name:"Stick", form:"Trips", prog:["Z","Y","X","C"], players:[QB(), pl("C",15,0,R.shallow(15,0,3,-1)), pl("Y",19,0,R.flat(19,0)), pl("Z",23,0,R.stick(23,0)), pl("X",27,0,R.go(27,0))]},
+  {name:"Levels", form:"Trips", prog:["Z","X","Y","C"], players:[QB(), pl("C",15,0,R.flat(14.9,0)), pl("Y",19,0,R.seam(19,0)), pl("Z",23,0,R.dig(23,0,5)), pl("X",27,0,R.dig(27,0,10))]},
+  {name:"Four Verticals", form:"Spread", prog:["Y","X","Z","C"], players:[QB(), pl("C",15,0,R.sit(15,0,7)), pl("X",3,0,R.go(3,0)), pl("Y",9,0,R.seam(9,0)), pl("Z",27,0,R.go(27,0))]},
+  {name:"Spacing", form:"Trips", prog:["Z","Y","X","C"], players:[QB(), pl("C",15,0,R.flat(14.9,0)), pl("Y",19,0,R.sit(19,0,5)), pl("Z",23,0,R.sit(23,0,5)), pl("X",27,0,R.hitch(27,0))]},
+  {name:"Snag", form:"Bunch", prog:["Z","X","Y","C"], players:[QB(), pl("C",15,0,R.shallow(15,0,3,-1)), pl("X",21,0,R.snag(21,0)), pl("Y",22.5,-1.3,R.flat(22.5,-1.3)), pl("Z",24,0,R.corner(24,0))]}
+];
+
+// 7v7: QB + center (snaps, then eligible) + 5 more
+const IDS7 = {"Spread":["X","H","C","Y","Z","F"], "Trips":["X","C","H","Y","Z","F"], "Bunch":["X","C","H","Y","Z","F"]};
+const FORM7 = {
+  "Spread": [[2,0],[8,0],[15,0],[21,0],[28,0],[11,-1.5]],
+  "Trips":  [[2,0],[15,0],[19,0],[23.5,0],[28,0],[11,-1.5]],
+  "Bunch":  [[2,0],[15,0],[20.5,0],[23,0],[25.5,0],[11,-1.5]]
+};
+function r7(type,x,y){
+  switch(type){
+    case "slant": return R.slant(x,y); case "flat": return R.flat(x,y); case "hitch": return R.hitch(x,y);
+    case "out": return R.out(x,y,8); case "corner": return R.corner(x,y); case "vertical": return R.seam(x,y);
+    case "go": return R.go(x,y); case "digshallow": return R.dig(x,y,5); case "digdeep": return R.dig(x,y,12);
+    case "stick": return R.stick(x,y); case "sit": return R.sit(x,y,5);
+    case "mesh": return R.shallow(x,y,3,sideIn(x)); case "meshhigh": return R.shallow(x,y,5.5,sideIn(x));
+    case "snag": return R.snag(x,y);
+  }
+}
+function mk7(name,form,types,prog){
+  const players=[QB()], ids=IDS7[form];
+  FORM7[form].forEach((p,i)=>players.push(pl(ids[i],p[0],p[1],r7(types[i],p[0],p[1]))));
+  return {name,form,players,prog:prog.map(i=>ids[i])};
+}
+const STANDARD7 = [
+  mk7("Slant-Flat","Spread",["slant","flat","sit","flat","slant","sit"],[0,1,4,3,2,5]),
+  mk7("Mesh","Spread",["go","mesh","sit","meshhigh","corner","flat"],[1,3,2,4,0,5]),
+  mk7("Smash","Spread",["hitch","corner","sit","corner","hitch","flat"],[1,0,3,4,2,5]),
+  mk7("Levels","Spread",["go","flat","sit","digshallow","digdeep","sit"],[3,4,2,1,0,5]),
+  mk7("Four Verticals","Spread",["go","vertical","sit","vertical","go","flat"],[1,3,0,4,2,5]),
+  mk7("Flood","Trips",["go","sit","flat","out","go","sit"],[3,2,4,1,0,5]),
+  mk7("Stick","Trips",["go","sit","flat","stick","go","sit"],[3,2,4,1,0,5]),
+  mk7("Spacing","Trips",["hitch","sit","sit","sit","hitch","flat"],[2,3,1,4,0,5]),
+  mk7("Snag","Bunch",["go","sit","snag","flat","corner","flat"],[4,2,3,1,0,5])
+];
+
+/* ============================================================
+   BIG DAWZ  — the user's own 5v5 playbook, transcribed from the diagrams.
+   Coordinates in yards: x across (0-30, ball at 15), y downfield from the LOS.
+   passer: who throws the ball; a later entry means a lateral/pitch to that player.
+============================================================ */
+const BIGDAWZ = [
+  {name:"Mesh", form:"Offset", kind:"pass", prog:["Y","X","Z","C"],
+   note:"Beats man (the crossers rub the defenders). Vs zone, sit the center in the hole.",
+   players:[QB(),
+    pl("C",15,0,C_([[15,0],[17.5,2],[18.5,4.5],[18.1,7]],"seam")),
+    pl("X",10.5,0,C_([[10.5,0],[12.5,1.8],[21.6,2.4]],"mesh cross")),
+    pl("Z",18.7,0,C_([[18.7,0],[18.1,2.3],[15,3.8],[11.2,4.3]],"mesh cross")),
+    pl("Y",17,-2.3,C_([[17,-2.3],[23.5,-0.3],[25.8,10]],"wheel"))]},
+  {name:"Drive", form:"Offset", kind:"pass", prog:["Z","Y","X","C"],
+   note:"High-low on the middle defender: shallow and dig go the same way. If he sinks, hit the shallow; if he jumps it, hit the dig.",
+   players:[QB(),
+    pl("C",15,0,C_([[15,0],[13.5,2],[11,3],[6.7,3.4]],"drag")),
+    pl("Z",8.6,0,C_([[8.6,0],[10.5,2.5],[13,3.8],[20.7,4.3]],"shallow")),
+    pl("Y",11.6,-1.2,C_([[11.6,-1.2],[11.5,8.5],[20.6,8.1]],"dig")),
+    pl("X",18.2,0,C_([[18.2,0],[21.6,1.6],[24,3.5],[24.9,9.3]],"out-and-up"))]},
+  {name:"Play 3 (untitled)", form:"Offset", kind:"pass", prog:["Z","Y","X","C"],
+   note:"Post between two corners: the deep middle defender can only take one. Center's out is the checkdown.",
+   players:[QB(),
+    pl("C",15,0,C_([[15,0],[15.3,4.2],[23.5,4.3]],"out")),
+    pl("X",11.4,0,C_([[11.4,0],[11.6,10.3],[7,12.8]],"corner")),
+    pl("Z",19.4,0,C_([[19.4,0],[19.6,11],[15.4,14]],"post")),
+    pl("Y",17.3,-2,C_([[17.3,-2],[17.6,9.8],[25.3,12.8]],"corner"))]},
+  {name:"Spread V-In", form:"Spread", kind:"pass", prog:["Z","Y","C","X"],
+   note:"Corner over the in: read the defender on Y's side. If he carries the corner, the in is open underneath.",
+   players:[QB(),
+    pl("C",15,0,C_([[15,0],[15.5,1.8],[18,2.6],[27.4,2.7]],"drag")),
+    pl("X",10,0,C_([[10,0],[9.1,8.8],[8,7.3]],"curl","sit")),
+    pl("Z",19.9,0,C_([[19.9,0],[19.9,8.8],[25.8,12.2]],"corner")),
+    pl("Y",26.3,0,C_([[26.3,0],[27.8,6.7],[20.2,7.8]],"in"))]},
+  {name:"Triangle 1", form:"Pistol (T)", kind:"trick", prog:["Y","X","Q","C"],
+   passer:[{id:"Q",until:0.75},{id:"T"}],
+   note:"Q pitches to T and releases, so the rusher has to redirect. T throws.",
+   players:[pl("Q",15,-4.3,C_([[15,-4.3],[18,-3.5],[23,-1],[27.7,2]],"QB release"),{target:true,delay:0.8}),
+    pl("T",11,-7.3,null),
+    pl("C",15,0,C_([[15,0],[10,1.5],[2.9,2.3]],"flat")),
+    pl("X",3.8,0,C_([[3.8,0],[6,2.5],[10,4],[21.2,4.6]],"shallow cross")),
+    pl("Y",26.2,0,C_([[26.2,0],[26.1,8.7],[15.2,13.3]],"post"))]},
+  {name:"Goaline", form:"Stack right", kind:"pass", prog:["Y","Z","X","C"],
+   note:"Stack gives free releases vs man. QB rolls toward the stack, which shortens the throws.",
+   players:[pl("Q",15,-4.3,C_([[15,-4.3],[19.3,-5]],"rollout","stop")),
+    pl("C",15,0,C_([[15,0],[13,2.5],[8.1,4]],"shallow")),
+    pl("Y",26.2,0,C_([[26.2,0],[26.2,3.1],[24,5.5],[21,6.8]],"slant")),
+    pl("Z",26.2,-2.5,C_([[26.2,-2.5],[26.6,2],[25.5,7],[22.8,10.8]],"fade-post")),
+    pl("X",26.1,-4.9,C_([[26.1,-4.9],[25.2,-1.5],[24.5,0.7]],"quick hitch","sit"))]},
+  {name:"PA Jet Sweep", form:"Under center", kind:"pass", prog:["Y","X","C","Z"],
+   note:"Jet fake pulls the underneath defenders left, then the QB boots right. Shot play to Y.",
+   players:[pl("Q",15,-1.6,C_([[15,-1.6],[15.2,-3.5],[17,-5.2],[21.2,-5.6]],"bootleg","stop")),
+    pl("C",15,0,C_([[15,0],[22.2,2.7]],"angle")),
+    pl("X",3.8,0,C_([[3.8,0],[4.3,6.5],[10.4,10.7]],"post")),
+    pl("Z",21.4,0,C_([[21.4,0],[21.3,-1.5],[19,-2.6],[15,-2.8],[6.4,-2.8]],"jet fake"),{dashed:true}),
+    pl("Y",26.3,0,C_([[26.3,0],[26.4,15]],"go"))]},
+  {name:"Stack Smash", form:"Stack right", kind:"pass", prog:["Z","Y","C","X"],
+   note:"Classic smash high-low on the corner: corner route over the out. Throw opposite what the corner does.",
+   players:[QB(),
+    pl("C",15,0,C_([[15,0],[15.2,6.2],[22.8,6.2]],"out")),
+    pl("X",10,0,C_([[10,0],[10.5,13.5],[14.6,17]],"deep post")),
+    pl("Z",20.3,0,C_([[20.3,0],[20.6,11.6],[27.4,16.8]],"corner")),
+    pl("Y",20.2,-2,C_([[20.2,-2],[21.5,1.5],[24,4.5],[27,6.2]],"arrow"))]},
+  {name:"Jet Sweep", form:"Spread", kind:"run", prog:["Z","Y","X","C"],
+   note:"Run play. Give the jet (throw/pitch to Z behind the line) unless the edge defender is already there.",
+   players:[pl("Q",15,-4.1,null),
+    pl("C",15,0,C_([[15,0],[15,11.9],[10,16]],"corner (clear)")),
+    pl("X",3.8,0,C_([[3.8,0],[3.5,13.5],[7.9,17]],"post (clear)")),
+    pl("Z",9.3,0,C_([[9.3,0],[9.8,-1.5],[13,-2.8],[20,-3],[23,-2],[24.9,0.9]],"jet sweep"),{dashed:true}),
+    pl("Y",26.4,0,C_([[26.4,0],[26.4,15]],"go (clear)"))]},
+  {name:"Bunch - Goaline", form:"Tight bunch", kind:"pass", prog:["Z","X","Y","C"],
+   note:"Bunch creates natural picks vs man. Short, quick throws — ball out fast.",
+   players:[pl("Q",15,-4.3,C_([[15,-4.3],[17,-5.5],[18.1,-6]],"slide","stop")),
+    pl("X",13.2,0,C_([[13.2,0],[13.2,4.3],[19.1,4.5]],"out")),
+    pl("C",15,0,C_([[15,0],[13,1.8],[8,3.3],[3.2,4]],"drag")),
+    pl("Z",16.8,0,C_([[16.8,0],[16.8,4.7],[21.9,8.3]],"corner")),
+    pl("Y",18.6,0,C_([[18.6,0],[17.5,1.8],[13,2.2],[7.4,2.2]],"shallow"))]},
+  {name:"Misdirection Run", form:"Offset", kind:"run", prog:["X","C","Y","Z"],
+   note:"Run play. Center's drag pulls defenders left; X runs right behind the line.",
+   players:[pl("Q",15,-1.6,null),
+    pl("Z",13.2,0,C_([[13.2,0],[13.3,15]],"go (clear)")),
+    pl("C",15,0,C_([[15,0],[14.9,3],[12,5.5],[2.3,6.7]],"drag")),
+    pl("X",5.8,-1.6,C_([[5.8,-1.6],[9.5,-2.6],[13,-3.1],[21.9,-3]],"misdirection run"),{dashed:true}),
+    pl("Y",26.3,0,C_([[26.3,0],[26.4,15]],"go (clear)"))]},
+  {name:"Disguise Triangle", form:"Offset", kind:"trick", prog:["Y","Z","X"],
+   passer:[{id:"Q",until:1.15},{id:"C"}],
+   note:"Center snaps, drops into the backfield and gets the pitch. The rusher has to chase a second passer.",
+   players:[pl("Q",15,-4.3,C_([[15,-4.3],[10.8,-4.8]],"pitch","stop")),
+    pl("C",15,0,C_([[15,0],[19.2,-6.1]],"drop to pass","stop"),{target:false}),
+    pl("X",3.8,0,C_([[3.8,0],[4.2,8.4],[15.5,15.3]],"deep post")),
+    pl("Z",19.2,-6.1,C_([[19.2,-6.1],[23.5,-4.6],[26.3,-2.5],[27.2,16.6]],"wheel")),
+    pl("Y",26.2,0,C_([[26.2,0],[25.4,3.8],[20.5,3.8],[28.5,3.8]],"whip"))]},
+  {name:"Fake Sweep Center Shovel", form:"Offset", kind:"pass", prog:["C","Z","X","Y"],
+   note:"Sweep fake right, QB slides left: flood the left side with three routes at three depths.",
+   players:[pl("Q",15,-1.9,C_([[15,-1.9],[7.4,-1.9]],"slide left","stop")),
+    pl("X",3.8,0,C_([[3.8,0],[2.1,4.9],[2,16]],"fade")),
+    pl("Z",8.8,0,C_([[8.8,0],[7.7,2.6],[7.5,13.7]],"go")),
+    pl("C",15,0,C_([[15,0],[12,4],[8.5,7.5],[6.5,9.5]],"angle")),
+    pl("Y",8,-3.7,C_([[8,-3.7],[9,-3.7],[18,-3.7],[23,-2.5],[25.5,1.5],[26.7,6]],"fake sweep → wheel"),{dashed:true})]},
+  {name:"Center Wheel", form:"Trips left", kind:"pass", prog:["C","Y","X","Z"],
+   note:"Trips left draws the defense over; the center wheels down the left sideline behind it.",
+   players:[QB(),
+    pl("X",3.8,0,C_([[3.8,0],[3.8,11.9],[8.1,15.1]],"post")),
+    pl("Y",7.8,0,C_([[7.8,0],[7.7,7.7],[10.7,10.7]],"short post")),
+    pl("Z",11.5,0,C_([[11.5,0],[11.5,3.3],[21.3,5.6]],"drag")),
+    pl("C",15,0,C_([[15,0],[13,-1.2],[8,-1.8],[3,-1.6],[1.2,3],[0.8,13]],"wheel"))]},
+  {name:"The Matilda Special", form:"Offset", kind:"trick", prog:["Y","X","Z"],
+   passer:[{id:"Q",until:1.35},{id:"C"}],
+   note:"QB drifts right to pull the rusher, then laterals back to the center who throws.",
+   players:[pl("Q",15,-5.3,C_([[15,-5.3],[20.5,-6]],"drift right","stop")),
+    pl("C",15,0,C_([[15,0],[9.8,-7.4]],"drop to pass","stop"),{target:false}),
+    pl("X",8.9,0,C_([[8.9,0],[9,3.7],[16.2,4.4]],"quick in")),
+    pl("Y",11.9,0,C_([[11.9,0],[11.8,6.5],[15.7,9.1]],"short post")),
+    pl("Z",17.3,-2.8,C_([[17.3,-2.8],[14,-4.2],[10.4,-4.4],[5,-2],[1.9,0.9]],"swing"))]}
+];
+
+const BOOKS = {
+  standard: {label:"Standard concepts", sub:"Mesh, Smash, Flood, Stick…", plays:{5:STANDARD5,7:STANDARD7}},
+  bigdawz:  {label:"Big Dawz", sub:"Your 15 plays (5v5)", plays:{5:BIGDAWZ}}
+};
+
+/* ============================================================
+   PATHS
+============================================================ */
+function mkPath(pts,speed,after,delay){
+  pts=pts.map(p=>[clamp(TX(p[0]),1,GEO.W-1),p[1]]);
+  let t=delay||0;
+  const w=[{x:pts[0][0],y:pts[0][1],t:0}];
+  if(delay) w.push({x:pts[0][0],y:pts[0][1],t:delay});
+  for(let i=1;i<pts.length;i++){
+    const a=pts[i-1], b=pts[i];
+    const d=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    let pen=0;
+    if(i>=2){
+      const p0=pts[i-2], v1=[a[0]-p0[0],a[1]-p0[1]], v2=[b[0]-a[0],b[1]-a[1]];
+      const cos=(v1[0]*v2[0]+v1[1]*v2[1])/((Math.hypot(v1[0],v1[1])*Math.hypot(v2[0],v2[1]))||1);
+      if(cos<0.6) pen=0.12+(0.6-cos)*0.12; // plant-and-cut costs a beat
+    }
+    t+=d/speed+pen;
+    w.push({x:b[0],y:b[1],t});
+  }
+  return {wps:w,pts,after,speed};
+}
+// Position at time t. Routes marked "run" keep going after the drawn line ends
+// (a go route keeps running; a flat hits the sideline and turns upfield).
+function posAt(p,t){
+  const w=p.path.wps;
+  if(t<=w[0].t) return {x:w[0].x,y:w[0].y};
+  for(let i=0;i<w.length-1;i++){
+    const a=w[i], b=w[i+1];
+    if(t>=a.t && t<=b.t){
+      const f=(b.t-a.t)<=1e-4?1:(t-a.t)/(b.t-a.t);
+      return {x:a.x+(b.x-a.x)*f, y:a.y+(b.y-a.y)*f};
+    }
+  }
+  const last=w[w.length-1];
+  if(p.path.after!=="run"||w.length<2) return {x:last.x,y:last.y};
+  let k=w.length-2; while(k>0 && dist(w[k],last)<0.01) k--;
+  const prev=w[k];
+  let ux=last.x-prev.x, uy=last.y-prev.y; const L=Math.hypot(ux,uy)||1; ux/=L; uy/=L;
+  let s=(t-last.t)*p.path.speed, x=last.x, y=last.y;
+  if(Math.abs(ux)>1e-3){
+    const bx=ux>0?GEO.W-1:1, sHit=(bx-x)/ux;
+    if(sHit>=0 && s>sHit){ x=bx; y+=uy*sHit; s-=sHit; ux=0; uy=1; }
+  }
+  x+=ux*s; y+=uy*s;
+  return {x:clamp(x,1,GEO.W-1), y:clamp(y,GEO.yMin+0.5,GEO.yMax-1)};
+}
+
+/* ============================================================
+   STATE
+============================================================ */
+const state = {
+  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, throwMode:"pull",
+  book:"standard", playPick:"random", throwType:"bullet",
+  driveCfg:{len:50, width:30, widthTouched:false, fd:"mid"}, drive:null,
+  session:{reps:0, score:0, log:[]},
+  rep:null, phase:"idle"
+};
+
+const els = {};
+["logTitle","driveGroup","lenRange","lenVal","widRange","widVal","fdRow","driveLine","hudRepLbl","summaryTitle","againBtn","bookRow","playSelect","throwType","playNote","throwRow","aimHint","playTag","controls","setupScreen","gameScreen","summaryScreen","field","fieldWrap","hud","hudMode","hudSub","hudRep","hudScore",
+ "timerBarWrap","timerBar","studyBanner","studyCount","rushCue","rushCount","coverageSheet","mcqOptions",
+ "resultSheet","resultTag","resultText","resultSub","resultExplain","scoreRow","nextRepBtn","primaryBtn",
+ "quitBtn","startBtn","restartBtn","squadRow","diffRow","modeRow","progSwitch",
+ "summarySub","statGrid","strengthRow","repLog"
+].forEach(id=>{ els[id]=document.getElementById(id); });
+
+/* ---- remember setup choices between visits (per device; safe if storage is unavailable) ---- */
+const SAVE_KEY="qbbrain.settings.v1";
+function loadSettings(){
+  try{
+    const o=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(!o) return;
+    ["squad","difficulty","mode","showProgression","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
+    if(o.driveCfg) Object.assign(state.driveCfg,o.driveCfg);
+    if(!MODES[state.mode]) state.mode="qb_brain";
+    if(!BOOKS[state.book]) state.book="standard";
+  }catch(_){}
+}
+function saveSettings(){
+  try{
+    const o={}; ["squad","difficulty","mode","showProgression","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
+    o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
+  }catch(_){}
+}
+function currentPlays(){ return (BOOKS[state.book].plays[state.squad])||[]; }
+
+/* ============================================================
+   SETUP SCREEN
+============================================================ */
+function buildChoiceRow(container, items, currentKey, onPick){
+  container.innerHTML="";
+  items.forEach(item=>{
+    const b=document.createElement("button");
+    b.className="choice"+(item.key===currentKey?" active":"");
+    b.disabled=!!item.disabled;
+    b.innerHTML="<b>"+item.title+"</b><small>"+item.sub+"</small>";
+    b.addEventListener("click",()=>{ onPick(item.key); refreshSetupUI(); });
+    container.appendChild(b);
+  });
+}
+function refreshSetupUI(){
+  buildChoiceRow(els.bookRow,[
+    {key:"standard",title:BOOKS.standard.label,sub:BOOKS.standard.sub},
+    {key:"bigdawz",title:BOOKS.bigdawz.label,sub:BOOKS.bigdawz.sub}
+  ], state.book, k=>{ state.book=k; state.playPick="random"; if(k==="bigdawz") state.squad=5; });
+
+  const lock7 = state.book==="bigdawz";
+  buildChoiceRow(els.squadRow,[
+    {key:5,title:"5v5",sub:"QB, center + 3 receivers"},
+    {key:7,title:"7v7",sub:lock7?"Big Dawz is a 5v5 book":"6 eligible receivers",disabled:lock7}
+  ], state.squad, k=>{ state.squad=k; state.playPick="random"; if(!state.driveCfg.widthTouched) state.driveCfg.width = k===7?40:30; });
+
+  const dc=state.driveCfg;
+  els.driveGroup.classList.toggle("hidden", state.mode!=="drive");
+  els.lenRange.value=dc.len; els.lenVal.textContent=dc.len;
+  els.widRange.value=dc.width; els.widVal.textContent=dc.width;
+  buildChoiceRow(els.fdRow,[
+    {key:"mid",title:"Midfield, then goal",sub:"Standard flag: cross midfield for a new set of downs"},
+    {key:"ten",title:"Every 10 yards",sub:"Classic chains"}
+  ], dc.fd, k=>dc.fd=k);
+
+  buildChoiceRow(els.diffRow,[
+    {key:"rookie",title:"Rookie",sub:"Slow rush, simple looks"},
+    {key:"varsity",title:"Varsity",sub:"Faster rush, some disguise"},
+    {key:"elite",title:"Elite",sub:"Fast rush, frequent disguise"}
+  ], state.difficulty, k=>state.difficulty=k);
+
+  buildChoiceRow(els.modeRow,[
+    {key:"drive",title:"Full Drive",sub:"Play a whole possession: downs, yards, touchdowns"},
+    {key:"qb_brain",title:"QB Brain",sub:"Full pre-snap coverage ID + post-snap read"},
+    {key:"coverage_id",title:"Coverage ID",sub:"Identify the defense only, no throw"},
+    {key:"quick_read",title:"Quick Read",sub:"Skip the ID question, find the throw fast"}
+  ], state.mode, k=>state.mode=k);
+
+  buildChoiceRow(els.throwRow,[
+    {key:"pull",title:"Pullback meter",sub:"Let go fast = bullet · hold still = lob"},
+    {key:"tap",title:"Tap receiver",sub:"Tap a receiver to throw"}
+  ], state.throwMode, k=>state.throwMode=k);
+
+  const plays=currentPlays();
+  els.playSelect.innerHTML="";
+  const o0=document.createElement("option"); o0.value="random"; o0.textContent="All plays (random)"; els.playSelect.appendChild(o0);
+  plays.forEach(p=>{ const o=document.createElement("option"); o.value=p.name; o.textContent=p.name+(p.kind==="run"?" (run)":p.kind==="trick"?" (trick)":""); els.playSelect.appendChild(o); });
+  els.playSelect.value=state.playPick;
+
+  els.progSwitch.classList.toggle("on", state.showProgression);
+  saveSettings();
+}
+els.playSelect.addEventListener("change",()=>{ state.playPick=els.playSelect.value; saveSettings(); });
+els.lenRange.addEventListener("input",()=>{ state.driveCfg.len=+els.lenRange.value; els.lenVal.textContent=els.lenRange.value; });
+els.widRange.addEventListener("input",()=>{ state.driveCfg.width=+els.widRange.value; state.driveCfg.widthTouched=true; els.widVal.textContent=els.widRange.value; });
+els.progSwitch.addEventListener("click",()=>{
+  state.showProgression=!state.showProgression;
+  els.progSwitch.classList.toggle("on", state.showProgression);
+  saveSettings();
+});
+els.lenRange.addEventListener("change",saveSettings);
+els.widRange.addEventListener("change",saveSettings);
+Array.from(els.throwType.querySelectorAll("button")).forEach(b=>{
+  b.addEventListener("click",()=>{ state.throwType=b.dataset.k; syncThrowType(); });
+});
+function syncThrowType(){
+  Array.from(els.throwType.querySelectorAll("button")).forEach(b=>b.classList.toggle("on",b.dataset.k===state.throwType));
+}
+loadSettings();
+refreshSetupUI();
+
+// iPhone tip: only on the installable (GitHub) build, only in Safari, only when not already installed
+(function(){
+  const tip=document.getElementById("installHint"); if(!tip || !window.QB_PWA) return;
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  const standalone=window.navigator.standalone===true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+  let dismissed=false; try{ dismissed=localStorage.getItem("qbbrain.tipDismissed")==="1"; }catch(_){}
+  if(ios && !standalone && !dismissed) tip.classList.remove("hidden");
+  const x=document.getElementById("installClose");
+  if(x) x.addEventListener("click",()=>{ tip.classList.add("hidden"); try{ localStorage.setItem("qbbrain.tipDismissed","1"); }catch(_){} });
+})();
+
+els.startBtn.addEventListener("click",()=>{
+  state.session={reps:0, score:0, log:[]};
+  state.drive = state.mode==="drive" ? newDrive() : null;
+  els.setupScreen.classList.add("hidden");
+  els.summaryScreen.classList.add("hidden");
+  els.gameScreen.classList.remove("hidden");
+  updateHud();
+  setupCanvas();
+  startRep();
+});
+els.restartBtn.addEventListener("click",()=>{
+  els.summaryScreen.classList.add("hidden");
+  els.setupScreen.classList.remove("hidden");
+});
+els.againBtn.addEventListener("click",()=>{ els.summaryScreen.classList.add("hidden"); els.startBtn.click(); });
+els.quitBtn.addEventListener("click", endSession);
+
+function updateHud(){
+  els.hudMode.textContent = MODES[state.mode].label.toUpperCase();
+  const d=state.drive;
+  if(isDrive() && d){
+    els.hudSub.textContent = d.over ? d.result : downText(d)+" · "+spotText(d,d.ballOn);
+    els.hudRepLbl.textContent="PLAY";
+    els.hudRep.textContent = d.over ? d.plays.length : d.plays.length+1;
+  } else {
+    els.hudSub.textContent = state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.book==="bigdawz"?" · Big Dawz":"");
+    els.hudRepLbl.textContent="REP";
+    els.hudRep.textContent = state.session.reps+1;
+  }
+  els.hudScore.textContent = state.session.score;
+}
+
+/* ============================================================
+   CANVAS
+============================================================ */
+const ctx = els.field.getContext("2d");
+let cw=0, ch=0, dpr=1;
+function setupCanvas(){
+  dpr = Math.min(window.devicePixelRatio||1, 2.5);
+  const rect = els.fieldWrap.getBoundingClientRect();
+  cw = rect.width; ch = rect.height;
+  els.field.width = Math.round(cw*dpr);
+  els.field.height = Math.round(ch*dpr);
+  els.field.style.width = cw+"px";
+  els.field.style.height = ch+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  updateView();
+}
+window.addEventListener("resize", ()=>{ if(!els.gameScreen.classList.contains("hidden")) setupCanvas(); });
+// Uniform scale: the full field width fits the screen; the LOS sits ~30% up from the bottom.
+const VIEW={ppy:13, yHi:40, PR:10};
+function updateView(){
+  VIEW.ppy = cw/GEO.W;
+  const visible = ch/VIEW.ppy;
+  VIEW.yHi = visible*0.70;
+  VIEW.PR = clamp(VIEW.ppy*0.72, 7, 11);
+}
+function toPx(x,y){ return {x: x*VIEW.ppy, y: (VIEW.yHi-y)*VIEW.ppy}; }
+if(window.ResizeObserver){
+  new ResizeObserver(()=>{
+    if(els.gameScreen.classList.contains("hidden")||!state.rep) return;
+    setupCanvas();
+    if(state.phase==="decision") return;
+    if(lastFrameT!==null && state.phase==="result") drawFrame(lastFrameT); else drawStatic();
+  }).observe(els.fieldWrap);
+}
+
+/* ============================================================
+   BUILD A REP
+============================================================ */
+function makePlayer(p){
+  const passerLike = (p.id==="Q"||p.id==="T") && !p.target;
+  const speed = p.speed || (passerLike||p.route.name==="rollout"||p.route.name==="bootleg"||p.route.name==="slide"||p.route.name==="slide left"||p.route.name==="drift right" ? QB_SPEED : RUN_SPEED);
+  // the center has to snap first, so his release is a beat late
+  const delay = p.delay!==undefined ? p.delay : (p.id==="C" ? 0.3 : 0);
+  return {id:p.id, color:COLORS[p.id]||"#f2c14e", x0:clamp(TX(p.x),1,GEO.W-1), y0:p.y, name:p.route.name,
+    path:mkPath(p.route.pts,speed,p.route.after,delay), target:p.target, dashed:!!p.dashed};
+}
+function buildRep(opts){
+  opts=opts||{};
+  const squad = opts.squad||state.squad;
+  const diff = DIFFICULTY[opts.difficulty||state.difficulty];
+  const plays = opts.plays || currentPlays();
+  const pick = opts.playName || state.playPick;
+  const play = (pick!=="random" && plays.find(p=>p.name===pick)) || choice(plays);
+  const players = play.players.map(makePlayer);
+  const targets = players.filter(p=>p.target);
+  const nDef = squad===5?4:6;
+
+  const disguised = opts.coverage ? false : Math.random() < diff.disguiseChance;
+  const shownCoverage = opts.coverage || choice(ALL_COVERAGES);
+  let actualCoverage = shownCoverage;
+  if(disguised){
+    const rotations = {"Cover 2":["Cover 3","Cover 1"],"Cover 1":["Cover 2","Man"],"Cover 3":["Cover 2","Cover 1"],"Man":["Cover 1"],"Underneath Zone":["Cover 3"]};
+    actualCoverage = choice(rotations[shownCoverage]);
+  }
+  const defenders = buildDefense(actualCoverage, targets, nDef);
+  if(actualCoverage!==shownCoverage) applyShownAlignment(defenders, shownCoverage, targets, nDef);
+
+  const out = {
+    play, players, targets, squad,
+    passer: play.passer || [{id:"Q"}],
+    shownCoverage, actualCoverage, disguised, defenders,
+    rusher:{x:GEO.CX,y:7}, rushStart:null,
+    askCoverage: opts.askCoverage!==undefined ? opts.askCoverage : Math.random() < MODES[state.mode].askCoverageChance,
+    tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed, reactionDelay: diff.reactionDelay,
+    ball:null
+  };
+  initLive(out);
+  buildBallTimeline(out);
+  out.goalRel = isDrive()&&state.drive ? state.drive.len-state.drive.ballOn : 1e9;
+  return out;
+}
+function playerById(rep,id){ return rep.players.find(p=>p.id===id); }
+
+/* ---- Live movement ----
+   Each player chases a "rabbit" that runs the drawn route, limited by real top speed and
+   acceleration, so cuts get rounded and stops take a step instead of being instant.
+   Once the ball is thrown, the receiver who can get there first reads it and runs to it. */
+const ACCEL=22, CHASE_SPEED=7.8;
+function initLive(rep){
+  rep.players.forEach(p=>{ p.s={x:p.x0,y:p.y0,vx:0,vy:0}; p.hist=[{t:0,x:p.x0,y:p.y0}]; });
+}
+function livePos(p){ return {x:p.s.x,y:p.s.y}; }
+function histPos(p,tq){
+  const h=p.hist;
+  if(tq<=h[0].t) return {x:h[0].x,y:h[0].y};
+  for(let i=h.length-1;i>0;i--){
+    if(h[i-1].t<=tq){ const a=h[i-1], b=h[i], f=(b.t-a.t)>1e-6?(tq-a.t)/(b.t-a.t):1; return {x:lerp(a.x,b.x,clamp(f,0,1)),y:lerp(a.y,b.y,clamp(f,0,1))}; }
+  }
+  return {x:h[0].x,y:h[0].y};
+}
+function stepPlayers(rep,t,dt){
+  const b=rep.ball;
+  rep.players.forEach(p=>{
+    if(p===rep.carrier) return;
+    const s=p.s;
+    let tx,ty,vmax=p.path.speed+0.3,gain=6;
+    if(b && b.chaser===p && t>=b.tRel+b.react){
+      tx=b.to.x; ty=b.to.y; vmax=CHASE_SPEED; gain=9;          // go get the ball
+    } else {
+      const q=posAt(p,t+0.12); tx=q.x; ty=q.y;                  // run the route
+    }
+    const dx=tx-s.x, dy=ty-s.y, d=Math.hypot(dx,dy);
+    const want=Math.min(vmax,d*gain);
+    let ax=(d>1e-4?dx/d*want:0)-s.vx, ay=(d>1e-4?dy/d*want:0)-s.vy;
+    const a=Math.hypot(ax,ay), amax=ACCEL*dt;
+    if(a>amax){ ax*=amax/a; ay*=amax/a; }
+    s.vx+=ax; s.vy+=ay;
+    s.x=clamp(s.x+s.vx*dt,0.8,GEO.W-0.8); s.y=clamp(s.y+s.vy*dt,GEO.yMin+0.5,GEO.yMax-0.8);
+    p.hist.push({t,x:s.x,y:s.y}); if(p.hist.length>400) p.hist.shift();
+  });
+}
+// The receiver with the best chance to reach the landing spot reads the throw and adjusts to it.
+function pickChaser(rep,to,flight){
+  let best=null, bt=1e9;
+  rep.targets.forEach(p=>{
+    const tReach=dist(livePos(p),to)/CHASE_SPEED;
+    const score=tReach-flight; // how late he'd be
+    if(score<bt){ bt=score; best=p; }
+  });
+  return best;
+}
+/* ---- Ball timeline: the center snaps it to the first passer; later entries are pitches/laterals ----
+   Each exchange travels through the air (snap ~13 yd/s, pitch ~11 yd/s); nobody can throw until they hold it. */
+function buildBallTimeline(rep){
+  const segs=[], C=playerById(rep,"C");
+  const start = C ? {x:C.x0,y:C.y0} : {x:GEO.CX,y:0};
+  const first=playerById(rep,rep.passer[0].id);
+  const d0=dist(start,{x:first.x0,y:first.y0});
+  let t = d0<2.2 ? 0.12 : d0/13;                                   // under center vs shotgun
+  segs.push({air:true,from:start,to:first.id,t0:0,t1:t});
+  rep.passer.forEach((sg,i)=>{
+    const until = sg.until===undefined ? 1e9 : Math.max(sg.until,t+0.05);
+    segs.push({air:false,id:sg.id,t0:t,t1:until});
+    const nx=rep.passer[i+1];
+    if(nx){
+      const a=posAt(playerById(rep,sg.id),until), b=posAt(playerById(rep,nx.id),until+0.3);
+      const dur=Math.max(0.15,dist(a,b)/11);
+      segs.push({air:true,fromId:sg.id,to:nx.id,t0:until,t1:until+dur});
+      t=until+dur;
+    }
+  });
+  rep.ballSegs=segs; rep.snapDone=segs[0].t1;
+}
+function ballSegAt(rep,t){ for(const s of rep.ballSegs){ if(t>=s.t0 && t<s.t1) return s; } return rep.ballSegs[rep.ballSegs.length-1]; }
+function holderAt(rep,t){ const s=ballSegAt(rep,t); return s.air?null:s.id; }
+// who has (or is about to receive) the ball — the rusher and the aim both key off this player
+function passerIdAt(rep,t){ const s=ballSegAt(rep,t); return s.air?s.to:s.id; }
+function passerPos(rep,t){ return livePos(playerById(rep,passerIdAt(rep,t))); }
+function ballAirPos(rep,t){
+  const s=ballSegAt(rep,t); if(!s.air) return null;
+  const a = s.from || s.fromPt || (s.fromPt = livePos(playerById(rep,s.fromId)));
+  const b = livePos(playerById(rep,s.to));
+  const f = clamp((t-s.t0)/(s.t1-s.t0),0,1);
+  return {x:lerp(a.x,b.x,f), y:lerp(a.y,b.y,f)};
+}
+
+function levOff(x,lev){ return lev==="inside"?(x<GEO.CX?1.2:-1.2):(x<GEO.CX?-1.2:1.2); }
+function manDef(r){
+  const lev=Math.random()<0.5?"inside":"outside";
+  return {role:"man",assign:r,leverage:lev,pos:{x:clamp(r.x0+levOff(r.x0,lev),1,GEO.W-1),y:2.5}};
+}
+function underZones(xs,ys,half){
+  return xs.map((x,i)=>({role:"zoneUnder",zoneX:ZX(x),zoneHalfWidth:half*GEO.zs,baseY:ys[i],pos:{x:ZX(x),y:Math.max(3,ys[i]-0.5)}}));
+}
+/* Flag coverages (the rusher is separate):
+   Man: everyone on a receiver.  Cover 1: man + one deep middle safety.
+   Cover 2: two deep halves + underneath zones.  Cover 3: three deep thirds + underneath.
+   Underneath Zone: short/intermediate zones only, no deep help.
+   Extra defenders (when a play has fewer targets) play a middle robber. */
+function buildDefense(coverage, targets, nDef){
+  let defs=[];
+  if(coverage==="Man"){
+    targets.slice(0,nDef).forEach(r=>defs.push(manDef(r)));
+  } else if(coverage==="Cover 1"){
+    defs.push({role:"zoneDeep",zoneX:GEO.CX,zoneHalfWidth:16*GEO.zs,baseY:12,pos:{x:GEO.CX,y:10}});
+    let man=targets.slice();
+    if(man.length>nDef-1){
+      const free=man.slice().sort((a,b)=>Math.abs(a.x0-GEO.CX)-Math.abs(b.x0-GEO.CX))[0];
+      man=man.filter(r=>r!==free);
+    }
+    man.slice(0,nDef-1).forEach(r=>defs.push(manDef(r)));
+  } else if(coverage==="Cover 2"){
+    defs.push({role:"zoneDeep",zoneX:ZX(7.5),zoneHalfWidth:8*GEO.zs,baseY:13,pos:{x:ZX(7.5),y:10}});
+    defs.push({role:"zoneDeep",zoneX:ZX(22.5),zoneHalfWidth:8*GEO.zs,baseY:13,pos:{x:ZX(22.5),y:10}});
+    defs=defs.concat(nDef-2===2 ? underZones([6,24],[5,5],7) : underZones([5,11,19,25],[5,7,7,5],6));
+  } else if(coverage==="Cover 3"){
+    defs.push({role:"zoneDeep",zoneX:ZX(5),zoneHalfWidth:6*GEO.zs,baseY:14,pos:{x:ZX(5),y:10}});
+    defs.push({role:"zoneDeep",zoneX:GEO.CX,zoneHalfWidth:6*GEO.zs,baseY:15,pos:{x:GEO.CX,y:10.5}});
+    defs.push({role:"zoneDeep",zoneX:ZX(25),zoneHalfWidth:6*GEO.zs,baseY:14,pos:{x:ZX(25),y:10}});
+    defs=defs.concat(nDef-3===1 ? underZones([15],[6],9) : underZones([6,15,24],[5,7,5],6.5));
+  } else {
+    defs = nDef===4 ? underZones([5,12,18,25],[5,7.5,7.5,5],6) : underZones([3,9,13,17,21,27],[5,7.5,5,5,7.5,5],5);
+  }
+  while(defs.length<nDef) defs.push({role:"zoneUnder",zoneX:GEO.CX,zoneHalfWidth:7*GEO.zs,baseY:7,pos:{x:GEO.CX,y:6.5}});
+  // near the goal line the defense can only back up to the end line
+  const cap=GEO.yMax-1.5;
+  defs.forEach(d=>{ if(d.baseY!==undefined) d.baseY=Math.min(d.baseY,cap-0.5); d.pos.y=Math.min(d.pos.y,cap-1); });
+  return defs;
+}
+function applyShownAlignment(defs, shown, targets, nDef){
+  const shownDefs=buildDefense(shown, targets, nDef);
+  const key=d=>-Math.round(d.pos.y/3)*100 + d.pos.x;
+  const a=defs.slice().sort((p,q)=>key(p)-key(q));
+  const b=shownDefs.slice().sort((p,q)=>key(p)-key(q));
+  for(let i=0;i<a.length&&i<b.length;i++) a[i].pos={x:b[i].pos.x,y:b[i].pos.y};
+}
+
+/* ============================================================
+   SIMULATION STEP (shared by the game loop and the analyzer)
+============================================================ */
+function updateDefenders(rep, t, dt){
+  // Defenders run about as fast as receivers (7.3 vs 7.0 yd/s), react late to cuts,
+  // and need a beat to read the throw before breaking on the ball.
+  const delay = rep.reactionDelay, maxSpeed = 7.3;
+  rep.defenders.forEach(d=>{
+    let target;
+    const lookT = Math.max(0, t-delay);
+    const breakR = rep.ball && rep.ball.type==="lob" ? 12 : 8;
+    if(rep.ball && t>=rep.ball.tRel+delay+0.15 && dist(d.pos,rep.ball.to)<breakR){
+      target={x:rep.ball.to.x,y:rep.ball.to.y};
+    } else if(d.role==="man"){
+      // mirror where the receiver was a reaction-time ago; leverage offset fades as routes develop
+      const rp = histPos(d.assign, lookT);
+      const off = levOff(d.assign.x0, d.leverage)*Math.max(0.3,1-t*0.4);
+      const cushion = Math.max(0.6, 2.0 - t*0.5);
+      target = {x:rp.x+off, y:rp.y-cushion};
+    } else if(d.role==="zoneDeep"){
+      let best=null, bestY=-999;
+      rep.targets.forEach(rec=>{
+        const rp = histPos(rec, lookT);
+        if(Math.abs(rp.x-d.zoneX)<=d.zoneHalfWidth && rp.y>7 && rp.y>bestY){ bestY=rp.y; best=rp; }
+      });
+      target = best ? {x:clamp(best.x, d.zoneX-d.zoneHalfWidth, d.zoneX+d.zoneHalfWidth), y:Math.max(d.baseY-2, best.y+2)} : {x:d.zoneX, y:d.baseY};
+    } else {
+      let best=null, bestScore=999;
+      rep.targets.forEach(rec=>{
+        const rp = histPos(rec, lookT);
+        const dd = Math.hypot(rp.x-d.zoneX, rp.y-d.baseY);
+        if(Math.abs(rp.x-d.zoneX)<=d.zoneHalfWidth && rp.y<12 && rp.y>-0.5 && dd<bestScore){ bestScore=dd; best=rp; }
+      });
+      target = best ? {x: lerp(d.zoneX,best.x,0.65), y: lerp(d.baseY,best.y,0.65)} : {x:d.zoneX, y:d.baseY};
+    }
+    if(!rep.ball) target.y=Math.max(0.3,target.y); // only the rusher crosses the line before the ball is out
+    const cur=d.pos, dx=target.x-cur.x, dy=target.y-cur.y, dd=Math.hypot(dx,dy);
+    // Traffic: a man defender who has to fight through another offensive player loses a step
+    // (this is what makes mesh, bunch and stack releases work against man).
+    let spd=maxSpeed;
+    if(d.role==="man" && !rep.ball){
+      for(const o of rep.players){ if(o===d.assign) continue; const q=livePos(o); if(Math.hypot(q.x-cur.x,q.y-cur.y)<1.2){ spd=maxSpeed*0.35; break; } }
+    }
+    const step=Math.min(dd, spd*dt);
+    if(dd>1e-4){ cur.x+=dx/dd*step; cur.y+=dy/dd*step; }
+  });
+}
+function updateRusher(rep, t, dt){
+  const r=rep.rusher;
+  if(t<rep.rushDelay || rep.ball) return;
+  const p=passerPos(rep,t);
+  if(!rep.rushStart) rep.rushStart=dist(r,p);
+  const dx=p.x-r.x, dy=p.y-r.y, dd=Math.hypot(dx,dy), step=Math.min(dd, rep.rushSpeed*dt);
+  if(dd>1e-4){ r.x+=dx/dd*step; r.y+=dy/dd*step; }
+}
+function isSacked(rep,t){ const h=holderAt(rep,t); return !rep.ball && h && dist(rep.rusher, livePos(playerById(rep,h)))<1.0; }
+function nearestDefender(rep, pt){
+  let best=null, bd=999;
+  rep.defenders.forEach(d=>{ const dd=dist(d.pos,pt); if(dd<bd){ bd=dd; best=d; } });
+  return {d:best, dist:bd};
+}
+// Bullet passes travel low: a defender standing in the lane can tip or pick them.
+function checkBulletLane(rep,t){
+  const b=rep.ball; if(!b || b.type!=="bullet") return null;
+  const f=(t-b.tRel)/b.flight; if(f<0.12||f>0.8) return null;
+  const g={x:lerp(b.from.x,b.to.x,f), y:lerp(b.from.y,b.to.y,f)};
+  for(const d of rep.defenders){
+    const dd=dist(d.pos,g);
+    if(dd<0.6) return {kind:"INTERCEPTED",def:d};
+    if(dd<1.0) return {kind:"BROKEN UP",def:d};
+  }
+  return null;
+}
+
+/* ============================================================
+   REP LIFECYCLE
+============================================================ */
+let rafId=null, tSnap=0, done=false, lastFrameT=null;
+/* Throw gesture: drag back to aim. Let go right away = BULLET.
+   Hold your finger still for a beat (LOFT_HOLD) = the throw lofts into a LOB (it stays a lob until release). */
+const aim = {active:false,start:null,cur:null,lob:false,anchor:null,stillSince:0};
+const LOFT_HOLD=0.45, STILL_PX=6;
+function aimType(){ return aim.lob ? "lob" : "bullet"; }
+
+function startRep(){
+  clearOverlays();
+  lastFrameT=null;
+  if(isDrive()){ const d=state.drive; setGeometry(d.width, -d.ballOn-10, d.len-d.ballOn+10); }
+  else setGeometry(30, -14, 45);
+  updateView();
+  state.rep = buildRep();
+  state.phase = "study";
+  aim.active=false;
+  updateHud();
+  drawStatic();
+  showPlayTag();
+  if(state.rep.askCoverage) showCoverageQuestion(); else beginStudyCountdown();
+}
+function label(p){ return p.id+"'s "+p.name; }
+function progText(rep){
+  return "Progression: "+rep.play.prog.slice(0,3).map(id=>label(playerById(rep,id))).join(" → ")+".";
+}
+function showPlayTag(){
+  if(state.mode==="coverage_id"){ els.playTag.classList.add("hidden"); return; }
+  const rep=state.rep, pl=rep.play;
+  let html='<b>'+pl.name+'</b> · '+pl.form+(pl.kind==="run"?" · run":pl.kind==="trick"?" · trick":"");
+  if(state.showProgression) html+='<br>'+pl.prog.slice(0,3).map((id,i)=>(i+1)+' '+label(playerById(rep,id))).join(' → ');
+  els.playTag.innerHTML=html;
+  els.playTag.classList.remove("hidden");
+}
+function showCoverageQuestion(){
+  els.coverageSheet.classList.remove("hidden");
+  els.controls.classList.add("hidden");
+  const must = Array.from(new Set([state.rep.actualCoverage, state.rep.shownCoverage]));
+  const others = shuffle(ALL_COVERAGES.filter(c=>!must.includes(c)));
+  const options = shuffle(must.concat(others).slice(0,4));
+  els.mcqOptions.innerHTML="";
+  const letters=["A","B","C","D"];
+  options.forEach((opt,i)=>{
+    const b=document.createElement("button");
+    b.innerHTML='<span class="k">'+letters[i]+'</span><span>'+opt+"</span>";
+    b.addEventListener("click",()=>{
+      state.rep.coverageGuess = opt;
+      els.coverageSheet.classList.add("hidden");
+      els.controls.classList.remove("hidden");
+      beginStudyCountdown();
+    });
+    els.mcqOptions.appendChild(b);
+  });
+}
+let studyTimer=null;
+function beginStudyCountdown(){
+  state.phase="study";
+  els.studyBanner.classList.remove("hidden");
+  let remaining = state.rep.tStudy;
+  els.studyCount.textContent = remaining.toFixed(1);
+  els.primaryBtn.textContent="SNAP";
+  els.primaryBtn.classList.remove("hidden");
+  els.throwType.classList.add("hidden");
+  clearInterval(studyTimer);
+  studyTimer = setInterval(()=>{
+    remaining -= 0.1;
+    if(remaining<=0){ clearInterval(studyTimer); els.studyBanner.classList.add("hidden"); }
+    else els.studyCount.textContent = remaining.toFixed(1);
+  },100);
+  drawStatic();
+  els.primaryBtn.onclick = ()=>doSnap();
+}
+function doSnap(){
+  clearInterval(studyTimer);
+  els.studyBanner.classList.add("hidden");
+  els.playTag.classList.add("hidden");
+  const throws=MODES[state.mode].throws;
+  if(throws){
+    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Drag back · let go = bullet · hold still = lob" : "Tap a receiver to throw";
+    els.aimHint.classList.remove("hidden");
+    els.timerBarWrap.classList.remove("hidden");
+  }
+  els.primaryBtn.classList.add("hidden");
+  els.controls.classList.add("hidden");   // the whole screen is the field during the play
+  state.phase="decision";
+  tSnap = performance.now();
+  done=false;
+  runLoop();
+}
+function runLoop(){
+  cancelAnimationFrame(rafId);
+  let lastT = performance.now();
+  const rep=state.rep;
+  function frame(now){
+    const dt = Math.min(0.05,(now-lastT)/1000);
+    lastT = now;
+    const t = (now - tSnap)/1000;
+
+    if(state.phase==="yac"){
+      stepPlayers(rep, t, dt);
+      const end=yacStep(rep, t, dt);
+      lastFrameT=t;
+      drawFrame(t);
+      if(end){ finalizeYac(t,end); return; }
+      rafId = requestAnimationFrame(frame);
+      return;
+    }
+    stepPlayers(rep, t, dt);
+    updateDefenders(rep, t, dt);
+    updateRusher(rep, t, dt);
+    lastFrameT=t;
+    drawFrame(t);
+
+    if(rep.rushStart){
+      const frac=clamp(dist(rep.rusher,passerPos(rep,t))/rep.rushStart,0,1);
+      els.timerBar.style.transform="scaleX("+frac+")";
+      els.timerBar.style.background = frac<0.35?"var(--bad)":frac<0.6?"var(--risky)":"var(--offense)";
+    } else { els.timerBar.style.transform="scaleX(1)"; els.timerBar.style.background="var(--offense)"; }
+
+    if(!MODES[state.mode].throws){
+      if(t>=2.8){ finalizeCoverageOnly(); return; }
+    } else if(rep.ball){
+      const lane=checkBulletLane(rep,t);
+      if(lane){ finalizeThrow(t,lane); return; }
+      if(t>=rep.ball.tLand){ finalizeThrow(t,null); if(state.phase==="yac") rafId=requestAnimationFrame(frame); return; }
+    } else if(isSacked(rep,t) || t>9){
+      aim.active=false;
+      finalizeSack(t);
+      return;
+    }
+    if(state.phase==="decision") rafId = requestAnimationFrame(frame);
+  }
+  rafId = requestAnimationFrame(frame);
+}
+
+/* ============================================================
+   DRAWING
+============================================================ */
+function drawField(){
+  ctx.clearRect(0,0,cw,ch);
+  ctx.fillStyle="#2f6b45"; ctx.fillRect(0,0,cw,ch);
+  const W=GEO.W, lo=VIEW.yHi-ch/VIEW.ppy, hi=VIEW.yHi;
+  const hline=(y,style,w,dash)=>{ const p=toPx(0,y); ctx.strokeStyle=style; ctx.lineWidth=w; ctx.setLineDash(dash||[]); ctx.beginPath(); ctx.moveTo(0,p.y); ctx.lineTo(cw,p.y); ctx.stroke(); ctx.setLineDash([]); };
+  const band=(y0,y1,fill)=>{ const a=toPx(0,y1), b=toPx(0,y0); ctx.fillStyle=fill; ctx.fillRect(0,a.y,cw,b.y-a.y); };
+  ctx.textBaseline="middle";
+  const d=state.drive;
+  if(d && isDrive()){
+    // absolute field: own goal line at rel -ballOn, opponent goal line at rel len-ballOn
+    const own=-d.ballOn, opp=d.len-d.ballOn;
+    band(own-60,own-10,"#1c2b21"); band(opp+10,opp+60,"#1c2b21");         // outside the end lines
+    band(own-10,own,"#27583a"); band(opp,opp+10,"#27583a");               // end zones
+    for(let y=0;y<d.len;y+=10) if(((y/10)|0)%2===0) band(own+y,own+Math.min(y+5,d.len),"rgba(0,0,0,0.05)");
+    ctx.font="700 "+Math.round(clamp(VIEW.ppy*1.1,10,16))+"px Oswald, sans-serif"; ctx.textAlign="center";
+    ctx.fillStyle="rgba(245,243,236,0.22)";
+    const ez=(y)=>{ const p=toPx(W/2,y); if(p.y>-20&&p.y<ch+20) ctx.fillText("END ZONE",p.x,p.y); };
+    ez(own-5); ez(opp+5);
+    for(let y=5;y<d.len;y+=5){
+      const ry=own+y; if(ry<lo-1||ry>hi+1) continue;
+      const mid=Math.abs(y-d.len/2)<0.01;
+      hline(ry, mid?"rgba(245,243,236,0.5)":"rgba(245,243,236,0.25)", mid?2:1);
+      if(y%10===0||mid){
+        const lab = mid ? "MID" : String(Math.min(y,d.len-y));
+        ctx.fillStyle="rgba(245,243,236,0.4)"; ctx.font="600 11px Oswald, sans-serif"; ctx.textAlign="left";
+        ctx.fillText(lab,5,toPx(0,ry).y-7); ctx.textAlign="right"; ctx.fillText(lab,cw-5,toPx(0,ry).y-7);
+      }
+    }
+    hline(own,"rgba(245,243,236,0.85)",3); hline(opp,"rgba(245,243,236,0.85)",3);
+    hline(own-10,"rgba(245,243,236,0.5)",2); hline(opp+10,"rgba(245,243,236,0.5)",2);
+    if(d.toGain<d.len) hline(d.toGain-d.ballOn,"#f2c14e",2.5);            // line to gain
+  } else {
+    for(let y=-10;y<hi;y+=10) band(y,y+5,"rgba(0,0,0,0.05)");
+    ctx.fillStyle="rgba(245,243,236,0.35)"; ctx.font="500 10px Inter, sans-serif"; ctx.textAlign="left";
+    for(let y=5;y<=hi;y+=5){ hline(y,"rgba(245,243,236,0.28)",1); ctx.fillText(String(y),4,toPx(0,y).y-8); }
+  }
+  hline(7,"rgba(226,84,43,0.35)",1,[3,6]);                                   // rush line
+  hline(0,"rgba(120,190,255,0.8)",2);                                        // line of scrimmage
+  ctx.strokeStyle="rgba(245,243,236,0.45)"; ctx.lineWidth=2;
+  [0.15,W-0.15].forEach(x=>{ const p=toPx(x,0); ctx.beginPath(); ctx.moveTo(p.x,0); ctx.lineTo(p.x,ch); ctx.stroke(); });
+}
+function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return "rgba("+(n>>16)+","+((n>>8)&255)+","+(n&255)+","+a+")"; }
+function drawRoutes(fade){
+  const rep=state.rep;
+  rep.players.forEach(p=>{
+    const pts=p.path.pts; if(pts.length<2) return;
+    ctx.strokeStyle=hexA(p.color, fade?0.2:0.9); ctx.lineWidth=2.2;
+    ctx.setLineDash(p.dashed?[4,4]:[]);
+    ctx.beginPath();
+    pts.forEach((q,i)=>{ const s=toPx(q[0],q[1]); if(i===0) ctx.moveTo(s.x,s.y); else ctx.lineTo(s.x,s.y); });
+    ctx.stroke(); ctx.setLineDash([]);
+    const a=toPx(pts[pts.length-2][0],pts[pts.length-2][1]), b=toPx(pts[pts.length-1][0],pts[pts.length-1][1]);
+    const ang=Math.atan2(b.y-a.y,b.x-a.x);
+    ctx.fillStyle=ctx.strokeStyle;
+    if(p.path.after==="run"){
+      ctx.beginPath(); ctx.moveTo(b.x+Math.cos(ang)*6,b.y+Math.sin(ang)*6);
+      ctx.lineTo(b.x+Math.cos(ang+2.5)*7,b.y+Math.sin(ang+2.5)*7);
+      ctx.lineTo(b.x+Math.cos(ang-2.5)*7,b.y+Math.sin(ang-2.5)*7); ctx.fill();
+    } else if(p.path.after==="sit"){
+      ctx.beginPath(); ctx.moveTo(b.x+Math.cos(ang+Math.PI/2)*6,b.y+Math.sin(ang+Math.PI/2)*6);
+      ctx.lineTo(b.x-Math.cos(ang+Math.PI/2)*6,b.y-Math.sin(ang+Math.PI/2)*6); ctx.stroke();
+    } else { ctx.beginPath(); ctx.arc(b.x,b.y,3,0,Math.PI*2); ctx.fill(); }
+  });
+}
+function drawFootball(x,y,s,rot){
+  ctx.beginPath(); ctx.ellipse(x,y,7*s,4.5*s,rot||0,0,Math.PI*2);
+  ctx.fillStyle="#8b5a2b"; ctx.fill(); ctx.strokeStyle="#f5f3ec"; ctx.lineWidth=1; ctx.stroke();
+}
+function drawPlayers(t){
+  const rep=state.rep, tt=t===null?0:t;
+  const holder = rep.carrier ? rep.carrier.id : rep.ball ? null : (t===null ? (playerById(rep,"C")?"C":passerIdAt(rep,0)) : holderAt(rep,tt));
+  rep.players.forEach(p=>{
+    const q=t===null?{x:p.x0,y:p.y0}:livePos(p), s=toPx(q.x,q.y);
+    ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR,0,Math.PI*2);
+    ctx.fillStyle=p.color; ctx.fill();
+    ctx.strokeStyle= p.target ? "rgba(0,0,0,0.35)" : "rgba(245,243,236,0.9)"; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.fillStyle="#1a1a1a"; ctx.font="700 10px Oswald, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(p.id, s.x, s.y+1);
+    p._px=s;
+    if(p.id===holder) drawFootball(s.x+11,s.y-9,0.7,-0.5);
+  });
+  if(t!==null && !rep.ball){ const ap=ballAirPos(rep,tt); if(ap){ const s=toPx(ap.x,ap.y); drawFootball(s.x,s.y,0.8,-Math.PI/2); } }
+  if(state.showProgression && t===null){
+    rep.play.prog.slice(0,3).forEach((id,order)=>{
+      const p=playerById(rep,id), s=toPx(p.x0,p.y0);
+      ctx.beginPath(); ctx.arc(s.x, s.y-20, 8, 0, Math.PI*2);
+      ctx.fillStyle="#f5f3ec"; ctx.fill();
+      ctx.fillStyle="#152119"; ctx.font="700 10px Oswald, sans-serif";
+      ctx.fillText(String(order+1), s.x, s.y-19);
+    });
+  }
+  // defenders: triangles pointing at the offense
+  rep.defenders.forEach(d=>{
+    const s=toPx(d.pos.x,d.pos.y);
+    const R=VIEW.PR; ctx.beginPath(); ctx.moveTo(s.x,s.y+R); ctx.lineTo(s.x-0.9*R,s.y-0.7*R); ctx.lineTo(s.x+0.9*R,s.y-0.7*R); ctx.closePath();
+    ctx.fillStyle="#e2542b"; ctx.fill(); ctx.strokeStyle="rgba(255,255,255,0.7)"; ctx.lineWidth=1.2; ctx.stroke();
+  });
+  const rs=toPx(rep.rusher.x,rep.rusher.y);
+  const RR=VIEW.PR; ctx.beginPath(); ctx.moveTo(rs.x,rs.y+RR); ctx.lineTo(rs.x-0.9*RR,rs.y-0.7*RR); ctx.lineTo(rs.x+0.9*RR,rs.y-0.7*RR); ctx.closePath();
+  ctx.fillStyle="#8a2f18"; ctx.fill(); ctx.strokeStyle="#ffd8c9"; ctx.stroke();
+  ctx.fillStyle="#ffd8c9"; ctx.font="700 8px Oswald, sans-serif"; ctx.fillText("R", rs.x, rs.y-2);
+}
+function drawStatic(){ drawField(); drawRoutes(false); drawPlayers(null); }
+function drawFrame(t){ drawField(); drawRoutes(true); drawPlayers(t); drawThrowOverlay(t); }
+
+/* ============================================================
+   THROWING — pullback meter with bullet / lob
+============================================================ */
+function ptField(e){
+  const r=els.field.getBoundingClientRect();
+  const px=e.clientX-r.left, py=e.clientY-r.top;
+  return {x:px/VIEW.ppy, y:VIEW.yHi-py/VIEW.ppy, px, py};
+}
+const THROW_GAIN=2.3, MAX_THROW=35, MIN_PULL=0.8;
+// Lob ≈ 19 yd/s with a little hang time; bullet ≈ 28 yd/s.
+function flightTime(type,d){ return type==="lob" ? 0.3+d/19 : 0.1+d/28; }
+// Slingshot: ball goes opposite the drag; longer drag = longer throw.
+function aimLanding(from,type){
+  const px=aim.start.x-aim.cur.x, py=aim.start.y-aim.cur.y;
+  const len=Math.hypot(px,py);
+  const valid=len>=MIN_PULL;
+  const d=Math.min(MAX_THROW,len*THROW_GAIN), ux=len?px/len:0, uy=len?py/len:1;
+  const x=clamp(from.x+ux*d,0.5,GEO.W-0.5), y=clamp(from.y+uy*d,GEO.yMin+0.5,GEO.yMax-0.5);
+  const dd=Math.hypot(x-from.x,y-from.y);
+  return {x,y,dist:dd,power:d/MAX_THROW,flight:flightTime(type,dd),valid};
+}
+els.field.addEventListener("pointerdown",(e)=>{
+  const rep=state.rep;
+  if(state.phase!=="decision"||!MODES[state.mode].throws||rep.ball) return;
+  e.preventDefault();
+  const pt=ptField(e);
+  if(state.throwMode==="tap"){
+    let hit=null, hd=999;
+    rep.targets.forEach(p=>{ if(!p._px) return; const dd=Math.hypot(p._px.x-pt.px,p._px.y-pt.py); if(dd<32&&dd<hd){hd=dd;hit=p;} });
+    const tt=(performance.now()-tSnap)/1000;
+    if(hit && holderAt(rep,tt)){
+      if(isDrive()){
+        const from=passerPos(rep,tt); let L=posAt(hit,tt);
+        for(let i=0;i<5;i++) L=posAt(hit,tt+flightTime("bullet",dist(from,L)));
+        releaseBall(rep,tt,from,L,"bullet");
+        els.aimHint.classList.add("hidden");
+      } else finalizeTap(hit,tt);
+    }
+  } else {
+    aim.active=true; aim.start=pt; aim.cur=pt; aim.lob=false; aim.anchor={x:pt.px,y:pt.py}; aim.stillSince=performance.now();
+    els.aimHint.classList.add("hidden");
+    try{ els.field.setPointerCapture(e.pointerId); }catch(_){}
+  }
+});
+els.field.addEventListener("pointermove",(e)=>{
+  if(!aim.active) return;
+  aim.cur=ptField(e);
+  if(!aim.lob && Math.hypot(aim.cur.px-aim.anchor.x, aim.cur.py-aim.anchor.y)>STILL_PX){
+    aim.anchor={x:aim.cur.px,y:aim.cur.py}; aim.stillSince=performance.now();
+  }
+});
+function endAim(e,cancel){
+  if(!aim.active) return;
+  aim.cur=ptField(e); aim.active=false;
+  const rep=state.rep;
+  if(state.phase!=="decision"||rep.ball) return;
+  const t=(performance.now()-tSnap)/1000;
+  if(!holderAt(rep,t)){ els.aimHint.firstElementChild.textContent="Wait until the ball is in your hands"; els.aimHint.classList.remove("hidden"); return; }
+  const from=passerPos(rep,t);
+  const type=aimType();
+  const L=aimLanding(from,type);
+  if(cancel||!L.valid){ els.aimHint.classList.remove("hidden"); return; }
+  releaseBall(rep,t,from,{x:L.x,y:L.y},type);
+}
+function releaseBall(rep,t,from,to,type){
+  const d=dist(from,to), fl=flightTime(type,d);
+  rep.ball={tRel:t, from:{x:from.x,y:from.y}, to, flight:fl, tLand:t+fl, dist:d, type, thrower:passerIdAt(rep,t),
+    react: type==="lob"?0.2:0.12};
+  rep.ball.chaser=pickChaser(rep,to,fl);
+}
+els.field.addEventListener("pointerup",(e)=>endAim(e,false));
+els.field.addEventListener("pointercancel",(e)=>endAim(e,true));
+
+function arcCtrl(a,b,type){
+  const d=Math.hypot(a.x-b.x,a.y-b.y);
+  const hgt = type==="lob" ? Math.min(90,20+d*0.3) : Math.min(14,3+d*0.04);
+  return {x:(a.x+b.x)/2, y:(a.y+b.y)/2-hgt};
+}
+function bez(p0,c,p1,f){ const u=1-f; return {x:u*u*p0.x+2*u*f*c.x+f*f*p1.x, y:u*u*p0.y+2*u*f*c.y+f*f*p1.y}; }
+function drawRing(pt,alpha,color,r){
+  const rx=r*VIEW.ppy, ry=r*VIEW.ppy;
+  ctx.beginPath(); ctx.ellipse(pt.x,pt.y,rx,ry,0,0,Math.PI*2);
+  ctx.strokeStyle=color; ctx.globalAlpha=alpha; ctx.lineWidth=2; ctx.stroke();
+  ctx.globalAlpha=alpha*0.25; ctx.fillStyle=color; ctx.fill(); ctx.globalAlpha=1;
+  return {rx,ry};
+}
+function drawThrowOverlay(t){
+  const rep=state.rep;
+  if(aim.active && !rep.ball){
+    const sp=toPx(aim.start.x,aim.start.y), cp=toPx(aim.cur.x,aim.cur.y);
+    const from=passerPos(rep,t);
+    const probe=aimLanding(from,aimType());
+    // hold-to-loft timer (only runs while the pull is a real throw)
+    if(!probe.valid && !aim.lob) aim.stillSince=performance.now();
+    const prog = aim.lob ? 1 : clamp((performance.now()-aim.stillSince)/1000/LOFT_HOLD,0,1);
+    if(!aim.lob && prog>=1) aim.lob=true;
+    const type=aimType(), L=aimLanding(from,type);
+    ctx.strokeStyle="rgba(245,243,236,0.55)"; ctx.lineWidth=2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(sp.x,sp.y); ctx.lineTo(cp.x,cp.y); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cp.x,cp.y,11,0,Math.PI*2); ctx.fillStyle=aim.lob?"#f2c14e":"rgba(245,243,236,0.85)"; ctx.fill();
+    if(L.valid && !aim.lob && prog>0.08){
+      ctx.beginPath(); ctx.arc(cp.x,cp.y,17,-Math.PI/2,-Math.PI/2+Math.PI*2*prog);
+      ctx.strokeStyle="#f2c14e"; ctx.lineWidth=3.5; ctx.stroke();
+    }
+    if(L.valid){
+      const a=toPx(from.x,from.y), e=toPx(L.x,L.y), c=arcCtrl(a,e,type);
+      ctx.strokeStyle="rgba(0,0,0,0.3)"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(e.x,e.y); ctx.stroke();
+      ctx.setLineDash(type==="lob"?[6,5]:[2,4]); ctx.strokeStyle=type==="lob"?"#f2c14e":"#ffffff"; ctx.lineWidth=2.5;
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(c.x,c.y,e.x,e.y); ctx.stroke(); ctx.setLineDash([]);
+      const col = L.power<0.5?"#5fb87a":(L.power<0.8?"#e8b84e":"#e2542b");
+      const r=drawRing(e,0.95,col,type==="lob"?2.2:1.6);
+      ctx.fillStyle="#fff"; ctx.font="600 11px Oswald, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText((type==="lob"?"LOB ":"BULLET ")+Math.round(L.dist)+" yd · "+L.flight.toFixed(1)+"s", e.x, e.y-r.ry-9);
+      const mx=10,my=ch*0.26,mw=12,mh=ch*0.46;
+      ctx.fillStyle="rgba(0,0,0,0.4)"; ctx.fillRect(mx,my,mw,mh);
+      ctx.fillStyle=col; ctx.fillRect(mx,my+mh*(1-L.power),mw,mh*L.power);
+      ctx.strokeStyle="rgba(245,243,236,0.6)"; ctx.lineWidth=1; ctx.strokeRect(mx,my,mw,mh);
+      ctx.fillStyle="#f5f3ec"; ctx.font="600 9px Oswald, sans-serif"; ctx.textAlign="left";
+      ctx.fillText("POWER",mx-2,my-8);
+    }
+  }
+  if(rep.ball && !rep.carrier){
+    const b=rep.ball, a=toPx(b.from.x,b.from.y), e=toPx(b.to.x,b.to.y), c=arcCtrl(a,e,b.type);
+    drawRing(e,0.55,"#ffffff",b.type==="lob"?2.2:1.6);
+    const f=clamp((t-b.tRel)/b.flight,0,1), pos=bez(a,c,e,f);
+    ctx.beginPath(); ctx.ellipse(lerp(a.x,e.x,f),lerp(a.y,e.y,f),5,3,0,0,Math.PI*2); ctx.fillStyle="rgba(0,0,0,0.3)"; ctx.fill();
+    const s = b.type==="lob" ? 1+0.6*Math.sin(Math.PI*f) : 1;
+    drawFootball(pos.x,pos.y,s,Math.atan2(e.y-a.y,e.x-a.x));
+  }
+}
+
+/* ============================================================
+   EVALUATION
+============================================================ */
+const COVERAGE_TELLS = {
+  "Man":"Each defender mirrors one receiver; nobody sits in a zone.",
+  "Cover 1":"Man underneath with one deep middle defender helping over the top.",
+  "Cover 2":"Two deep defenders split the field in halves; the rest sit in short zones.",
+  "Cover 3":"Three deep defenders take thirds; underneath defenders guard the flats and hook.",
+  "Underneath Zone":"Everyone sits in short-to-mid zones with no deep help, so deep shots are open if you beat the rush."
+};
+function roleName(rep,d){
+  if(!d) return "a defender";
+  if(d.role==="man") return "the man defender on "+d.assign.id;
+  if(d.role==="zoneDeep") return "the deep defender";
+  return "an underneath zone defender";
+}
+function sideWord(x){ return x<GEO.CX ? "left" : "right"; }
+function openness(rep,t){
+  return rep.targets.map(p=>{ const q=livePos(p); return {p, pos:q, sep:nearestDefender(rep,q).dist}; });
+}
+function coverageBits(rep){
+  let c=null;
+  if(rep.askCoverage && rep.coverageGuess!==undefined) c=(rep.coverageGuess===rep.actualCoverage);
+  return c;
+}
+function commonTail(rep,explain){
+  if(rep.askCoverage) explain+=" Tell: "+COVERAGE_TELLS[rep.actualCoverage];
+  return explain+" "+progText(rep);
+}
+function finishRep(rep,resultType,subtitle,explain,chips,points,coverageCorrect,time,outcome){
+  state.phase="result";
+  cancelAnimationFrame(rafId);
+  els.timerBarWrap.classList.add("hidden");
+  els.rushCue.classList.add("hidden");
+  els.aimHint.classList.add("hidden");
+  els.controls.classList.add("hidden");
+  let driveInfo=null;
+  if(isDrive() && state.drive && outcome){
+    driveInfo = driveApply(rep,outcome,resultType,chips,points);
+    points = driveInfo.points;
+  }
+  state.session.reps++; state.session.score+=points;
+  state.session.log.push({play:rep.play.name,coverage:rep.actualCoverage,disguised:rep.disguised,coverageAsked:rep.askCoverage,coverageCorrect,result:resultType,points,time});
+  renderResult(resultType,subtitle,explain,chips,points,rep,driveInfo);
+  updateHud();
+}
+
+function finalizeSack(t){
+  if(done) return; done=true;
+  const rep=state.rep, cc=coverageBits(rep);
+  let points=cc?100:0;
+  const o=openness(rep,t).sort((a,b)=>b.sep-a.sep)[0];
+  let explain="The rusher got home before the ball came out.";
+  if(o && o.sep>4) explain+=" "+label(o.p)+" was open by "+o.sep.toFixed(1)+" yds at that moment.";
+  const passer=passerIdAt(rep,t);
+  if(passer!=="Q") explain+=" Even after the pitch, "+passer+" has to get it out fast.";
+  const py=passerPos(rep,t).y;
+  finishRep(rep,"SACKED",isDrive()?"Sacked "+Math.abs(Math.round(py))+" yds behind the line.":"",commonTail(rep,explain),[["Coverage ID",cc===null?null:(cc?"+100":"+0")],["Read","+0"]],points,cc,t,{kind:"sack",y:py});
+}
+
+function finalizeTap(chosen,t){
+  if(done) return; done=true;
+  const rep=state.rep, cc=coverageBits(rep);
+  const o=openness(rep,t);
+  const best=o.slice().sort((a,b)=>b.sep-a.sep)[0], mine=o.find(x=>x.p===chosen);
+  const gap=best.sep-mine.sep;
+  let points=cc?100:0, resultType, explain, subtitle="";
+  const chips=[["Coverage ID",cc===null?null:(cc?"+100":"+0")]];
+  if(mine.sep>4 && (best.p===chosen||gap<1.5)){ resultType="GOOD READ"; points+=150; chips.push(["Correct read","+150"]); explain=label(chosen)+" had "+mine.sep.toFixed(1)+" yds of space against "+rep.actualCoverage+"."; }
+  else if(mine.sep>4){ resultType="RISKY"; points+=75; chips.push(["Partial credit","+75"]); explain="Open enough, but "+label(best.p)+" had "+best.sep.toFixed(1)+" yds vs your "+mine.sep.toFixed(1)+"."; }
+  else if(mine.sep>2.2){ resultType="RISKY"; points+=50; chips.push(["Partial credit","+50"]); explain="Tight window — the nearest defender was "+mine.sep.toFixed(1)+" yds from "+label(chosen)+"."; }
+  else { resultType="COVERED"; chips.push(["Read","+0"]); explain=label(chosen)+" was blanketed."+(gap>3?" "+label(best.p)+" was the answer.":""); subtitle=gap>3?"Missed opportunity.":""; }
+  if(resultType!=="COVERED" && t<2.0){ points+=75; chips.push(["Quick decision","+75"]); }
+  finishRep(rep,resultType,subtitle,commonTail(rep,explain),chips,points,cc,t);
+}
+
+function finalizeThrow(t,lane){
+  if(done) return; done=true;
+  const rep=state.rep, b=rep.ball, L=b.to, cc=coverageBits(rep);
+  let points=cc?100:0, resultType, explain, subtitle="";
+  const chips=[["Coverage ID",cc===null?null:(cc?"+100":"+0")]];
+  const o=openness(rep,t);
+  const withD=o.map(x=>Object.assign(x,{dl:dist(x.pos,L)}));
+  const near=withD.find(x=>x.p===b.chaser) || withD.slice().sort((a,c)=>a.dl-c.dl)[0];
+  const best=withD.slice().sort((a,c)=>c.sep-a.sep)[0];
+  const nd=nearestDefender(rep,L);
+  const catchR = b.type==="lob" ? 1.4 : 1.2;   // receivers now track the ball, so this is hands reach
+  const adjust = dist(posAt(near.p,t), L);    // how far off his route he had to go
+  const typeWord = b.type==="lob" ? "lob" : "bullet";
+
+  if(lane){
+    resultType=lane.kind;
+    subtitle="Bullet "+(lane.kind==="INTERCEPTED"?"picked off":"tipped")+" in the lane by "+roleName(rep,lane.def)+".";
+    explain="A bullet stays low the whole way, so "+roleName(rep,lane.def)+" sitting in the throwing lane got a hand on it. Either lob it over that defender or pick a window that isn't behind him.";
+    if(lane.kind==="INTERCEPTED"){ points-=50; chips.push(["Turnover","−50"]); } else chips.push(["Read","+0"]);
+  } else if(near.dl>catchR){
+    if(nd.dist<0.9){
+      resultType="INTERCEPTED"; points-=50; chips.push(["Turnover","−50"]);
+      explain="The ball landed on "+roleName(rep,nd.d)+", not a receiver.";
+    } else {
+      resultType="OFF TARGET"; chips.push(["Read","+0"]);
+      subtitle=near.p.id+" broke off his route to chase it but came up "+near.dl.toFixed(1)+" yds short.";
+      explain = label(near.p)+" read the throw and went for it, but it was "+adjust.toFixed(1)+" yds off his route — too far to get there in "+b.flight.toFixed(1)+"s. "
+        + (b.type==="bullet" ? "A bullet gives him almost no time to adjust, so it has to be on the spot." : "The lob gave him time, but not that much.")
+        + " Aim where the route will be when the ball arrives.";
+    }
+  } else if(nd.dist<0.8 && nd.dist<=near.dl){
+    resultType="INTERCEPTED"; points-=50; chips.push(["Turnover","−50"]);
+    explain=roleName(rep,nd.d)+" got to the catch point first and caught it.";
+    if(b.type==="lob") explain+=" The lob was in the air "+b.flight.toFixed(1)+"s, which gave him time to close. A bullet gets there before help arrives.";
+  } else if(nd.dist<1.3 && nd.dist<near.dl+0.5){
+    resultType="BROKEN UP"; chips.push(["Read","+0"]);
+    explain=roleName(rep,nd.d)+" arrived with the ball and knocked it away from "+near.p.id+".";
+    if(b.type==="lob" && b.flight>1.3) explain+=" The lob hung up "+b.flight.toFixed(1)+"s — against tight coverage, drive it in on a line.";
+  } else {
+    const gap=best.sep-near.sep;
+    subtitle="Complete to "+near.p.id+" ("+typeWord+", "+(adjust<=1.5?"on the money":"he adjusted "+adjust.toFixed(1)+" yds")+").";
+    if(near.sep>=4 && (near.p===best.p || gap<1.5)){
+      resultType="GOOD READ"; points+=150; chips.push(["Correct read","+150"]);
+      explain=label(near.p)+" had "+near.sep.toFixed(1)+" yds of space against "+rep.actualCoverage+" when the ball arrived.";
+    } else if(near.sep>=4){
+      resultType="RISKY"; points+=75; chips.push(["Partial credit","+75"]);
+      explain="Completed, but "+label(best.p)+" on the "+sideWord(best.pos.x)+" had "+best.sep.toFixed(1)+" yds of space vs "+near.sep.toFixed(1)+".";
+    } else {
+      resultType="RISKY"; points+=50; chips.push(["Partial credit","+50"]);
+      explain="Completed into a tight window — "+roleName(rep,nearestDefender(rep,near.pos).d)+" was "+near.sep.toFixed(1)+" yds away.";
+    }
+    if(adjust<=1.5){ points+=50; chips.push(["Ball placement","+50"]); }
+    else explain+=" "+near.p.id+" had to adjust "+adjust.toFixed(1)+" yds off his route to make the catch — a more accurate ball keeps him running.";
+    if(b.tRel<2.0){ points+=75; chips.push(["Quick decision","+75"]); }
+  }
+  if(rep.disguised) explain+=" The defense showed "+rep.shownCoverage+" and rotated to "+rep.actualCoverage+" after the snap.";
+  const completed = resultType==="GOOD READ" || resultType==="RISKY";
+  if(isDrive() && completed){
+    const pend={resultType,subtitle,explain:commonTail(rep,explain),chips,points,cc,time:b.tRel,catchY:near.pos.y};
+    if(near.pos.y >= rep.goalRel){ // caught in the end zone
+      finishRep(rep,resultType,subtitle,pend.explain,chips,points,cc,b.tRel,{kind:"catch",y:near.pos.y,catchY:near.pos.y,how:"td"});
+      return;
+    }
+    startYac(rep,near.p,t,pend);
+    return;
+  }
+  const kind = resultType==="INTERCEPTED" ? "int" : "inc";
+  finishRep(rep,resultType,subtitle,commonTail(rep,explain),chips,points,cc,b.tRel,{kind});
+}
+
+/* ============================================================
+   FULL DRIVE
+   Flag defaults: drive starts at your own 5, 4 downs to cross midfield, then 4 to score.
+   Field length/width and the first-down rule are set on the setup screen.
+============================================================ */
+function isDrive(){ return state.mode==="drive"; }
+function toGainFrom(d,ballOn){
+  if(d.fd==="ten") return Math.min(ballOn+10,d.len);
+  return ballOn < d.len/2 ? d.len/2 : d.len;
+}
+function newDrive(){
+  const c=state.driveCfg;
+  const d={len:c.len, width:c.width, fd:c.fd, ballOn:5, down:1, plays:[], score:0, over:false, result:null, firstDowns:0, yards:0, comp:0, att:0};
+  d.toGain=toGainFrom(d,d.ballOn);
+  return d;
+}
+function spotText(d,y){
+  const r=Math.round(y), half=d.len/2;
+  if(Math.abs(r-half)<0.5) return "MIDFIELD";
+  return r<half ? "OWN "+r : "OPP "+(d.len-r);
+}
+function downText(d){
+  const n=["1st","2nd","3rd","4th"][d.down-1]||(d.down+"th");
+  return d.toGain>=d.len ? n+" & Goal" : n+" & "+Math.max(1,Math.round(d.toGain-d.ballOn));
+}
+// Run after the catch: the carrier heads upfield and bends away from pursuit; everyone chases to pull the flag.
+function startYac(rep,carrier,t,pend){
+  rep.carrier=carrier; rep.yacT0=t; rep.pending=pend;
+  rep.defenders.forEach(d=>{ d.v={x:0,y:0}; });
+  state.phase="yac";
+  els.timerBarWrap.classList.add("hidden");
+  els.controls.classList.add("hidden");
+  els.aimHint.classList.add("hidden");
+}
+function yacStep(rep,t,dt){
+  const c=rep.carrier, s=c.s, W=GEO.W;
+  // carrier steering
+  let dx=0, dy=1;
+  const chasers=rep.defenders.map(d=>d.pos).concat([rep.rusher]);
+  chasers.forEach(p=>{
+    const rx=s.x-p.x, ry=s.y-p.y, dd=Math.hypot(rx,ry)||0.01;
+    if(dd<7 && p.y>s.y-3){ const w=3/(dd*dd+1); dx+=rx/dd*w; dy+=ry/dd*w*0.35; }
+  });
+  if(s.x<2.5) dx+=(2.5-s.x)*0.9; if(s.x>W-2.5) dx-=(s.x-(W-2.5))*0.9;
+  dy=Math.max(dy,0.25);
+  const L=Math.hypot(dx,dy); dx/=L; dy/=L;
+  const want=7.2;
+  let ax=dx*want-s.vx, ay=dy*want-s.vy; const a=Math.hypot(ax,ay), amax=ACCEL*dt;
+  if(a>amax){ ax*=amax/a; ay*=amax/a; }
+  s.vx+=ax; s.vy+=ay; s.x+=s.vx*dt; s.y+=s.vy*dt;
+  c.hist.push({t,x:s.x,y:s.y});
+  // pursuit (after a short reaction), aiming at where the carrier is heading
+  const react = t>=rep.yacT0+0.15;
+  const pursue=(pos,spd)=>{
+    const dd=dist(pos,s), lead=Math.min(0.8,dd/9);
+    const tx=s.x+s.vx*lead, ty=s.y+s.vy*lead, ex=tx-pos.x, ey=ty-pos.y, e=Math.hypot(ex,ey)||1;
+    const step=Math.min(e,spd*dt); pos.x+=ex/e*step; pos.y+=ey/e*step;
+  };
+  if(react){ rep.defenders.forEach(d=>pursue(d.pos,7.4)); }
+  pursue(rep.rusher, Math.max(rep.rushSpeed,6.2));
+  // camera follows a long run
+  const visible=ch/VIEW.ppy;
+  VIEW.yHi=Math.max(VIEW.yHi, s.y+visible*0.35);
+  // end conditions
+  for(const p of chasers){ if(dist(p,s)<0.9){ const who=rep.defenders.find(d=>d.pos===p); return {how:"flag", by:who?roleName(rep,who):"the rusher"}; } }
+  if(s.y>=rep.goalRel) return {how:"td"};
+  if(s.x<=0.15 || s.x>=W-0.15) return {how:"oob"};
+  if(t-rep.yacT0>8) return {how:"flag", by:"the defense"};
+  return null;
+}
+function finalizeYac(t,end){
+  if(state.phase!=="yac") return;
+  const rep=state.rep, pd=rep.pending, c=rep.carrier;
+  const y = end.how==="td" ? rep.goalRel : c.s.y;
+  const after = Math.round(y - pd.catchY);
+  let ex=pd.explain;
+  const tail = end.how==="td" ? c.id+" caught it at "+Math.round(pd.catchY)+" and took it the rest of the way!"
+    : end.how==="oob" ? c.id+" caught it at "+Math.round(pd.catchY)+" and ran "+Math.max(0,after)+" more before stepping out."
+    : c.id+" caught it at "+Math.round(pd.catchY)+" and ran "+Math.max(0,after)+" more before "+end.by+" pulled the flag.";
+  finishRep(rep,pd.resultType,(pd.subtitle?pd.subtitle+" ":"")+tail,ex,pd.chips,pd.points,pd.cc,pd.time,{kind:"catch",y,catchY:pd.catchY,how:end.how});
+}
+function driveApply(rep,o,resultType,chips,points){
+  const d=state.drive; let pts=points;
+  const add=(lab,v)=>{ chips.push([lab,(v<0?"−"+Math.abs(v):"+"+v)]); pts+=v; };
+  const before={down:d.down, ballOn:d.ballOn, text:downText(d)+" at "+spotText(d,d.ballOn)};
+  let gain=0, headline="", status="";
+  if(o.kind==="int"){
+    // replace the drill's −50 turnover with the drive penalty
+    const i=chips.findIndex(c=>c[0]==="Turnover"); if(i>=0){ chips.splice(i,1); pts+=50; }
+    add("Interception",-200); d.over=true; d.result="INTERCEPTION"; headline="Intercepted — drive over.";
+    d.att++;
+  } else if(o.kind==="inc"){
+    d.att++;
+    if(resultType==="OFF TARGET"||resultType==="BROKEN UP") add("Bad throw",-50);
+    headline="Incomplete.";
+  } else if(o.kind==="sack"){
+    gain=Math.round(o.y); add("Sack",-100); headline="Sack, loss of "+Math.abs(gain)+".";
+  } else if(o.kind==="catch"){
+    d.att++; d.comp++;
+    gain = o.how==="td" ? d.len-d.ballOn : Math.round(o.y);
+    headline = o.how==="td" ? "TOUCHDOWN!" : (gain>=0?"Gain of "+gain+".":"Loss of "+Math.abs(gain)+".");
+  }
+  if(!d.over){
+    const spot=d.ballOn+gain;
+    if(o.kind==="catch" && (o.how==="td" || spot>=d.len)){
+      if(gain>0) add("Yards ("+gain+")",gain*2);
+      add("Touchdown",500); d.ballOn=d.len; d.over=true; d.result="TOUCHDOWN";
+    } else if(spot<=0){
+      add("Safety",-200); d.ballOn=0; d.over=true; d.result="SAFETY"; headline+=" Tackled in the end zone — safety.";
+    } else {
+      if(gain>0) add("Yards ("+gain+")",gain*2);
+      d.ballOn=spot;
+      if(d.ballOn>=d.toGain){
+        add("First down",50); d.firstDowns++; d.down=1; d.toGain=toGainFrom(d,d.ballOn);
+        headline+=" First down!";
+      } else {
+        d.down++;
+        if(d.down>4){ add("Turnover on downs",-100); d.over=true; d.result="TURNOVER ON DOWNS"; }
+      }
+    }
+  }
+  d.yards += (o.kind==="int"||o.kind==="inc") ? 0 : gain;
+  d.score += pts;
+  status = d.over ? "DRIVE OVER — "+d.result : "Next: "+downText(d)+" at "+spotText(d,d.ballOn);
+  d.plays.push({situation:before.text, play:rep.play.name, coverage:rep.actualCoverage, result:resultType, kind:o.kind, gain, headline, points:pts});
+  return {points:pts, headline, status, over:d.over};
+}
+
+function finalizeCoverageOnly(){
+  if(done) return; done=true;
+  const rep=state.rep;
+  const correct = rep.coverageGuess===rep.actualCoverage;
+  const points = correct?100:0;
+  state.phase="result";
+  cancelAnimationFrame(rafId);
+  els.rushCue.classList.add("hidden");
+  els.controls.classList.add("hidden");
+  state.session.reps++; state.session.score+=points;
+  state.session.log.push({play:rep.play.name,coverage:rep.actualCoverage,disguised:rep.disguised,coverageAsked:true,coverageCorrect:correct,result:null,points,time:0});
+  els.resultText.textContent = "COVERAGE: "+(correct?"CORRECT":"INCORRECT");
+  els.resultTag.querySelector(".dot").style.background = correct?"var(--good)":"var(--bad)";
+  let sub = "You guessed "+rep.coverageGuess+". It was "+rep.actualCoverage+".";
+  if(rep.disguised) sub += " It showed "+rep.shownCoverage+" and rotated after the snap.";
+  els.resultSub.textContent = sub;
+  els.resultExplain.textContent = COVERAGE_TELLS[rep.actualCoverage];
+  els.playNote.classList.add("hidden");
+  els.scoreRow.innerHTML="";
+  [["Coverage ID","+"+points],["TOTAL","+"+points]].forEach(c=>{
+    const d=document.createElement("div"); d.className="score-chip";
+    d.innerHTML=c[0]+": <b>"+c[1]+"</b>"; els.scoreRow.appendChild(d);
+  });
+  els.resultSheet.classList.remove("hidden");
+  updateHud();
+}
+
+const RESULT_COLORS={"GOOD READ":"var(--good)","RISKY":"var(--risky)","COVERED":"var(--bad)","SACKED":"var(--bad)","OFF TARGET":"var(--risky)","BROKEN UP":"var(--bad)","INTERCEPTED":"var(--bad)"};
+function renderResult(resultType, subtitle, explain, chips, points, rep, driveInfo){
+  els.resultText.textContent = "DECISION: "+resultType;
+  if(driveInfo){
+    els.driveLine.innerHTML="<b>"+driveInfo.headline+"</b> "+driveInfo.status;
+    els.driveLine.classList.remove("hidden");
+    els.nextRepBtn.textContent = driveInfo.over ? "See drive summary" : "Next play";
+  } else { els.driveLine.classList.add("hidden"); els.nextRepBtn.textContent="Next rep"; }
+  els.resultTag.querySelector(".dot").style.background = RESULT_COLORS[resultType];
+  let sub = subtitle;
+  if(rep.askCoverage && rep.coverageGuess!==undefined){
+    sub += (sub?" · ":"")+"Coverage: you guessed "+rep.coverageGuess+", it was "+rep.actualCoverage+".";
+  } else if(rep.disguised && sub.indexOf("rotated")<0){
+    sub += (sub?" · ":"")+"Rotated from "+rep.shownCoverage+" into "+rep.actualCoverage+".";
+  }
+  els.resultSub.textContent = sub;
+  els.resultExplain.textContent = explain;
+  if(rep.play.note){ els.playNote.innerHTML="<b>"+rep.play.name+":</b> "+rep.play.note; els.playNote.classList.remove("hidden"); }
+  else els.playNote.classList.add("hidden");
+  els.scoreRow.innerHTML="";
+  chips.filter(c=>c[1]!==null).concat([["TOTAL",(points<0?"−"+Math.abs(points):"+"+points)]]).forEach(c=>{
+    const d=document.createElement("div"); d.className="score-chip";
+    d.innerHTML=c[0]+": <b>"+c[1]+"</b>";
+    els.scoreRow.appendChild(d);
+  });
+  els.resultSheet.classList.remove("hidden");
+}
+
+els.nextRepBtn.addEventListener("click",()=>{
+  els.resultSheet.classList.add("hidden");
+  if(isDrive() && state.drive && state.drive.over) endSession(); else startRep();
+});
+
+function clearOverlays(){
+  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType"].forEach(k=>els[k].classList.add("hidden"));
+  els.controls.classList.remove("hidden");
+  els.primaryBtn.classList.remove("hidden");
+}
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+function endSession(){
+  cancelAnimationFrame(rafId);
+  clearInterval(studyTimer);
+  clearOverlays();
+  els.gameScreen.classList.add("hidden");
+  els.summaryScreen.classList.remove("hidden");
+  renderSummary();
+}
+function renderDriveSummary(){
+  const d=state.drive;
+  if(!d.over){ d.over=true; d.result="ENDED EARLY"; }
+  els.summaryTitle.textContent="DRIVE SUMMARY"; els.logTitle.textContent="Play-by-play";
+  els.summarySub.textContent=d.result+" · "+d.plays.length+" play"+(d.plays.length===1?"":"s")+", "+d.yards+" yds · "+d.len+"×"+d.width+" field";
+  els.statGrid.innerHTML="";
+  [[d.score,"Drive score"],[d.yards+" yds","Total yards"],[d.comp+"/"+d.att,"Completions"],[d.firstDowns,"First downs"]].forEach(s=>{
+    const c=document.createElement("div"); c.className="stat-card";
+    c.innerHTML='<div class="n">'+s[0]+'</div><div class="l">'+s[1]+"</div>";
+    els.statGrid.appendChild(c);
+  });
+  els.strengthRow.innerHTML="";
+  const good=d.plays.filter(p=>p.result==="GOOD READ").length;
+  const c1=document.createElement("div"); c1.className="strength-card "+(d.result==="TOUCHDOWN"?"good":"work");
+  c1.innerHTML="<b>"+d.result+"</b><span>"+(d.result==="TOUCHDOWN"?"Drive finished in the end zone":"Drive ended at "+spotText(d,d.ballOn))+"</span>";
+  const c2=document.createElement("div"); c2.className="strength-card good";
+  c2.innerHTML="<b>"+good+" good read"+(good===1?"":"s")+"</b><span>of "+d.plays.length+" plays</span>";
+  els.strengthRow.appendChild(c1); els.strengthRow.appendChild(c2);
+  els.repLog.innerHTML="";
+  d.plays.forEach((p,i)=>{
+    const row=document.createElement("div"); row.className="rep-row";
+    const col=RESULT_COLORS[p.result]||"var(--chalk-dim)";
+    row.innerHTML='<span class="dot" style="background:'+col+'"></span><span class="c">'+(i+1)+". "+p.situation+" · "+p.play+" · "+p.headline+'</span><span class="pts">'+(p.points<0?"−"+Math.abs(p.points):"+"+p.points)+'</span>';
+    els.repLog.appendChild(row);
+  });
+  els.againBtn.classList.remove("hidden");
+}
+function renderSummary(){
+  els.againBtn.classList.add("hidden");
+  if(isDrive() && state.drive){ renderDriveSummary(); return; }
+  els.summaryTitle.textContent="QB BRAIN SESSION"; els.logTitle.textContent="Rep log";
+  const log=state.session.log, reps=log.length;
+  els.summarySub.textContent = reps+" REP"+(reps===1?"":"S");
+  const asked=log.filter(l=>l.coverageAsked && l.coverageCorrect!==null);
+  const covPct = asked.length ? Math.round(100*asked.filter(l=>l.coverageCorrect).length/asked.length) : null;
+  const dec=log.filter(l=>l.result);
+  const goodPct = dec.length ? Math.round(100*dec.filter(l=>l.result==="GOOD READ").length/dec.length) : 0;
+  const thrown=dec.filter(l=>l.result!=="SACKED");
+  const avgTime = thrown.length ? thrown.reduce((s,l)=>s+l.time,0)/thrown.length : 0;
+  els.statGrid.innerHTML="";
+  [[covPct===null?"—":covPct+"%","Coverage recognition"],[dec.length?goodPct+"%":"—","Good decisions"],[thrown.length?avgTime.toFixed(1)+"s":"—","Avg time to throw"],[state.session.score,"Total score"]].forEach(s=>{
+    const c=document.createElement("div"); c.className="stat-card";
+    c.innerHTML='<div class="n">'+s[0]+'</div><div class="l">'+s[1]+"</div>";
+    els.statGrid.appendChild(c);
+  });
+  const by={};
+  log.forEach(l=>{ (by[l.coverage]=by[l.coverage]||{good:0,total:0}).total++; if(l.result==="GOOD READ"||(l.result===null&&l.coverageCorrect)) by[l.coverage].good++; });
+  let strongest=null, weakest=null;
+  Object.keys(by).forEach(k=>{ const r=by[k].good/by[k].total; if(!strongest||r>strongest.rate) strongest={cov:k,rate:r}; if(!weakest||r<weakest.rate) weakest={cov:k,rate:r}; });
+  els.strengthRow.innerHTML="";
+  if(strongest){ const c=document.createElement("div"); c.className="strength-card good"; c.innerHTML="<b>Strongest</b><span>"+strongest.cov+"</span>"; els.strengthRow.appendChild(c); }
+  if(weakest){ const c=document.createElement("div"); c.className="strength-card work"; c.innerHTML="<b>Needs work</b><span>"+weakest.cov+"</span>"; els.strengthRow.appendChild(c); }
+  els.repLog.innerHTML="";
+  log.forEach((l,i)=>{
+    const row=document.createElement("div"); row.className="rep-row";
+    const col=RESULT_COLORS[l.result]||(l.coverageCorrect?"var(--good)":"var(--bad)");
+    row.innerHTML='<span class="dot" style="background:'+col+'"></span><span class="c">'+(i+1)+". "+l.play+" · "+l.coverage+(l.disguised?" (disguised)":"")+" · "+(l.result||(l.coverageCorrect?"Correct ID":"Missed ID"))+'</span><span class="pts">'+(l.points<0?"−"+Math.abs(l.points):"+"+l.points)+'</span>';
+    els.repLog.appendChild(row);
+  });
+}
+
+// headless hook for the play analyzer (not used by the UI)
+window.__qbState = state;
+window.__qbSim = {holderAt, BOOKS, buildRep, stepPlayers, releaseBall, flightTime, livePos, updateDefenders, updateRusher, isSacked, posAt, passerPos, passerIdAt, nearestDefender, dist};
+})();
+
+</script>
+<script>
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){
+  window.addEventListener("load",function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+}
+</script>
+</body>
+</html>
