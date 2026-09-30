@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.2.0 — Retro arcade UI overhaul
+
+- **New home screen** with big tiles: **Play Drive**, **Drills**, **Playbook** and **Settings** — each opens its own screen with a back button.
+- **Retro arcade look** (Retro Bowl vibe): jersey-number pixel font, chunky pressable buttons, scoreboard-style HUD, speckled pixel turf, blue-tinted end zones.
+- **Big result banners** across the field after every play — TOUCHDOWN!, FIRST DOWN, +12 YARDS, INCOMPLETE, SACKED, INTERCEPTED — then the breakdown slides up. Tap the field to skip.
+- **Playbook browser:** every play (Big Dawz and standard) drawn as a mini diagram; tap one to see the routes, read progression and notes, then **Run this play**. A "Create a play" slot is waiting for the next update.
+- Settings (format, difficulty, throw control, progression) moved to their own screen and are summarized on the home tile.
+- Drive status text cleaned up (no more repeated "drive over").
+
 ## v1.1.0 — Retro Bowl throwing meter
 
 - Pulling back now starts as a **lob** by default, drawn as a Retro Bowl–style dotted arc (hollow "ball in the air" dots over shadow dots on the ground, with a ring at the passer).

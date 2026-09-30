@@ -20,7 +20,7 @@ It launches full-screen from its own icon, remembers your settings, and works of
 - **Throwing (pullback meter, Retro Bowl style):** after the snap, pull back anywhere on the field to aim — it starts as a **lob** (hollow dotted arc).
   While you're still pulling, **tap anywhere with a second finger** to switch to a **bullet** (tight gold dots, flatter and faster). Tap again to switch back. Let go to throw.
   On a computer: **Space** or **right-click** switches while you drag.
-- **Modes:** Full Drive · QB Brain · Coverage ID · Quick Read.
+- **Home screen:** Play Drive · Drills (QB Brain, Coverage ID, Quick Read) · Playbook (every play drawn out; tap one to run it) · Settings.
 - **Full Drive:** set field length (50–100 yds, plus two 10-yd end zones), width (20–53 yds) and the first-down rule (midfield or every 10).
 
 ## Hosting (GitHub Pages)
