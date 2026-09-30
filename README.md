@@ -28,7 +28,7 @@ It launches full-screen from its own icon, remembers your settings, and works of
 Settings → Pages → *Deploy from a branch* → `main` / root. The site appears at
 `https://<your-username>.github.io/<repo-name>/`.
 
-When you publish an update, bump `VERSION` in `sw.js` so installed copies refresh their offline cache. Every update gets a GitHub release; see `CHANGELOG.md`.
+When you publish an update, bump `VERSION` in `sw.js` so installed copies refresh their offline cache. Every update gets a GitHub release automatically: add a `## vX.Y.Z — Title` section to the top of `CHANGELOG.md`, push, and `.github/workflows/release.yml` publishes it.
 
 ## Files
 

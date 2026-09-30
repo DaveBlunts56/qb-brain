@@ -1,0 +1,45 @@
+# Publishes a GitHub release for every version in CHANGELOG.md that doesn't have one yet.
+# Add a new "## vX.Y.Z — Title" section at the top of CHANGELOG.md, push to main, and the release appears.
+# Optional: put <!-- commit: SHA --> on the heading line to point the release at an older commit.
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths: [CHANGELOG.md]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create missing releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          grep -E '^## v[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md | tac | while IFS= read -r line; do
+            ver=$(echo "$line" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+            title=$(echo "$line" | sed -E 's/^## //; s/<!--.*-->//; s/[[:space:]]+$//')
+            sha=$(echo "$line" | grep -oE 'commit: *[0-9a-f]{7,40}' | sed -E 's/commit: *//' || true)
+            target=${sha:-$GITHUB_SHA}
+            if gh release view "$ver" >/dev/null 2>&1; then
+              echo "$ver already released"; continue
+            fi
+            # notes = the lines under this heading, up to the next "## " heading
+            awk -v v="$ver" '
+              /^## /{ if (grab) exit; if (index($0, v)) { grab=1; next } }
+              grab { print }
+            ' CHANGELOG.md > notes.md
+            printf '\n**Play / install:** https://%s.github.io/%s/ — on iPhone, open it in Safari → Share → Add to Home Screen. Installed copies update themselves the next time you open them online.\n' \
+              "${GITHUB_REPOSITORY_OWNER,,}" "${GITHUB_REPOSITORY#*/}" >> notes.md
+            echo "Releasing $ver at $target"
+            gh release create "$ver" --title "$title" --notes-file notes.md --target "$target"
+          done
