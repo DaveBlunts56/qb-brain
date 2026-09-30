@@ -1019,7 +1019,7 @@ function refreshSetupUI(){
   ], state.mode, k=>state.mode=k);
 
   buildChoiceRow(els.throwRow,[
-    {key:"pull",title:"Pullback meter",sub:"Let go fast = bullet · hold still = lob"},
+    {key:"pull",title:"Pullback meter",sub:"Pull back = lob · tap a 2nd finger = bullet"},
     {key:"tap",title:"Tap receiver",sub:"Tap a receiver to throw"}
   ], state.throwMode, k=>state.throwMode=k);
 
@@ -1389,11 +1389,12 @@ function checkBulletLane(rep,t){
    REP LIFECYCLE
 ============================================================ */
 let rafId=null, tSnap=0, done=false, lastFrameT=null;
-/* Throw gesture: drag back to aim. Let go right away = BULLET.
-   Hold your finger still for a beat (LOFT_HOLD) = the throw lofts into a LOB (it stays a lob until release). */
-const aim = {active:false,start:null,cur:null,lob:false,anchor:null,stillSince:0};
-const LOFT_HOLD=0.45, STILL_PX=6;
+/* Throw gesture (Retro Bowl style): pull back to aim — it starts as a LOB.
+   While still pulling, tap anywhere with another finger to switch to a BULLET (tap again to switch back).
+   Desktop: Space bar or right-click toggles. */
+const aim = {active:false,start:null,cur:null,lob:true,pointerId:null,flash:0};
 function aimType(){ return aim.lob ? "lob" : "bullet"; }
+function toggleThrowType(){ if(!aim.active) return; aim.lob=!aim.lob; aim.flash=performance.now(); }
 
 function startRep(){
   clearOverlays();
@@ -1465,7 +1466,7 @@ function doSnap(){
   els.playTag.classList.add("hidden");
   const throws=MODES[state.mode].throws;
   if(throws){
-    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Drag back · let go = bullet · hold still = lob" : "Tap a receiver to throw";
+    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Pull back to throw a lob · tap a 2nd finger for a bullet" : "Tap a receiver to throw";
     els.aimHint.classList.remove("hidden");
     els.timerBarWrap.classList.remove("hidden");
   }
@@ -1655,6 +1656,8 @@ els.field.addEventListener("pointerdown",(e)=>{
   const rep=state.rep;
   if(state.phase!=="decision"||!MODES[state.mode].throws||rep.ball) return;
   e.preventDefault();
+  // a second finger while aiming switches lob <-> bullet
+  if(aim.active && e.pointerId!==aim.pointerId){ toggleThrowType(); return; }
   const pt=ptField(e);
   if(state.throwMode==="tap"){
     let hit=null, hd=999;
@@ -1669,20 +1672,19 @@ els.field.addEventListener("pointerdown",(e)=>{
       } else finalizeTap(hit,tt);
     }
   } else {
-    aim.active=true; aim.start=pt; aim.cur=pt; aim.lob=false; aim.anchor={x:pt.px,y:pt.py}; aim.stillSince=performance.now();
+    aim.active=true; aim.start=pt; aim.cur=pt; aim.lob=true; aim.pointerId=e.pointerId; aim.flash=0;
     els.aimHint.classList.add("hidden");
     try{ els.field.setPointerCapture(e.pointerId); }catch(_){}
   }
 });
 els.field.addEventListener("pointermove",(e)=>{
-  if(!aim.active) return;
+  if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e);
-  if(!aim.lob && Math.hypot(aim.cur.px-aim.anchor.x, aim.cur.py-aim.anchor.y)>STILL_PX){
-    aim.anchor={x:aim.cur.px,y:aim.cur.py}; aim.stillSince=performance.now();
-  }
 });
+els.field.addEventListener("contextmenu",(e)=>{ e.preventDefault(); toggleThrowType(); });
+window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && aim.active){ e.preventDefault(); toggleThrowType(); } });
 function endAim(e,cancel){
-  if(!aim.active) return;
+  if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e); aim.active=false;
   const rep=state.rep;
   if(state.phase!=="decision"||rep.ball) return;
@@ -1720,29 +1722,39 @@ function drawThrowOverlay(t){
   const rep=state.rep;
   if(aim.active && !rep.ball){
     const sp=toPx(aim.start.x,aim.start.y), cp=toPx(aim.cur.x,aim.cur.y);
-    const from=passerPos(rep,t);
-    const probe=aimLanding(from,aimType());
-    // hold-to-loft timer (only runs while the pull is a real throw)
-    if(!probe.valid && !aim.lob) aim.stillSince=performance.now();
-    const prog = aim.lob ? 1 : clamp((performance.now()-aim.stillSince)/1000/LOFT_HOLD,0,1);
-    if(!aim.lob && prog>=1) aim.lob=true;
-    const type=aimType(), L=aimLanding(from,type);
-    ctx.strokeStyle="rgba(245,243,236,0.55)"; ctx.lineWidth=2; ctx.setLineDash([]);
+    const from=passerPos(rep,t), type=aimType(), L=aimLanding(from,type);
+    const lob=type==="lob";
+    // pull band + thumb
+    ctx.strokeStyle="rgba(245,243,236,0.35)"; ctx.lineWidth=2; ctx.setLineDash([]);
     ctx.beginPath(); ctx.moveTo(sp.x,sp.y); ctx.lineTo(cp.x,cp.y); ctx.stroke();
-    ctx.beginPath(); ctx.arc(cp.x,cp.y,11,0,Math.PI*2); ctx.fillStyle=aim.lob?"#f2c14e":"rgba(245,243,236,0.85)"; ctx.fill();
-    if(L.valid && !aim.lob && prog>0.08){
-      ctx.beginPath(); ctx.arc(cp.x,cp.y,17,-Math.PI/2,-Math.PI/2+Math.PI*2*prog);
-      ctx.strokeStyle="#f2c14e"; ctx.lineWidth=3.5; ctx.stroke();
-    }
+    ctx.beginPath(); ctx.arc(cp.x,cp.y,10,0,Math.PI*2); ctx.fillStyle="rgba(245,243,236,0.55)"; ctx.fill();
+    // ring at the passer
+    const a=toPx(from.x,from.y);
+    ctx.beginPath(); ctx.arc(a.x,a.y,VIEW.PR+6,0,Math.PI*2); ctx.strokeStyle="rgba(255,255,255,0.8)"; ctx.lineWidth=2; ctx.stroke();
     if(L.valid){
-      const a=toPx(from.x,from.y), e=toPx(L.x,L.y), c=arcCtrl(a,e,type);
-      ctx.strokeStyle="rgba(0,0,0,0.3)"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(e.x,e.y); ctx.stroke();
-      ctx.setLineDash(type==="lob"?[6,5]:[2,4]); ctx.strokeStyle=type==="lob"?"#f2c14e":"#ffffff"; ctx.lineWidth=2.5;
-      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.quadraticCurveTo(c.x,c.y,e.x,e.y); ctx.stroke(); ctx.setLineDash([]);
+      const e=toPx(L.x,L.y), c=arcCtrl(a,e,type);
+      const len=Math.hypot(e.x-a.x,e.y-a.y);
+      const gap = lob ? 17 : 12, n=Math.max(3,Math.floor(len/gap));
+      // shadow dots on the ground
+      ctx.fillStyle="rgba(0,0,0,0.35)";
+      for(let i=1;i<n;i++){ const f=i/n; ctx.beginPath(); ctx.arc(lerp(a.x,e.x,f),lerp(a.y,e.y,f),1.8,0,Math.PI*2); ctx.fill(); }
+      // ball-in-the-air dots (hollow for a lob, solid for a bullet)
+      for(let i=1;i<n;i++){
+        const f=i/n, q=bez(a,c,e,f), r=lob ? 3.2+1.6*Math.sin(Math.PI*f) : 2.6;
+        ctx.beginPath(); ctx.arc(q.x,q.y,r,0,Math.PI*2);
+        if(lob){ ctx.fillStyle="rgba(20,20,20,0.35)"; ctx.fill(); ctx.strokeStyle="#ffffff"; ctx.lineWidth=1.8; ctx.stroke(); }
+        else { ctx.fillStyle="#ffd166"; ctx.fill(); ctx.strokeStyle="rgba(0,0,0,0.45)"; ctx.lineWidth=1; ctx.stroke(); }
+      }
+      const r=drawRing(e,0.9,lob?"#ffffff":"#ffd166",lob?2.2:1.6);
+      // type badge (pops briefly when switched)
+      const pop = aim.flash ? clamp(1-(performance.now()-aim.flash)/250,0,1) : 0;
+      const label=(lob?"LOB":"BULLET")+"  "+Math.round(L.dist)+" yd · "+L.flight.toFixed(1)+"s";
+      ctx.font="700 "+Math.round(12+pop*4)+"px Oswald, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+      const tw=ctx.measureText(label).width+14, ty=e.y-r.ry-14;
+      ctx.fillStyle=lob?"rgba(21,33,25,0.85)":"rgba(90,60,0,0.9)"; ctx.fillRect(e.x-tw/2,ty-10,tw,20);
+      ctx.fillStyle=lob?"#ffffff":"#ffd166"; ctx.fillText(label,e.x,ty+1);
+      // power meter
       const col = L.power<0.5?"#5fb87a":(L.power<0.8?"#e8b84e":"#e2542b");
-      const r=drawRing(e,0.95,col,type==="lob"?2.2:1.6);
-      ctx.fillStyle="#fff"; ctx.font="600 11px Oswald, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
-      ctx.fillText((type==="lob"?"LOB ":"BULLET ")+Math.round(L.dist)+" yd · "+L.flight.toFixed(1)+"s", e.x, e.y-r.ry-9);
       const mx=10,my=ch*0.26,mw=12,mh=ch*0.46;
       ctx.fillStyle="rgba(0,0,0,0.4)"; ctx.fillRect(mx,my,mw,mh);
       ctx.fillStyle=col; ctx.fillRect(mx,my+mh*(1-L.power),mw,mh*L.power);
@@ -1750,6 +1762,12 @@ function drawThrowOverlay(t){
       ctx.fillStyle="#f5f3ec"; ctx.font="600 9px Oswald, sans-serif"; ctx.textAlign="left";
       ctx.fillText("POWER",mx-2,my-8);
     }
+    // how-to strip at the bottom of the field
+    const hint = lob ? "LOB  ·  tap with another finger for BULLET" : "BULLET  ·  tap again for LOB";
+    ctx.font="600 12px Inter, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    const hw=ctx.measureText(hint).width+24, hy=ch-22;
+    ctx.fillStyle="rgba(21,33,25,0.85)"; ctx.fillRect(cw/2-hw/2,hy-13,hw,26);
+    ctx.fillStyle=lob?"#ffffff":"#ffd166"; ctx.fillText(hint,cw/2,hy+1);
   }
   if(rep.ball && !rep.carrier){
     const b=rep.ball, a=toPx(b.from.x,b.from.y), e=toPx(b.to.x,b.to.y), c=arcCtrl(a,e,b.type);

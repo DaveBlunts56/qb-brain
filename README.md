@@ -17,17 +17,18 @@ It launches full-screen from its own icon, remembers your settings, and works of
 
 ## How to play
 
-- **Throwing (pullback meter):** after the snap, drag back anywhere on the field to aim.
-  Let go right away = **bullet**. Hold your finger still until the gold ring fills = **lob**.
+- **Throwing (pullback meter, Retro Bowl style):** after the snap, pull back anywhere on the field to aim — it starts as a **lob** (hollow dotted arc).
+  While you're still pulling, **tap anywhere with a second finger** to switch to a **bullet** (tight gold dots, flatter and faster). Tap again to switch back. Let go to throw.
+  On a computer: **Space** or **right-click** switches while you drag.
 - **Modes:** Full Drive · QB Brain · Coverage ID · Quick Read.
 - **Full Drive:** set field length (50–100 yds, plus two 10-yd end zones), width (20–53 yds) and the first-down rule (midfield or every 10).
 
 ## Hosting (GitHub Pages)
 
 Settings → Pages → *Deploy from a branch* → `main` / root. The site appears at
-`https://daveblunts56.github.io/qb-brain/`.
+`https://<your-username>.github.io/<repo-name>/`.
 
-When you publish an update, bump `VERSION` in `sw.js` so installed copies refresh their offline cache.
+When you publish an update, bump `VERSION` in `sw.js` so installed copies refresh their offline cache. Every update gets a GitHub release; see `CHANGELOG.md`.
 
 ## Files
 
