@@ -26,6 +26,8 @@ It launches full-screen from its own icon, remembers your settings, and works of
 - **Key defender reads:** the coach tells you who to read, what he did, the correct read and whether your ball came out on time.
 - **Film Room:** pre-snap quiz (man/zone, coverage, key, first read) → live rep → PRE-SNAP → POST-SNAP reveal with the clue.
 - **QB Profile:** your tendencies across sessions and recommended drills. No ratings — training metrics only.
+- **Adaptive training:** optional; reps are built from your profile (weak coverages more often, strong ones disguised, eyes and pressure tuned to your habits).
+- **5v5 vs 7v7:** 5v5 = quick game vs simple shells and a fast rush; 7v7 = no rush, 4-second clock, seven in coverage with robbers, brackets, quarters and rotations.
 - **Learn:** Home → Learn has the interactive Tutorial (8 lessons) and the Coach's Manual (coverages, routes, reads, progressions, concepts — with diagrams and sources).
 - **Your coach:** after every play you get a breakdown and Coach View (the moment you threw, with the coverage drawn on the field).
 - **Share codes:** share any play as a code; import a teammate's code in My Plays.

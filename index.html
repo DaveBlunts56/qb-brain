@@ -472,6 +472,9 @@ select.play-select{
 .pf-bar .track{height:10px;background:var(--ink-3);position:relative;}
 .pf-bar .track i{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:0 4px 4px 0;}
 .pf-bar .v{color:var(--chalk-dim);font-size:12px;min-width:62px;text-align:right;}
+
+.sm7{font-size:18px;margin-top:4px;}
+#pfAdaptive.hidden{display:none;}
 </style>
 </head>
 <body>
@@ -521,7 +524,7 @@ select.play-select{
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.7.0</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.8.0</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -591,6 +594,7 @@ select.play-select{
     <div class="group"><div class="section-label">BY COVERAGE</div><div class="help">Successful reps against each coverage (and rotated shells).</div><div id="pfCov"></div></div>
     <div class="group"><div class="section-label">BY CONCEPT</div><div class="help">Best and worst concepts you've run.</div><div id="pfCon"></div></div>
     <div class="help" id="pfTrend"></div>
+    <div class="coach-note hidden" id="pfAdaptive"><p></p></div>
     <div class="help">These are training metrics from your own reps — not ratings. They're stored only on this device.</div>
     <button class="btn alt sm" id="pfReset" type="button">RESET PROFILE</button>
   </div>
@@ -635,8 +639,14 @@ select.play-select{
   <!-- ============ SETTINGS ============ -->
   <div id="settingsScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>SETTINGS</h2></div>
-    <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div></div>
-    <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div></div>
+    <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div>
+      <div class="help" id="formatHelp"></div>
+      <div class="section-label sm7">7v7 PASS RUSH</div><div class="choice-row" id="rush7Row"></div></div>
+    <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div>
+      <div class="toggle-row">
+        <div class="t-label"><b>ADAPTIVE TRAINING</b><span>Uses your QB Profile: more reps where you're weak, more disguises where you're strong, eyes and pressure tuned to your habits</span></div>
+        <div class="switch" id="adaptiveSwitch" role="switch" tabindex="0" aria-label="Adaptive training"><i></i></div>
+      </div></div>
     <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
       <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.<br>Tap receiver: a quick tap throws a bullet; press and hold him for a lob.</div></div>
     <div class="group"><div class="section-label">COACH TALK</div><div class="choice-row" id="coachRow"></div>
@@ -1185,7 +1195,7 @@ function posAt(p,t){
    STATE
 ============================================================ */
 const state = {
-  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, stickSide:"left", coachTalk:"auto", throwMode:"pull",
+  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, stickSide:"left", coachTalk:"auto", rush7:"clock", adaptive:false, throwMode:"pull",
   book:"standard", playPick:"random", throwType:"bullet", drillMode:"qb_brain",
   driveCfg:{len:50, width:30, widthTouched:false, fd:"mid"}, drive:null,
   session:{reps:0, score:0, log:[]},
@@ -1205,7 +1215,7 @@ const SAVE_KEY="qbbrain.settings.v1";
 function loadSettings(){
   try{
     const o=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(!o) return;
-    ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
+    ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","rush7","adaptive","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
     if(!MODES[state.drillMode] || state.drillMode==="drive") state.drillMode="qb_brain";
     if(o.driveCfg) Object.assign(state.driveCfg,o.driveCfg);
     if(!MODES[state.mode]) state.mode="qb_brain";
@@ -1214,7 +1224,7 @@ function loadSettings(){
 }
 function saveSettings(){
   try{
-    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
+    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","rush7","adaptive","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
     o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
   }catch(_){}
 }
@@ -1515,14 +1525,15 @@ function buildRep(opts){
   const play = opts.play || (pick!=="random" && plays.find(p=>p.name===pick)) || choice(plays);
   const players = play.players.map(makePlayer);
   const targets = players.filter(p=>p.target);
-  const nDef = squad===5?4:6;
+  const sevenClock = squad===7 && state.rush7!=="rusher" && !state.tut;
+  const nDef = squad===5?4:(sevenClock?7:6);
 
   const keep = opts.keep;   // audible: same defense, new play
-  let disguised = keep ? keep.disguised : opts.coverage ? false : Math.random() < disguiseChanceFor(plan,diff);
+  let disguised = keep ? keep.disguised : opts.coverage ? false : Math.random() < disguiseChanceFor(plan,diff,squad);
   const shownCoverage = keep ? keep.shownCoverage : opts.coverage || pickShownCoverage(Object.assign({forceRotation:disguised},plan),squad);
   let actualCoverage = keep ? keep.actualCoverage : shownCoverage, disguiseKind = keep ? keep.disguiseKind : null;
   if(disguised && !keep){
-    const a=pickActualCoverage(shownCoverage,plan); actualCoverage=a.cov; disguiseKind=a.kind;
+    const a=pickActualCoverage(shownCoverage,plan,squad); actualCoverage=a.cov; disguiseKind=a.kind;
     if(actualCoverage===shownCoverage) disguised=false;
   }
   let tune = DEF_TUNE[opts.difficulty||state.difficulty] || DEF_TUNE.varsity;
@@ -1530,7 +1541,7 @@ function buildRep(opts){
   if(plan.rushPlans) tune=Object.assign({},tune,{plans:plan.rushPlans});
   const defenders = buildDefense(actualCoverage, targets, nDef, tune);
   if(actualCoverage!==shownCoverage) applyShownAlignment(defenders, shownCoverage, targets, nDef, tune);
-  const rushPlan = keep ? keep.rushPlan : opts.rushPlan || pickRushPlan(tune);
+  const rushPlan = keep ? keep.rushPlan : sevenClock ? "none" : opts.rushPlan || pickRushPlan(tune);
   const rx = keep ? keep.rusher.x : rushPlan==="edge" ? GEO.CX+(Math.random()<0.5?-1:1)*Math.min(7,GEO.W*0.25) : GEO.CX;
 
   const out = {
@@ -1544,6 +1555,7 @@ function buildRep(opts){
   };
   initLive(out);
   buildBallTimeline(out);
+  if(rushPlan==="none"){ out.rusher.dropped=true; out.rusher.x=-50; out.rusher.y=40; out.clock=4.0; }
   setupKeyRead(out);
   out.shellShown=shellOf(defenders);
   out.goalRel = isDrive()&&state.drive ? state.drive.len-state.drive.ballOn : 1e9;
@@ -1674,6 +1686,7 @@ function manDef(r,tune){
   return newDef({role:"man",assign:r,leverage:lev,press,pos:{x:clamp(r.x0+levOff(r.x0,lev)*(press?0.8:1.4),1,GEO.W-1),y:Math.max(y0, r.y0+y0)}});
 }
 // zone defender: landmark (lx,ly) on the 30-yd template, coverage range x0..x1 (template), type
+function TXinv(x){ return CENTER_X+(x-GEO.CX)/GEO.zs; }   // field x -> template x (zones)
 function zoneDef(type,lx,ly,x0,x1,align){
   const L={x:ZX(lx),y:ly};
   return newDef({role:"zone",type,lx:L.x,ly:L.y,x0:ZX(x0),x1:ZX(x1),pos:{x:align?ZX(align[0]):L.x,y:align?align[1]:Math.min(L.y,type==="deep"?10:L.y)}});
@@ -1701,11 +1714,34 @@ function buildDefense(coverage, targets, nDef, tune){
     defs.push(zoneDef("deep",5,13.5,0,10.5,[5,10]), zoneDef("deep",15,15.5,9.5,20.5,[15,12.5]), zoneDef("deep",25,13.5,19.5,30,[25,10]));
     if(nDef<=4) defs.push(zoneDef("hook",15,6,5,25,[15,5]));
     else defs.push(zoneDef("flat",5,5,0,11,[5,4]), zoneDef("hook",15,7,9,21,[15,5.5]), zoneDef("flat",25,5,19,30,[25,4]));
+  } else if(coverage==="Robber"){
+    // Cover 1 Robber: one deep safety, a robber sitting in the middle hole reading the QB, man on the outside
+    defs.push(zoneDef("deep",15,15,0,30,[15,12.5]));
+    const rb=zoneDef("hook",15,7,8,22,[15,7.5]); rb.robber=true; defs.push(rb);
+    const man=targets.slice().sort((a,b)=>Math.abs(b.x0-GEO.CX)-Math.abs(a.x0-GEO.CX)).slice(0,nDef-2);
+    man.forEach(r=>defs.push(manDef(r,tune)));
+  } else if(coverage==="Bracket"){
+    // double the biggest threat: one under him (man, inside leverage), one over the top; man on the rest
+    const threat=targets.slice().sort((a,b)=>routeEnd(b).y-routeEnd(a).y)[0];
+    const under=manDef(threat,tune); under.leverage="inside"; under.bracket=true; defs.push(under);
+    const tx=clamp(threat.x0,4,26)/GEO.kx; const over=zoneDef("deep",clamp(TXinv(threat.x0),3,27),13,clamp(TXinv(threat.x0)-7,0,30),clamp(TXinv(threat.x0)+7,0,30),[clamp(TXinv(threat.x0),3,27),10]); over.bracket=true; defs.push(over);
+    targets.filter(r=>r!==threat).sort((a,b)=>Math.abs(b.x0-GEO.CX)-Math.abs(a.x0-GEO.CX)).slice(0,nDef-2).forEach(r=>defs.push(manDef(r,tune)));
+  } else if(coverage==="2-Man"){
+    // Cover 2 man-under: two deep halves, man underneath
+    defs.push(zoneDef("deep",7.5,14,0,15.5,[7.5,12]), zoneDef("deep",22.5,14,14.5,30,[22.5,12]));
+    targets.slice().sort((a,b)=>Math.abs(b.x0-GEO.CX)-Math.abs(a.x0-GEO.CX)).slice(0,nDef-2).forEach(r=>defs.push(manDef(r,tune)));
+  } else if(coverage==="Cover 4"){
+    // quarters: four deep, the rest underneath
+    defs.push(zoneDef("deep",4,15,0,8.5,[4,11]), zoneDef("deep",11.5,16,7,16,[11,12]), zoneDef("deep",18.5,16,14,23,[19,12]), zoneDef("deep",26,15,21.5,30,[26,11]));
+    const left=nDef-4;
+    if(left>=3) defs.push(zoneDef("flat",4,4,0,10,[4,4]), zoneDef("hook",15,6,9,21,[15,5.5]), zoneDef("flat",26,4,20,30,[26,4]));
+    else if(left===2) defs.push(zoneDef("hook",10,6,3,15.5,[10,5]), zoneDef("hook",20,6,14.5,27,[20,5]));
+    else if(left===1) defs.push(zoneDef("hook",15,6,6,24,[15,5]));
   } else { // Underneath Zone: no deep help — hook players carry verticals to ~12 then let them go
     if(nDef<=4) defs.push(zoneDef("flat",4,4,0,9.5), zoneDef("hook",11.5,7.5,8,16), zoneDef("hook",18.5,7.5,14,22), zoneDef("flat",26,4,20.5,30));
     else defs.push(zoneDef("flat",3,4,0,7), zoneDef("hook",9,7.5,6,12.5), zoneDef("hook",13.5,5,11,16), zoneDef("hook",16.5,5,14,19), zoneDef("hook",21,7.5,17.5,24), zoneDef("flat",27,4,23,30));
   }
-  while(defs.length<nDef) defs.push(zoneDef("hook",15,7,8,22));   // extra defender = middle robber
+  while(defs.length<nDef){ const rb=zoneDef("hook",15,7,8,22); rb.robber=true; defs.push(rb); }   // extra defender = middle robber
   const cap=GEO.yMax-1.5;   // near the goal line nobody can drop past the end line
   defs.forEach(d=>{ if(d.ly!==undefined) d.ly=Math.min(d.ly,cap-0.5); d.pos.y=Math.min(d.pos.y,cap-1); });
   return defs;
@@ -1785,7 +1821,7 @@ function zoneTarget(rep,d,lookT,qb,tune){
   }
   // QB eyes pull zone players toward where you're looking
   if(rep.eyesStr>0 && rep.eyesSm && rep.eyesSm.x>d.x0-5 && rep.eyesSm.x<d.x1+5){
-    const w=tune.eyes*rep.eyesStr;
+    const w=Math.min(0.9,tune.eyes*rep.eyesStr*(d.robber?1.8:1));
     tx=lerp(tx,rep.eyesSm.x,w);
     ty = d.type==="deep" ? Math.max(ty, lerp(ty,rep.eyesSm.y+1.5,w)) : lerp(ty,rep.eyesSm.y-1,w*0.6);
   }
@@ -1920,7 +1956,7 @@ function showCoverageQuestion(){
   els.coverageSheet.classList.remove("hidden");
   els.controls.classList.add("hidden");
   const must = Array.from(new Set([state.rep.actualCoverage, state.rep.shownCoverage]));
-  const others = shuffle(ALL_COVERAGES.filter(c=>!must.includes(c)));
+  const others = shuffle(coveragePool(state.rep.squad).filter(c=>!must.includes(c)));
   const options = shuffle(must.concat(others).slice(0,4));
   els.mcqOptions.innerHTML="";
   const letters=["A","B","C","D"];
@@ -2005,7 +2041,11 @@ function runLoop(){
     lastFrameT=t;
     drawFrame(t);
 
-    if(rep.rushStart && !rep.rusher.dropped){
+    if(rep.clock){
+      const frac=clamp(1-t/rep.clock,0,1);
+      els.timerBar.style.transform="scaleX("+frac+")";
+      els.timerBar.style.background = frac<0.3?"var(--bad)":frac<0.55?"var(--risky)":"var(--offense)";
+    } else if(rep.rushStart && !rep.rusher.dropped){
       const frac=clamp(dist(rep.rusher,passerPos(rep,t))/rep.rushStart,0,1);
       els.timerBar.style.transform="scaleX("+frac+")";
       els.timerBar.style.background = frac<0.35?"var(--bad)":frac<0.6?"var(--risky)":"var(--offense)";
@@ -2017,7 +2057,8 @@ function runLoop(){
       const lane=checkBulletLane(rep,t);
       if(lane){ finalizeThrow(t,lane); return; }
       if(t>=rep.ball.tLand){ finalizeThrow(t,null); if(state.phase==="yac") rafId=requestAnimationFrame(frame); return; }
-    } else if(isSacked(rep,t) || t>9){
+    } else if(isSacked(rep,t) || t>9 || (rep.clock && t>rep.clock)){
+      if(rep.clock && t>rep.clock) rep.clockOut=true;
       aim.active=false;
       finalizeSack(t);
       return;
@@ -2560,7 +2601,11 @@ const COVERAGE_TELLS = {
   "Cover 1":"Man underneath with one deep middle defender helping over the top.",
   "Cover 2":"Two deep defenders split the field in halves; the rest sit in short zones.",
   "Cover 3":"Three deep defenders take thirds; underneath defenders guard the flats and hook.",
-  "Underneath Zone":"Everyone sits in short-to-mid zones with no deep help, so deep shots are open if you beat the rush."
+  "Underneath Zone":"Everyone sits in short-to-mid zones with no deep help, so deep shots are open if you beat the rush.",
+  "Cover 4":"Four deep defenders split the field in quarters; only a few defenders cover the short area.",
+  "Robber":"Man outside, one deep safety, and a robber sitting in the middle reading your eyes.",
+  "Bracket":"Two defenders on your best receiver (one under, one over); man on everyone else.",
+  "2-Man":"Two deep safeties with man coverage underneath."
 };
 function roleName(rep,d){
   if(!d) return "a defender";
@@ -2609,14 +2654,14 @@ function finalizeSack(t){
   rep.sackT=t;
   let points=cc?100:0;
   const o=openness(rep,t).sort((a,b)=>b.sep-a.sep)[0];
-  let explain="The rusher got home before the ball came out.";
+  let explain = rep.clockOut ? "The 4-second clock ran out. In 7v7 nobody rushes, but the ball has to be out by 4.0s." : "The rusher got home before the ball came out.";
   if(o && o.sep>4) explain+=" "+label(o.p)+" was open by "+o.sep.toFixed(1)+" yds at that moment.";
   const passer=passerIdAt(rep,t);
   if(passer!=="Q") explain+=" Even after the pitch, "+passer+" has to get it out fast.";
   const py=passerPos(rep,t).y;
   const qp=passerPos(rep,t), qb=playerById(rep,passer);
   const puller = rep.rusher.dropped ? (nearestDefender(rep,qp).d||{}).pos : rep.rusher;
-  if(qb) qb.flagGone = (puller && puller.x<qp.x) ? "left" : "right";
+  if(qb && !rep.clockOut) qb.flagGone = (puller && puller.x<qp.x) ? "left" : "right";
   rep.ballGone=true;
   if(puller) addFx({kind:"flag",from:{x:qp.x,y:qp.y},to:{x:puller.x,y:puller.y},dur:850,text:"SACK!"});
   SFX.flag(); SFX.sackThud(); SFX.groan();
@@ -2898,11 +2943,12 @@ function bannerFor(resultType, driveInfo){
     if(/TURNOVER ON DOWNS/.test(driveInfo.status)) return ["TURNOVER ON DOWNS","bad"];
     if(/Intercepted/.test(h)) return ["INTERCEPTED","bad"];
     if(/First down/.test(h)) return ["FIRST DOWN","good"];
-    if(/Sack/.test(h)) return ["SACKED","bad"];
+    if(/Sack/.test(h)) return [state.rep && state.rep.clockOut ? "TIME!" : "SACKED","bad"];
     if(/Incomplete/.test(h)) return ["INCOMPLETE",""];
     const m=h.match(/Gain of (\d+)/); if(m) return ["+"+m[1]+" YARDS","good"];
     const l=h.match(/Loss of (\d+)/); if(l) return ["LOSS OF "+l[1],"bad"];
   }
+  if(resultType==="SACKED" && state.rep && state.rep.clockOut) return ["TIME!","bad"];
   const map={"GOOD READ":["GOOD READ","good"],"RISKY":["COMPLETE",""],"COVERED":["COVERED","bad"],"SACKED":["SACKED","bad"],"OFF TARGET":["INCOMPLETE",""],"BROKEN UP":["BROKEN UP","bad"],"INTERCEPTED":["INTERCEPTED","bad"]};
   return map[resultType]||[resultType,""];
 }
@@ -2919,7 +2965,7 @@ function showBanner(text,cls,then){
   bannerTimer=setTimeout(done,1000);
 }
 function renderResult(resultType, subtitle, explain, chips, points, rep, driveInfo){
-  els.resultText.textContent = resultType;
+  els.resultText.textContent = resultType==="SACKED" && rep.clockOut ? "CLOCK RAN OUT" : resultType;
   if(driveInfo){
     els.driveLine.innerHTML="<b>"+driveInfo.headline+"</b> "+driveInfo.status;
     els.driveLine.classList.remove("hidden");
@@ -3055,8 +3101,23 @@ const ROTATIONS={
   "Cover 3":        [["Cover 2","rotation"],["Cover 1","bluff zone → man"]],
   "Cover 1":        [["Cover 3","bluff man → zone"],["Cover 2","bluff man → zone"]],
   "Man":            [["Cover 3","bluff man → zone"],["Underneath Zone","bluff man → zone"],["Cover 1","rotation"]],
-  "Underneath Zone":[["Man","bluff zone → man"],["Cover 3","rotation"]]
+  "Underneath Zone":[["Man","bluff zone → man"],["Cover 3","rotation"]],
+  // 7v7: more bodies, more layers
+  "Cover 4":        [["Cover 3","rotation"],["2-Man","bluff zone → man"],["Cover 2","rotation"]],
+  "Robber":         [["Cover 3","bluff man → zone"],["Cover 1","rotation"]],
+  "Bracket":        [["Cover 1","rotation"],["2-Man","rotation"]],
+  "2-Man":          [["Cover 2","bluff man → zone"],["Cover 4","bluff man → zone"]]
 };
+// 7v7-only twists on the base looks
+const ROTATIONS_7={
+  "Cover 1":[["Robber","rotation"],["Bracket","rotation"]],
+  "Cover 2":[["2-Man","bluff zone → man"],["Cover 4","rotation"]],
+  "Cover 3":[["Cover 4","rotation"],["Robber","bluff zone → man"]],
+  "Man":    [["Bracket","rotation"],["Robber","rotation"]]
+};
+// 5v5 = quick game vs simple shells and fast pressure; 7v7 = layered zones, two safeties, robbers and brackets
+const POOL_5=["Man","Cover 1","Cover 2","Cover 3","Underneath Zone"];
+const POOL_7=["Man","Cover 1","Cover 2","Cover 3","Cover 4","Robber","Bracket","2-Man","Underneath Zone"];
 function weighted(obj){ const ks=Object.keys(obj).filter(k=>obj[k]>0); let s=ks.reduce((a,k)=>a+obj[k],0), r=Math.random()*s; for(const k of ks){ r-=obj[k]; if(r<=0) return k; } return ks[ks.length-1]; }
 function currentPlan(){
   const p=Object.assign({}, state.plan||{});
@@ -3068,33 +3129,73 @@ function mergePlan(p,a){
   if(a.disguise!=null) p.disguise=Math.max(p.disguise||0,a.disguise);
   if(a.rotations && !p.rotations) p.rotations=a.rotations;
   if(a.eyesMul) p.eyesMul=Math.max(p.eyesMul||1,a.eyesMul);
-  if(a.rushMul) p.rushMul=Math.max(p.rushMul||1,a.rushMul);
+  if(a.rushMul && p.rushMul==null) p.rushMul=a.rushMul;
   if(a.rushPlans && !p.rushPlans) p.rushPlans=a.rushPlans;
   p.adaptiveNote=a.note;
   return p;
 }
-function coveragePool(squad){ return ALL_COVERAGES; }
+function coveragePool(squad){ return (squad||state.squad)===7 ? POOL_7 : POOL_5; }
 function pickShownCoverage(plan,squad){
   if(plan.rotations && plan.rotations.length && plan.forceRotation){ return choice(plan.rotations)[0]; }
-  if(plan.covWeights) return weighted(plan.covWeights);
+  if(plan.covWeights){ const pool=coveragePool(squad), w={}; Object.keys(plan.covWeights).forEach(k=>{ if(pool.includes(k)) w[k]=plan.covWeights[k]; }); if(Object.keys(w).length) return weighted(w); }
   return choice(coveragePool(squad));
 }
-function pickActualCoverage(shown,plan){
-  let opts=ROTATIONS[shown]||[];
+function pickActualCoverage(shown,plan,squad){
+  const pool=coveragePool(squad);
+  let opts=(ROTATIONS[shown]||[]).concat(squad===7?(ROTATIONS_7[shown]||[]):[]).filter(o=>pool.includes(o[0]));
   if(plan.rotations && plan.rotations.length){ const f=opts.filter(o=>plan.rotations.some(r=>r[0]===shown && r[1]===o[0])); if(f.length) opts=f; }
   if(!opts.length) return {cov:shown, kind:null};
   const o=choice(opts); return {cov:o[0], kind:o[1]};
 }
-function disguiseChanceFor(plan,diff){
+function disguiseChanceFor(plan,diff,squad){
   if(plan.disguise!=null) return plan.disguise;
-  if(MODES[state.mode] && MODES[state.mode].film) return Math.max(diff.disguiseChance, state.difficulty==="rookie"?0.35:0.5);
-  return diff.disguiseChance;
+  const bump = squad===7 && diff.disguiseChance>0 ? 0.1 : 0;   // 7v7 defenses rotate more
+  if(MODES[state.mode] && MODES[state.mode].film) return Math.max(diff.disguiseChance+bump, state.difficulty==="rookie"?0.35:0.5);
+  return diff.disguiseChance+bump;
 }
 // how many defenders sit deep (8+ yds) — "one-high", "two-high"...
 // QB language: count the deep defenders. 3 deep = one-high (middle closed), 4 deep = two-high quarters
 function shellName(n){ return n===0?"zero-high":n===1?"one-high":n===2?"two-high":n===3?"one-high, 3 deep":"two-high, quarters"; }
 function shellOf(defs){ return shellName(defs.filter(d=>(d.pos0||d.pos).y>=8.5).length); }
 function actualShell(rep){ return shellName(rep.defenders.filter(d=>d.role==="zone" && d.type==="deep").length); }
+
+/* ============================================================
+   ADAPTIVE TRAINING — builds a plan from your QB Profile every rep.
+   Strong vs a coverage → you'll see it disguised more. Weak → you'll see it more.
+   Stare-downs → defenders read your eyes harder. Pressure → the rush ramps up as you handle it.
+   Struggle with rotations → more disguised reps.
+============================================================ */
+function adaptivePlan(){
+  const all=PROFILE.recs.filter(r=>r.sq===state.squad);
+  const recs=all.slice(-80);
+  if(recs.length<8) return {note:"ADAPTIVE: learning your tendencies ("+recs.length+"/8 "+state.squad+"v"+state.squad+" reps)"};
+  const M=profileMetrics(recs), pool=coveragePool(state.squad), plan={covWeights:{}}, notes=[];
+  const rateOf=c=>{ const g=M.byCov[c]; return g&&g.n>=3 ? g.k/g.n : 0.5; };
+  pool.forEach(c=>{ plan.covWeights[c]=+(0.6+(1-rateOf(c))*1.6).toFixed(2); });
+  const weak=pool.filter(c=>M.byCov[c] && M.byCov[c].n>=3 && rateOf(c)<0.45);
+  if(weak.length) notes.push("more "+weak.slice(0,2).join(" & ")+" reps");
+  const strong=pool.filter(c=>M.byCov[c] && M.byCov[c].n>=4 && rateOf(c)>=0.7);
+  if(strong.length){
+    plan.disguise=0.3;
+    plan.rotations=[]; strong.forEach(s0=>{ (ROTATIONS[s0]||[]).concat(state.squad===7?(ROTATIONS_7[s0]||[]):[]).forEach(o=>{ if(pool.includes(o[0])) plan.rotations.push([s0,o[0]]); }); });
+    notes.push(strong[0]+" gets disguised more (you're reading it well)");
+  }
+  if((M.rotTwoHigh.n>=3 && M.rotTwoHigh.pct<50) || (M.disg.n>=4 && M.disg.pct!=null && M.disg.plain!=null && M.disg.pct<M.disg.plain-20)){
+    plan.disguise=Math.max(plan.disguise||0,0.55); plan.rotations=null; notes.push("extra post-snap rotations");
+  }
+  if(M.stare.n>=4 && M.stare.pct>=20){ plan.eyesMul=+(1+Math.min(1.4,M.stare.pct/25)).toFixed(2); notes.push("safeties read your eyes harder"); }
+  const P=M.pressure;
+  if(P.n>=3){
+    const sc=(P.pct||0)/100, L= sc<0.35?0 : sc<0.55?1 : sc<0.75?2 : 3;
+    plan.rushMul=[0.92,1.0,1.06,1.12][L];
+    plan.rushPlans = L>=2 ? {straight:0.4,edge:0.35,delay:0.25} : L===1 ? {straight:0.65,edge:0.35} : {straight:1};
+    notes.push("pressure level "+(L+1)+"/4");
+  }
+  plan.note = notes.length ? "ADAPTIVE: "+notes.join(" · ") : "ADAPTIVE: balanced mix";
+  return plan;
+}
+
+window.__qbTrain={adaptivePlan,currentPlan,coveragePool};
 
 /* ============================================================
    KEY DEFENDER READS
@@ -3122,7 +3223,8 @@ function readPt(p){ return posAt(p,1.5); }
 function keyShort(rep,d){
   if(!d) return "?";
   if(d.isRusher) return "R";
-  if(d.role==="robber") return "ROBBER";
+  if(d.robber) return "ROBBER";
+  if(d.bracket) return d.role==="man"?"CB":"S";
   if(d.role==="man"){ const off=Math.abs(d.assign.x0-GEO.CX); return off>GEO.W*0.28 ? "CB" : (d.assign.id==="C"?"LB":"NB"); }
   if(d.type==="deep") return Math.abs(d.lx-GEO.CX)<GEO.W*0.2 ? "S" : (Math.abs(d.lx-GEO.CX)>GEO.W*0.3 && !(rep.actualCoverage==="Cover 2") ? "CB" : "S");
   if(d.type==="flat") return "CB";
@@ -3796,6 +3898,7 @@ showPlayTag=function(){
   let extra="";
   if(rep.audibledFrom) extra+='<br><span style="color:#ffc933">AUDIBLE</span> from '+rep.audibledFrom;
   if(rep.hot && Object.keys(rep.hot).length) extra+='<br><span style="color:#ffc933">HOT</span> '+Object.keys(rep.hot).map(k=>k+" "+LIB[rep.hot[k]].name).join(", ");
+  if(rep.plan && rep.plan.adaptiveNote && state.adaptive) extra+='<br><span style="color:#5ab8ff">'+rep.plan.adaptiveNote+'</span>';
   if(state.showProgression && rep.keyRead && !MODES[state.mode].film) extra+='<br><span style="color:#ff6b5a">'+keyPlanText(rep)+'</span>';
   if(extra) els.playTag.innerHTML+=extra;
 };
@@ -3959,6 +4062,26 @@ const COV_COACH = {
     tell:"Three deep players keep everything in front of them. Only one or two defenders cover the short area.",
     beat:"Take what's underneath: flats, hitches, outs and ins in front of the deep defenders.",
     chapter:"cov-3"},
+  "Cover 4": {
+    simple:"Cover 4 (quarters): four defenders deep, only a few short.",
+    tell:"Four deep defenders across the field; the short area is thin.",
+    beat:"Take the underneath throws, and flood one side with layered routes.",
+    chapter:"cov-7v7"},
+  "Robber": {
+    simple:"Cover 1 Robber: man outside, one deep safety, and a robber sitting in the middle.",
+    tell:"One deep safety plus a defender parked at 6–8 yds in the middle with his eyes on you.",
+    beat:"Don't throw into the middle where the robber sits — attack outside, or freeze him with your eyes and throw behind him.",
+    chapter:"cov-7v7"},
+  "Bracket": {
+    simple:"Bracket: two defenders on your best receiver (one under, one over), man everywhere else.",
+    tell:"A defender over the top of one receiver with another underneath him.",
+    beat:"Your #1 is doubled — that means someone else is one-on-one or free. Go there.",
+    chapter:"cov-7v7"},
+  "2-Man": {
+    simple:"2-Man: two deep safeties with man coverage underneath.",
+    tell:"Two deep safeties (looks like Cover 2), but the underneath defenders turn and run with receivers.",
+    beat:"Crossers and rubs underneath, or a receiver beating his man on an out — the safeties are too deep to help short.",
+    chapter:"cov-7v7"},
   "Underneath Zone": {
     simple:"Underneath zone: everyone sat in short zones with no deep help.",
     tell:"Defenders at short depth looking at the QB, nobody really deep.",
@@ -4024,6 +4147,7 @@ function bestMoment(rep,tEnd){
   return best;
 }
 function rushArrival(rep){
+  if(rep.clock) return rep.clock;
   // straight-line estimate of when the rusher gets home on this difficulty
   if(rep.rushPlan==="drop") return null;
   const d=rep.rushStart || 11, v=rep.rushSpeed||5;
@@ -4083,7 +4207,7 @@ function coachAnalyze(rep,resultType){
     case "BROKEN UP": v="Broken up by "+roleOf(out.keyDef)+"."+(best && best.p.id!==mineId && best.sep>3.5 ? " "+name(best.p.id)+" was the safer throw ("+sepTxt(best.sep)+")." : ""); break;
     case "INTERCEPTED": v="Picked. "+(mine ? roleOf(mine.def)+" was "+sepTxt(mine.sep)+" from "+mineId+" when you threw." : "")+(best && best.p.id!==mineId && best.sep>3.5 ? " "+name(best.p.id)+" was open." : ""); break;
     case "OFF TARGET": v="Right idea, but the ball missed "+(mineId||"him")+". "+(mine&&mine.sep>3?"He was open — lead him to where he's going.":"Aim for the spot he's running to, not where he is."); break;
-    case "SACKED": v = best && best.sep>=3.5 ? "Sacked. At "+tDec.toFixed(1)+"s "+name(best.p.id)+" was open by "+sepTxt(best.sep)+" — that was your throw." : "Sacked. Nobody was clean — throw it away or check it down sooner."; break;
+    case "SACKED": v = best && best.sep>=3.5 ? (rep.clockOut?"Time ran out.":"Sacked.")+" At "+tDec.toFixed(1)+"s "+name(best.p.id)+" was open by "+sepTxt(best.sep)+" — that was your throw." : (rep.clockOut?"Time ran out.":"Sacked.")+" Nobody was clean — throw it away or check it down sooner."; break;
     default: v=resultType;
   }
   out.verdict=v;
@@ -4099,15 +4223,18 @@ function coachAnalyze(rep,resultType){
   // timing
   let timing="";
   if(b){
-    timing="Ball out at "+tDec.toFixed(1)+"s"+(arrive?" — the rusher gets home in about "+arrive.toFixed(1)+"s on "+DIFFICULTY[state.difficulty].label+".":".");
+    timing="Ball out at "+tDec.toFixed(1)+"s"+(rep.clock?" — the 7v7 clock runs out at "+rep.clock.toFixed(1)+"s.":arrive?" — the rusher gets home in about "+arrive.toFixed(1)+"s on "+DIFFICULTY[state.difficulty].label+".":".");
     if(b.type==="lob" && b.flight>1.4 && (resultType==="INTERCEPTED"||resultType==="BROKEN UP")) timing+=" The lob hung "+b.flight.toFixed(1)+"s, giving defenders time to close.";
   } else if(resultType==="SACKED"){
     timing="You held it "+(rep.sackT||0).toFixed(1)+"s"+(arrive?"; on "+DIFFICULTY[state.difficulty].label+" the rusher arrives around "+arrive.toFixed(1)+"s.":".");
   }
   out.timing=timing;
   // one coaching tip (most important first)
-  const zone = rep.actualCoverage!=="Man" && rep.actualCoverage!=="Cover 1";
-  if(resultType==="SACKED") tip = arrive && arrive<1.8 ? "On Elite you have about one read. Know where the ball is going before the snap and throw on time, or scramble away from the rusher with the stick." : "Decide by your 2nd read. If nothing's there, scramble away from the rusher and throw to your checkdown.";
+  const zone = !MAN_FAMILY(rep.actualCoverage);
+  const cOpen = rep.squad===5 && snap.find(o=>o.p.id==="C" && o.sep>=3);
+  if(resultType==="SACKED" && rep.clockOut) tip="7v7 gives you 4 seconds and no rush. Decide on your 1st read pre-snap, work 1 → 2 → checkdown, and get it out before the clock.";
+  else if(resultType==="SACKED" && cOpen) tip="In 5v5 your center is your hot read — he was open. When the rush gets home fast, dump it to him.";
+  else if(resultType==="SACKED") tip = arrive && arrive<1.8 ? "On Elite you have about one read. Know where the ball is going before the snap and throw on time, or scramble away from the rusher with the stick." : "Decide by your 2nd read. If nothing's there, scramble away from the rusher and throw to your checkdown.";
   else if(resultType==="INTERCEPTED" && b && b.type==="bullet") tip="Bullets travel low — an underneath defender in the lane can pick them. Lob it over him, or throw away from his side.";
   else if(resultType==="INTERCEPTED" && b && b.type==="lob") tip="Lobs hang in the air. Against tight coverage drive it in with a bullet, or save the lob for when the defender is trailing.";
   else if((resultType==="COVERED"||resultType==="BROKEN UP") && zone) tip="Against zone, throw to grass — the open space between defenders — not to a receiver standing next to one.";
@@ -4123,7 +4250,7 @@ function coachAnalyze(rep,resultType){
   else if(ka && ka.timing==="early" && ka.right) tip="It worked, but you threw before "+ka.label.short+" moved. Wait one beat for the key to declare.";
   // decision metrics for the QB Profile
   const rq=hAt(rep.rusher.h,tDec,rep.rusher), qbp=histPos(playerById(rep,passerIdAt(rep,tDec))||rep.players[0],tDec);
-  const pressured = !rep.rusher.dropped && (dist(rq,qbp)<3.2 || (arrive && tDec>=arrive-0.35));
+  const pressured = rep.clock ? tDec>=rep.clock-0.8 : (!rep.rusher.dropped && (dist(rq,qbp)<3.2 || (arrive && tDec>=arrive-0.35)));
   const firstOpen = !!(first && first.sep>=4);
   out.metrics={
     release: b ? +tDec.toFixed(2) : null,
@@ -4332,7 +4459,7 @@ function filmAsk(){
     ["Man","Zone"].forEach(k=>opt(k,()=>filmAnswer("mz",k,k===familyOf(rep.shownCoverage))));
   } else if(step==="cov"){
     els.filmQ.textContent="2 · LIKELY COVERAGE?"; els.filmSub.textContent="Count the deep defenders. The look can still change after the snap.";
-    const must=[rep.shownCoverage], others=shuffle(ALL_COVERAGES.filter(c=>c!==rep.shownCoverage));
+    const must=[rep.shownCoverage], others=shuffle(coveragePool(rep.squad).filter(c=>c!==rep.shownCoverage));
     shuffle(must.concat(others).slice(0,4)).forEach(c=>opt(c,()=>filmAnswer("cov",c,c===rep.shownCoverage)));
   } else if(step==="key"){
     els.filmQ.textContent="3 · WHO'S YOUR KEY DEFENDER?"; els.filmSub.textContent="Tap the defender this play puts in a bind ("+rep.keyRead.A+" vs "+rep.keyRead.B+").";
@@ -4426,7 +4553,7 @@ function filmResult(rep){
   els.filmBox.innerHTML="";
   const h=document.createElement("div"); h.className="film-q"; h.textContent="5 · POST-SNAP: WHAT DID THEY ACTUALLY PLAY?"; els.filmBox.appendChild(h);
   const row=document.createElement("div"); row.className="film-opts"; els.filmBox.appendChild(row);
-  const opts=shuffle(Array.from(new Set([rep.actualCoverage,rep.shownCoverage].concat(shuffle(ALL_COVERAGES)))).slice(0,4));
+  const opts=shuffle(Array.from(new Set([rep.actualCoverage,rep.shownCoverage].concat(shuffle(coveragePool(rep.squad))))).slice(0,4));
   opts.forEach(c=>{ const b=document.createElement("button"); b.type="button"; b.className="film-opt"; b.textContent=c;
     b.addEventListener("click",()=>{ FILM.ans.post={val:c, ok:c===rep.actualCoverage}; profileFilm(FILM.ans); filmReveal(rep); }); row.appendChild(b); });
 }
@@ -4637,6 +4764,33 @@ showScreen=function(id){ _showScreenP(id); if(id==="profileScreen"){ els.pfReset
 if(els.profileSummary){ const n=PROFILE.recs.length; els.profileSummary.textContent = n ? n+" reps tracked" : "Your tendencies"; }
 window.__qbProfile={profileMetrics,profileDiagnose,DRILLS,startDrill,get recs(){ return PROFILE.recs; }};
 
+/* ---------- settings: 7v7 pass rush + adaptive ---------- */
+["rush7Row","adaptiveSwitch","formatHelp","pfAdaptive"].forEach(id=>{ els[id]=document.getElementById(id); });
+function renderTrainingSettings(){
+  if(els.rush7Row) buildChoiceRow(els.rush7Row,[
+    {key:"clock",title:"4-sec clock",sub:"No rush, 7th defender in coverage (real 7v7)"},
+    {key:"rusher",title:"One rusher",sub:"Rusher from 7 yds, 6 in coverage"}
+  ], state.rush7||"clock", k=>{ state.rush7=k; });
+  if(els.formatHelp) els.formatHelp.textContent = state.squad===7
+    ? "7v7: layered zones, two-high shells, robbers, brackets and more rotations. Bigger picture, more to process."
+    : "5v5: quick reads and spacing vs simple shells, a fast rush, and your center as the hot read.";
+  if(els.adaptiveSwitch) els.adaptiveSwitch.classList.toggle("on",!!state.adaptive);
+  if(els.rush7Row){ const show=state.squad===7; els.rush7Row.style.display=show?"":"none"; if(els.rush7Row.previousElementSibling) els.rush7Row.previousElementSibling.style.display=show?"":"none"; }
+}
+function flipAdaptive(){ state.adaptive=!state.adaptive; els.adaptiveSwitch.classList.toggle("on",state.adaptive); saveSettings(); refreshSetupUI(); }
+els.adaptiveSwitch.addEventListener("click",flipAdaptive);
+els.adaptiveSwitch.addEventListener("keydown",(e)=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); flipAdaptive(); } });
+const _refreshSetupUI_P=refreshSetupUI;
+refreshSetupUI=function(){ _refreshSetupUI_P(); renderTrainingSettings(); };
+renderTrainingSettings();
+const _renderProfile=renderProfile;
+renderProfile=function(){
+  _renderProfile();
+  const box=els.pfAdaptive; if(!box) return;
+  box.classList.remove("hidden");
+  box.firstChild.textContent = state.adaptive ? (adaptivePlan().note||"ADAPTIVE: on") + " (" + state.squad+"v"+state.squad+")" : "Adaptive training is off. Turn it on in Settings and every rep is built from this profile.";
+};
+
 /* ============================================================
    LEARN — Coach's Manual (chapters + diagrams) and the interactive Tutorial
 ============================================================ */
@@ -4672,12 +4826,14 @@ function figZone(F,x0,x1,y0,y1,deep){ const g=F.g, A=F.P(x0,y1), B=F.P(x1,y0);
   g.fillStyle=deep?"rgba(90,184,255,0.18)":"rgba(255,201,51,0.18)"; g.strokeStyle=deep?"rgba(90,184,255,0.8)":"rgba(255,201,51,0.8)"; g.lineWidth=1.5;
   g.fillRect(A[0],A[1],B[0]-A[0],B[1]-A[1]); g.strokeRect(A[0],A[1],B[0]-A[0],B[1]-A[1]); }
 const FIG_OFF5=[["Q",15,-2.8],["C",15,0],["X",3,0],["Y",9,0],["Z",27,0]];
+const FIG_OFF7=[["Q",15,-2.8],["C",15,0],["X",2,0],["H",8,0],["Y",21,0],["Z",28,0],["F",11,-1.5]];
 // coverage diagram using the game's own defense builder
 function figCoverage(cv,cov){
-  const F=figCtx(cv,-6,18); if(!F) return;
+  const F=figCtx(cv,-6,19); if(!F) return;
   const save={W:GEO.W,yMin:GEO.yMin,yMax:GEO.yMax}; setGeometry(30,-14,45);
-  let defs=[], rusher=true;
-  const targets=FIG_OFF5.filter(o=>o[0]!=="Q").map(o=>({id:o[0],x0:o[1],y0:o[2]}));
+  let defs=[], rusher=true, OFF=FIG_OFF5, nd=4;
+  if(/^7:/.test(cov)){ cov=cov.slice(2); OFF=FIG_OFF7; nd=7; rusher=false; }
+  const targets=OFF.filter(o=>o[0]!=="Q").map(o=>({id:o[0],x0:o[1],y0:o[2],path:{wps:[{x:o[1],y:o[2],t:0},{x:o[1],y:o[2]+(o[0]==="Y"||o[0]==="X"?16:6),t:2}]}}));
   if(cov==="Cover 4"){ [[0,7.5],[7.5,15],[15,22.5],[22.5,30]].forEach(([a,b])=>defs.push({role:"zone",type:"deep",x0:a,x1:b,lx:(a+b)/2,ly:12,pos:{x:(a+b)/2,y:10}})); }
   else if(cov==="2-2 Box"){ defs=[{role:"zone",type:"flat",x0:0,x1:14,lx:8,ly:5,pos:{x:8,y:5}},{role:"zone",type:"flat",x0:16,x1:30,lx:22,ly:5,pos:{x:22,y:5}},
      {role:"zone",type:"deep",x0:0,x1:15,lx:8,ly:13,pos:{x:8,y:11}},{role:"zone",type:"deep",x0:15,x1:30,lx:22,ly:13,pos:{x:22,y:11}}]; }
@@ -4685,14 +4841,14 @@ function figCoverage(cv,cov){
      {role:"zone",type:"flat",x0:20,x1:30,lx:26,ly:4,pos:{x:26,y:4}},{role:"zone",type:"deep",x0:0,x1:30,lx:15,ly:14,pos:{x:15,y:12}}]; }
   else if(cov==="Cover 3 (no rush)"){ defs=[{role:"zone",type:"deep",x0:0,x1:10,lx:5,ly:12,pos:{x:5,y:10}},{role:"zone",type:"deep",x0:10,x1:20,lx:15,ly:13,pos:{x:15,y:11}},{role:"zone",type:"deep",x0:20,x1:30,lx:25,ly:12,pos:{x:25,y:10}},
      {role:"zone",type:"flat",x0:0,x1:15,lx:8,ly:5,pos:{x:8,y:5}},{role:"zone",type:"flat",x0:15,x1:30,lx:22,ly:5,pos:{x:22,y:5}}]; rusher=false; }
-  else { try{ defs=buildDefense(cov,targets,4,DEF_TUNE.varsity); defs.forEach(d=>{ if(d.role==="man"){ d.press=false; d.pos={x:clamp(d.assign.x0+(d.assign.x0<15?1:-1),1,29),y:5}; } }); }catch(_){ defs=[]; } }
+  else { try{ defs=buildDefense(cov,targets,nd,DEF_TUNE.varsity); defs.forEach(d=>{ if(d.role==="man"){ d.press=false; d.pos={x:clamp(d.assign.x0+(d.assign.x0<15?1:-1),1,29),y:5}; } }); }catch(_){ defs=[]; } }
   setGeometry(save.W,save.yMin,save.yMax);
   defs.forEach(d=>{ if(d.role==="zone"){ const deep=d.type==="deep";
       const y0=deep?Math.max(8,d.ly-4):d.type==="flat"?0.5:2.5, y1=deep?Math.min(18,d.ly+6):d.type==="flat"?6.5:10; figZone(F,d.x0,d.x1,y0,y1,deep); } });
-  FIG_OFF5.forEach(o=>figDot(F,o[1],o[2],o[0]));
+  OFF.forEach(o=>figDot(F,o[1],o[2],o[0]));
   defs.forEach(d=>{
     if(d.role==="man"){ const r=targets.find(q=>q.id===d.assign.id); if(r) figLine(F,[[d.pos.x,d.pos.y],[r.x0,r.y0+0.6]],"rgba(232,65,44,0.95)",2,[5,4]); }
-    figDef(F,d.pos.x,d.pos.y, d.role==="man"?"man":d.type);
+    figDef(F,d.pos.x,d.pos.y, d.robber?"robber":d.bracket?(d.role==="man"?"under":"over"):d.role==="man"?"man":d.type);
   });
   if(rusher){ figDef(F,15,7,"rusher","#9e1b12"); figLine(F,[[15,6.2],[15,-1.5]],"rgba(255,201,51,0.9)",2,[3,4],true); }
 }
@@ -4945,6 +5101,20 @@ const MANUAL=[
     ["fig","coverage","3-1","The 3-1: three short, one deep."],
     ["p","<b>3-1:</b> outside defenders 3–5 yards off check quick routes and drags, then bail deep; one safety rotates with the play. Good against bunch, weaker against spread formations."],
     ["src",[SRC.def5,SRC.iflagdef,["PlaybookTech — 5v5 defense changeup","https://firstdown.playbooktech.com/coaches-community/5v5-flag-football-defense-changeup"]]]
+  ]},
+  {id:"cov-7v7",title:"7v7: layered coverages",level:"pro",group:"COVERAGES",blocks:[
+    ["p","7v7 is a different processing job than 5v5. Most 7v7 formats have <b>no rusher and a 4-second clock</b>, so all seven defenders cover — two safeties, robbers, brackets and late rotations. You have more time, but the windows are smaller and the picture changes after the snap."],
+    ["note","QB Brain 7v7 defaults to the no-rush 4-second clock with seven in coverage. You can switch to one rusher in Settings → 7v7 Pass Rush."],
+    ["fig","coverage","7:Robber","Cover 1 Robber: one deep safety, a robber in the middle hole, man outside."],
+    ["p","<b>Robber:</b> the robber sits at 6–8 yds in the middle and reads your eyes to jump digs and crossers. Attack outside, or look at the middle to pull him and throw behind him."],
+    ["fig","coverage","7:Bracket","Bracket: two defenders on the biggest threat."],
+    ["p","<b>Bracket:</b> your best receiver gets a defender underneath and one over the top. That means someone else is one-on-one or free — find him."],
+    ["fig","coverage","7:2-Man","2-Man: two deep halves, man underneath."],
+    ["p","<b>2-Man:</b> looks like Cover 2 before the snap, but the underneath players turn and run with receivers. Crossers and rubs are the answer; the safeties are too deep to help short."],
+    ["fig","coverage","7:Cover 4","Cover 4 (quarters) with seven: four deep, three short."],
+    ["p","<b>Cover 4:</b> four deep defenders take away everything vertical. Be patient: hit the hitches, outs and checkdowns underneath."],
+    ["tip","5v5 rewards quick decisions and your center as the hot read. 7v7 rewards patience: confirm the shell after the snap, find the key, then throw on time before the clock."],
+    ["src",[["Under Armour — What is 7-on-7 football","https://www.underarmour.com/en-us/t/playbooks/football/what-is-7-on-7-football-format"],SRC.beaters]]
   ]},
   {id:"read-presnap",title:"Pre-snap: count the safeties",level:"all",group:"READING THE DEFENSE",blocks:[
     ["p","Before the snap, the most useful thing you can do is <b>count how many defenders are deep</b>. That tells you whether the middle of the field is open or closed."],

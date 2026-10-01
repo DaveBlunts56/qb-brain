@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.8.0 — Adaptive training, real 5v5 vs 7v7, Robber & Bracket
+
+### 5v5 and 7v7 are different jobs now
+- **5v5:**
+  - quick reads and spacing vs simple shells (Man, Cover 1, Cover 2, Cover 3, underneath zone)
+  - a fast rusher
+  - when you get sacked with the center open, the coach tells you: "In 5v5 your center is your hot read."
+- **7v7:**
+  - no rush and a **4-second pass clock** by default, like most 7v7 formats, so all **seven defenders cover** (Settings → 7v7 Pass Rush can switch back to one rusher)
+  - layered coverages: **Cover 4 (quarters)**, **Cover 1 Robber** (a robber in the middle reading your eyes), **Bracket** (two defenders on the biggest threat, one under, one over) and **2-Man** (two deep, man underneath), on top of the base coverages
+  - more post-snap rotations, including Cover 1 → Robber or Bracket, Cover 2 → 2-Man or Cover 4, Cover 3 → Cover 4, and Robber → Cover 3
+  - a little more disguise overall
+  - when the clock runs out, the result reads **CLOCK RAN OUT** with a 7v7-specific coaching tip
+- Bot testing: 7v7 completion rate is about 59% vs 68% in 5v5. The extra time doesn't make up for the smaller windows.
+
+### Adaptive training (Settings → Adaptive Training)
+- An optional layer on top of Rookie, Varsity and Elite. Every rep is built from your QB Profile, kept separately for 5v5 and 7v7:
+  - **Weak against a coverage?** You see it more.
+  - **Strong against one?** It gets disguised more.
+  - **Stare down your first read?** Safeties and zone defenders read your eyes harder.
+  - **Struggle with pressure?** The rush starts gentler and ramps up through 4 levels as you handle it.
+  - **Struggle with rotations?** More disguised reps.
+- The play tag tells you what Adaptive is doing (e.g. "ADAPTIVE: more Man & Cover 3 reps · Cover 2 gets disguised more · safeties read your eyes harder · pressure level 2/4"), and so does the QB Profile.
+
+### Under the hood
+- One training plan layer drives the coverage mix, disguises, eyes and pressure. Drills, Film Room and Adaptive all use it, so they work together.
+- Manual: new **7v7: layered coverages** chapter with diagrams of Robber, Bracket, 2-Man and Cover 4 with seven defenders.
+
 ## v1.7.0 — Key defender reads, Film Room, QB Profile
 
 Built around one loop: **see the defense → identify the key → process the movement → decide → get coached → improve the next rep.**
