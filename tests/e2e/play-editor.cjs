@@ -37,7 +37,7 @@ const { chromium, devices } = require('playwright');
   await p.tap('#pickList button >> nth=0'); await p.tap('#pickList button >> nth=1'); await p.screenshot({path:OUT+'ed2_picker.png'}); await p.tap('#pickDone');
   await p.fill('#edNote','Dig behind the seam. Hit the dig vs Cover 2.');
   await p.locator('#edSave').scrollIntoViewIfNeeded(); await p.tap('#edSave'); await p.waitForTimeout(100);
-  const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('qbbrain.myplays.v1')));
+  const saved=await p.evaluate(()=>(JSON.parse(localStorage.getItem('qbbrain.p.local.plays'))||{data:{}}).data.plays);
   await p.screenshot({path:OUT+'ed3_saved.png', fullPage:false});
   // Test it -> quick read drill
   await p.tap('#edTest'); await p.waitForTimeout(300);

@@ -5,6 +5,7 @@ import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
+import { createRequire } from "node:module";
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const which = process.argv[2];
 const list = dir => fs.readdirSync(path.join(root, "tests", dir)).filter(f => f.endsWith(".cjs") && !f.startsWith("_")).map(f => path.join("tests", dir, f));
@@ -31,11 +32,13 @@ function serve(port) {   // tiny static server for the offline/install test (ser
 
 const files = [];
 if (which !== "e2e") files.push(...list("unit"));
-let srv = null;
+let srv = null, mockCloud = null;
 if (which !== "unit") {
   const b = spawnSync(process.execPath, ["scripts/build.mjs"], { cwd: root, stdio: "inherit" });
   if (b.status !== 0) process.exit(1);
   srv = await serve(8765);
+  const { start } = createRequire(import.meta.url)(path.join(root, "tests/mock-cloud.cjs"));
+  mockCloud = await start(8790);
   files.push(...list("e2e"));
 }
 const results = [];
@@ -45,6 +48,7 @@ for (const f of files) {           // one at a time: the e2e tests are timing-se
   if (!r.ok) console.log(r.out.split("\n").slice(-25).map(l => "      " + l).join("\n"));
 }
 if (srv) srv.close();
+if (mockCloud) mockCloud.close();
 const failed = results.filter(r => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} passed`);
 process.exit(failed.length ? 1 : 0);

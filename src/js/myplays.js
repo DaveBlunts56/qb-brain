@@ -1,4 +1,6 @@
+import { emit, on } from "./config.js";
 import { BOOKS, C_, pl, sideIn } from "./plays.js";
+import { load, save } from "./store.js";
 
 /* ============================================================
    MY PLAYS — plays you build in the editor, saved on this device.
@@ -86,17 +88,17 @@ function myToPlay(sp){
   if(pitchTo) play.passer=[{id:"Q",until:sp.pitch.at||0.9},{id:pitchTo}];
   return play;
 }
-const MYPLAYS_KEY="qbbrain.myplays.v1", AUD_KEY="qbbrain.audibles.v1";
-let MY_PLAYS=[];          // stored format
+let MY_PLAYS=[];          // stored format; each play carries upd (last edit time) for merging devices
 let AUDIBLES={};          // play key -> [play keys]
+let GONE={};              // uid -> time deleted (so a deleted play doesn't come back from another device)
 function loadMyPlays(){
-  try{ MY_PLAYS=JSON.parse(localStorage.getItem(MYPLAYS_KEY)||"[]")||[]; }catch(_){ MY_PLAYS=[]; }
-  try{ AUDIBLES=JSON.parse(localStorage.getItem(AUD_KEY)||"{}")||{}; }catch(_){ AUDIBLES={}; }
+  const d=load("plays",null)||{};
+  MY_PLAYS=Array.isArray(d.plays)?d.plays:[]; AUDIBLES=d.audibles&&typeof d.audibles==="object"?d.audibles:{}; GONE=d.gone&&typeof d.gone==="object"?d.gone:{};
   rebuildCustomBook();
 }
-function deleteMyPlay(uid){ MY_PLAYS=MY_PLAYS.filter(q=>q.uid!==uid); }
+function deleteMyPlay(uid){ MY_PLAYS=MY_PLAYS.filter(q=>q.uid!==uid); GONE[uid]=Date.now(); }
 function saveMyPlays(){
-  try{ localStorage.setItem(MYPLAYS_KEY,JSON.stringify(MY_PLAYS)); localStorage.setItem(AUD_KEY,JSON.stringify(AUDIBLES)); }catch(_){}
+  save("plays",{plays:MY_PLAYS, audibles:AUDIBLES, gone:GONE});
   rebuildCustomBook();
 }
 function rebuildCustomBook(){
@@ -125,6 +127,7 @@ export function init(){
   BOOKS.custom={label:"My Plays", sub:"Plays you built", plays:{5:[],7:[]}};
   ["standard","bigdawz"].forEach(bk=>{ const b=BOOKS[bk]; Object.keys(b.plays).forEach(sq=>b.plays[sq].forEach(p=>{ p.key=bk+":"+sq+":"+p.name; p.squad=+sq; })); });
   loadMyPlays();
+  on("data:changed",k=>{ if(k==="plays"){ loadMyPlays(); emit("plays:changed"); } });
 }
 
-export { LIB, LIB_ORDER, HOT_ROUTES, QB_ACTIONS, libPts, storedRoutePts, storedRouteName, storedAfter, myToPlay, MYPLAYS_KEY, AUD_KEY, MY_PLAYS, AUDIBLES, loadMyPlays, deleteMyPlay, saveMyPlays, rebuildCustomBook, booksForSquad, playByKey, audiblesFor };
+export { LIB, LIB_ORDER, HOT_ROUTES, QB_ACTIONS, libPts, storedRoutePts, storedRouteName, storedAfter, myToPlay, MY_PLAYS, AUDIBLES, loadMyPlays, deleteMyPlay, saveMyPlays, rebuildCustomBook, booksForSquad, playByKey, audiblesFor, GONE };

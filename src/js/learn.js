@@ -11,6 +11,7 @@ import { playerById } from "./rep.js";
 import { SCREENS, buildChoiceRow, refreshSetupUI, showScreen, startSession } from "./setup.js";
 import { drawStatic } from "./sprites.js";
 import { els, state } from "./state.js";
+import { load, save } from "./store.js";
 
 /* ============================================================
    LEARN — Coach's Manual (chapters + diagrams) and the interactive Tutorial
@@ -256,9 +257,8 @@ function practiceFromManual(o){
    TUTORIAL — guided lessons that run on the real game engine
 ============================================================ */
 
-const TUT_KEY="qbbrain.tutorial.v1";
 let TUT_DONE={}; 
-function tutSave(){ try{ localStorage.setItem(TUT_KEY,JSON.stringify(TUT_DONE)); }catch(_){} }
+function tutSave(){ save("tutorial",TUT_DONE); }
 const completed=r=>r==="GOOD READ"||r==="RISKY";
 const LESSONS=[
   {id:"l1", title:"Your first throw", sub:"Meet your team, snap it, pull back and throw", reps:[
@@ -770,7 +770,8 @@ export function init(){
   els.manualOpenBtn.addEventListener("click",()=>openManual(null));
   MODES.tutorial={label:"Tutorial", askCoverageChance:0, throws:true};
   MODES.tutorial_id={label:"Tutorial", askCoverageChance:1, throws:false};
-  try{ TUT_DONE=JSON.parse(localStorage.getItem(TUT_KEY)||"{}")||{}; }catch(_){ TUT_DONE={}; }
+  TUT_DONE=load("tutorial",{})||{};
+  on("data:changed",k=>{ if(k!=="tutorial") return; TUT_DONE=load("tutorial",{})||{}; renderLessons(); });
   els.cbBtn.addEventListener("click",(e)=>{
     e.stopPropagation();
     if(!state.tut) return;
@@ -793,4 +794,4 @@ export function init(){
   renderCoachRow();
 }
 
-export { figCtx, figDot, figDef, figLine, figText, figZone, FIG_OFF5, FIG_OFF7, figCoverage, figPlay, figRoutes, figHighLow, figHorizontal, figLeverage, figLobBullet, figRush, figField, FIGS, stdPlay, SRC, covChapter, conChapter, MANUAL, MAN_CUR, openManual, openManualFromGame, closeManual, lvlTag, showChapterList, showChapter, practiceFromManual, TUT_KEY, TUT_DONE, tutSave, completed, LESSONS, TUT, tutLesson, tutRep, tutStep, startLesson, tutRestore, tutRepCfg, tutAdjustRep, tutRender, tutDrawHighlight, tutAdvance, tutEvent, tutOnResult, tutAfterResult, tutExit, highlightNextLesson, renderLessons, renderCoachRow };
+export { figCtx, figDot, figDef, figLine, figText, figZone, FIG_OFF5, FIG_OFF7, figCoverage, figPlay, figRoutes, figHighLow, figHorizontal, figLeverage, figLobBullet, figRush, figField, FIGS, stdPlay, SRC, covChapter, conChapter, MANUAL, MAN_CUR, openManual, openManualFromGame, closeManual, lvlTag, showChapterList, showChapter, practiceFromManual, TUT_DONE, tutSave, completed, LESSONS, TUT, tutLesson, tutRep, tutStep, startLesson, tutRestore, tutRepCfg, tutAdjustRep, tutRender, tutDrawHighlight, tutAdvance, tutEvent, tutOnResult, tutAfterResult, tutExit, highlightNextLesson, renderLessons, renderCoachRow };

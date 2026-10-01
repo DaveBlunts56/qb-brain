@@ -53,6 +53,10 @@ When you publish an update, bump `VERSION` in `sw.js` so installed copies refres
 | `sw.js` | Offline support |
 | `icons/` | Home-screen and browser icons |
 
+## Accounts & sync
+
+Parents can create an account and add a player for each kid, so progress syncs across phones, tablets and computers. It's off until a Supabase project is connected: see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md) (about 10 minutes). Privacy policy draft: [PRIVACY.md](PRIVACY.md).
+
 ## For developers
 
 QB Brain is plain JavaScript (ES modules) with no framework and no runtime dependencies. The only build step is bundling.
@@ -74,6 +78,8 @@ npm test             # engine tests in Node + browser tests in Chromium
 | `src/js/` content | `plays.js` (built-in playbooks), `myplays.js` and `playbook.js` (Create a Play, audibles, play calling, share codes), `learn.js` (Coach's Manual and Tutorial) |
 | `src/html`, `src/styles`, `src/fonts` | Markup, CSS, and the two pixel fonts (subset and embedded at build; SIL Open Font License, see `src/fonts/OFL-*.txt`) |
 | `tests/unit` | The game engine running headless against a tiny fake DOM |
+| `src/js/` accounts | `store.js` (everything saved, per player), `merge.js` (combining two devices' data), `cloud.js` (sign-in + sync over Supabase's API), `account.js` (screens) |
+| `supabase/schema.sql` | Database tables + row-level security |
 | `tests/e2e` | Real touch input in Chromium on an iPhone-sized screen, including offline install |
 
 Features talk to each other through small hooks (`on("screen", …)`, `on("setup", …)` in `config.js`) instead of overriding each other's functions.

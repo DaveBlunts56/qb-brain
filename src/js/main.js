@@ -1,5 +1,6 @@
 // QB Brain entry: every module only declares things at load time; init() calls run the app in this order.
 import { init as init_config } from "./config.js";
+import { init as init_store } from "./store.js";
 import { init as init_plays } from "./plays.js";
 import { init as init_myplays } from "./myplays.js";
 import { init as init_paths } from "./paths.js";
@@ -24,9 +25,12 @@ import { init as init_coach } from "./coach.js";
 import { init as init_film } from "./film.js";
 import { init as init_profile } from "./profile.js";
 import { init as init_learn } from "./learn.js";
+import { init as init_cloud } from "./cloud.js";
+import { init as init_account } from "./account.js";
 import { installTestHooks } from "./testhooks.js";
 
 init_config();
+init_store();
 init_plays();
 init_myplays();
 init_paths();
@@ -51,4 +55,6 @@ init_coach();
 init_film();
 init_profile();
 init_learn();
+init_cloud();
+init_account();
 installTestHooks();

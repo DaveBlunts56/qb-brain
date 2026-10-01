@@ -4,6 +4,7 @@ import { familyOf } from "./film.js";
 import { closeManual } from "./learn.js";
 import { SCREENS, buildChoiceRow, refreshSetupUI, startSession } from "./setup.js";
 import { els, saveSettings, state } from "./state.js";
+import { load, save } from "./store.js";
 import { actualShell, adaptivePlan } from "./train.js";
 
 /* ============================================================
@@ -11,10 +12,11 @@ import { actualShell, adaptivePlan } from "./train.js";
    Training metrics only: no ratings, no overall number.
 ============================================================ */
 
-const PROFILE_KEY="qbbrain.profile.v1", PROFILE_MAX=600;
+const PROFILE_MAX=600;
 let PROFILE={v:1, recs:[]};
 
-function profileSave(){ try{ localStorage.setItem(PROFILE_KEY,JSON.stringify(PROFILE)); }catch(_){} }
+function profileSave(){ save("profile",PROFILE); }
+function profileLoad(){ const o=load("profile",null); PROFILE = o && Array.isArray(o.recs) ? o : {v:1,recs:[]}; }
 const OK_RESULTS=["GOOD READ","RISKY"];
 // one record per rep (called from the coach after every result)
 function profileRecord(rep,resultType,info){
@@ -187,7 +189,8 @@ function renderAdaptiveStatus(){
 export function init(){
   SCREENS.push("profileScreen");
   ["profileScreen","pfSub","pfTiles","pfDiag","pfCov","pfCon","pfTrend","pfReset","profileSummary"].forEach(id=>{ els[id]=document.getElementById(id); });
-  try{ const o=JSON.parse(localStorage.getItem(PROFILE_KEY)||"null"); if(o && Array.isArray(o.recs)) PROFILE=o; }catch(_){}
+  profileLoad();
+  on("data:changed",k=>{ if(k!=="profile") return; profileLoad(); if(!els.profileScreen.classList.contains("hidden")) renderProfile(); else if(els.profileSummary){ const n=PROFILE.recs.length; els.profileSummary.textContent = n ? n+" reps tracked" : "Your tendencies"; } });
   els.pfReset.addEventListener("click",()=>{
     if(els.pfReset.dataset.arm!=="1"){ els.pfReset.dataset.arm="1"; els.pfReset.textContent="TAP AGAIN TO ERASE YOUR PROFILE"; return; }
     PROFILE={v:1,recs:[]}; profileSave(); els.pfReset.dataset.arm=""; els.pfReset.textContent="RESET PROFILE"; renderProfile();
@@ -202,4 +205,4 @@ export function init(){
   ;
 }
 
-export { PROFILE_KEY, PROFILE_MAX, PROFILE, profileSave, OK_RESULTS, profileRecord, profileFilm, pct, rate, success, profileMetrics, DRILLS, COV_BEATERS, covDrill, startDrill, profileDiagnose, tile, bars, renderProfile, renderTrainingSettings, flipAdaptive, renderAdaptiveStatus };
+export { PROFILE_MAX, PROFILE, profileSave, OK_RESULTS, profileRecord, profileFilm, pct, rate, success, profileMetrics, DRILLS, COV_BEATERS, covDrill, startDrill, profileDiagnose, tile, bars, renderProfile, renderTrainingSettings, flipAdaptive, renderAdaptiveStatus, profileLoad };

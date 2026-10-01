@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.10.0 — Parent accounts & cloud sync, QB speed
+
+### Accounts & sync (switches on once the cloud project is connected)
+- **Parent-owned accounts.** A parent, guardian or coach signs up with email + password, then adds a **player** for each kid: a nickname and an optional age group (8U–Adult). Kids never type an email. They tap **PLAYING AS ▾** on the home screen and pick their name.
+- **Progress syncs across devices:** QB Profile reps, My Plays and audibles, tutorial lessons and settings.
+  - It works offline first: everything saves on the device right away and syncs in the background, catching up when you're back online.
+- **Nothing gets lost when two devices disagree:**
+  - reps from both are kept
+  - each play keeps its newest edit, and a deleted play stays deleted
+  - a lesson finished anywhere counts
+  - settings take the newest change
+- **Your guest progress comes with you.** When you create your first player, you can keep everything you've already done on this device.
+- **Grown-ups only:** account settings sit behind a quick grown-ups question, so young kids can't sign out, delete or change the account.
+- **Your data, your call:** download all your data as a file, remove a player, or delete the whole account (it's permanent). Signing out also clears the account's players from that device, for shared family and team phones.
+- Friendly messages for a wrong password, an email that's already registered, an unconfirmed email and being offline. Expired logins refresh on their own.
+- Database schema with row-level security in `supabase/schema.sql`, a 10-minute setup guide in `docs/CLOUD_SETUP.md`, and a privacy policy **draft** in `PRIVACY.md` (have it reviewed before launch).
+
+### QB speed
+- Rollouts, bootlegs and the scramble stick now all move the QB at the same speed: **about 80% of a receiver**. That's quick enough to get to the edge and buy time, but every defender is still faster. Before, scripted rollouts were a bit slow and the stick was nearly receiver speed.
+
+### Under the hood
+- One storage layer for everything that's saved, per player. Data from earlier versions moves over automatically.
+- Settings you've never touched aren't saved, so a new device's defaults can't overwrite real choices from another device. A two-device test caught this.
+- New tests: the merge rules, and a two-device browser test against a stand-in cloud server. It covers guest progress carrying over, signing in on a second device, changes flowing both ways, an expired login, a wrong password and account deletion. Another test checks that updating from an older version keeps all your data. Total: 20 tests.
+
 ## v1.9.0 — Foundation rebuild
 
 No gameplay changes. This release makes QB Brain easier to keep improving without breaking things.

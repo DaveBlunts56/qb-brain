@@ -1,5 +1,5 @@
 import { VIEW, ctx } from "./canvas.js";
-import { COLORS, choice, clamp } from "./config.js";
+import { COLORS, choice, clamp, on } from "./config.js";
 import { downText, spotText } from "./drive.js";
 import { ptField } from "./input.js";
 import { setupKeyRead } from "./keyread.js";
@@ -314,6 +314,7 @@ function edSave(){
   sp.name=name; els.edName.value=name;
   edRenderProg();
   const copy=JSON.parse(JSON.stringify(sp));
+  copy.upd=Date.now();
   const i=MY_PLAYS.findIndex(q=>q.uid===sp.uid);
   if(i>=0) MY_PLAYS[i]=copy; else MY_PLAYS.push(copy);
   AUDIBLES["my:"+sp.uid]=ED.aud.slice();
@@ -598,6 +599,7 @@ function openImport(){
 
 /* ---- runs once at startup, in module order (see main.js) ---- */
 export function init(){
+  on("plays:changed",()=>{ if(!els.playbookScreen.classList.contains("hidden") && els.pbDetail.classList.contains("hidden")) renderPlaybook(); });
   ["editorScreen","edBack","edTitle","edName","edSquadRow","edCanvas","edHint","edTools","edFormRow","edProgRow","edProgBtn",
    "edPitchRow","edPitchTime","edAudRow","edAudBtn","edNote","edSave","edTest","edDelete",
    "pickSheet","pickTitle","pickSub","pickList","pickDone",
@@ -718,7 +720,7 @@ export function init(){
     try{
       const sp=decodePlay(els.codeText.value);
       let name=sp.name, base=name, k=2; while(MY_PLAYS.some(q=>q.name===name && q.squad===sp.squad)) name=base+" "+(k++);
-      sp.name=name; MY_PLAYS.push(sp); saveMyPlays();
+      sp.name=name; sp.upd=Date.now(); MY_PLAYS.push(sp); saveMyPlays();
       els.codeSheet.classList.add("hidden");
       state.book="custom"; showScreen("playbookScreen");
       const p=BOOKS.custom.plays[sp.squad].find(q=>q.uid===sp.uid); if(p) openPlay(p);

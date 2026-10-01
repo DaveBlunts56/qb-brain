@@ -15,7 +15,10 @@ const MODES = {
   quick_read:  {label:"Quick Read",  askCoverageChance:0.00, throws:true},
   drive:       {label:"Full Drive",  askCoverageChance:0.30, throws:true}
 };
-const RUN_SPEED=7.0, QB_SPEED=5.0, CENTER_X=15; // CENTER_X = middle of the 30-yd template plays are drawn on
+const RUN_SPEED=7.0, CENTER_X=15; // CENTER_X = middle of the 30-yd template plays are drawn on
+// QB on the move (rollouts, bootlegs, the scramble stick): ~80% of a receiver. Fast enough to reach the edge,
+// slower than every defender, so he can buy time but never outrun the coverage.
+const QB_SPEED=5.6;
 
 /* ---- Field geometry ----
    Plays are authored on a 30-yd-wide template and mapped onto the real field width.

@@ -18,6 +18,9 @@
       <button id="installClose" aria-label="Dismiss">✕</button>
     </div>
 
+    <button class="player-bar" id="playerBar" type="button" aria-label="Switch player">
+      <span class="pb-label">PLAYING AS</span><b id="playerName">GUEST</b><span class="pb-sync" id="playerSync"></span><span class="pb-caret" aria-hidden="true">▾</span>
+    </button>
     <button class="newbie hidden" id="newbieCard" type="button"><b>NEW HERE?</b><span>Take the tutorial — 8 quick lessons with your coach.</span><i id="newbieX" aria-label="Dismiss">✕</i></button>
     <div class="tiles">
       <button class="tile hero" data-go="driveScreen">
@@ -106,6 +109,47 @@
     <div class="play-grid" id="pbGrid"></div>
   </div>
 
+  <!-- ============ ACCOUNT ============ -->
+  <div id="accountScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>ACCOUNT</h2></div>
+
+    <div id="acctNotSet" class="group hidden">
+      <div class="coach-note"><p>Accounts aren't switched on in this copy of QB Brain yet. Everything you do is saved on this device.</p></div>
+    </div>
+
+    <div id="acctOut" class="group hidden">
+      <p class="acct-lead"><b>For parents, guardians and coaches.</b> Create one account, then add a player for each kid. Kids just tap their name — no email, no real names needed — and their progress syncs across devices.</p>
+      <div class="seg-row" id="authTabs"><button type="button" data-k="signin" class="on">SIGN IN</button><button type="button" data-k="create">CREATE ACCOUNT</button></div>
+      <label class="fld"><span>Email</span><input id="authEmail" class="text-in" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"></label>
+      <label class="fld"><span>Password</span><input id="authPw" class="text-in" type="password" autocomplete="current-password" minlength="8"></label>
+      <label class="check hidden" id="authConsent"><input type="checkbox" id="authAgree"><span>I'm a parent, guardian or coach — or I'm 13 or older and this account is for me.</span></label>
+      <button class="btn" id="authGo" type="button">SIGN IN</button>
+      <button class="linkish" id="authForgot" type="button">Forgot password?</button>
+      <div class="warn-line" id="authMsg" role="status"></div>
+    </div>
+
+    <div id="acctIn" class="hidden">
+      <div class="group">
+        <div class="help">Signed in as <b id="acctEmail"></b></div>
+        <div class="section-label">PLAYERS</div>
+        <div id="acctPlayers" class="acct-players"></div>
+        <button class="btn alt sm" id="addPlayerBtn" type="button">+ ADD PLAYER</button>
+      </div>
+      <div class="group">
+        <div class="section-label">SYNC</div>
+        <div class="help" id="syncLine" role="status"></div>
+        <button class="btn alt sm" id="syncNowBtn" type="button">SYNC NOW</button>
+      </div>
+      <div class="group">
+        <div class="section-label">YOUR DATA</div>
+        <div class="help">QB Brain stores the account email, each player's nickname and optional age group, and their training data (reps, plays, lessons, settings). Nothing is sold or shared, and there are no ads. You can download it or delete it any time.</div>
+        <button class="btn alt sm" id="exportBtn" type="button">DOWNLOAD MY DATA</button>
+        <button class="btn alt sm" id="signOutBtn" type="button">SIGN OUT</button>
+        <button class="btn alt sm danger" id="deleteAcctBtn" type="button">DELETE ACCOUNT</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ QB PROFILE ============ -->
   <div id="profileScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB PROFILE</h2></div>
@@ -160,6 +204,7 @@
   <!-- ============ SETTINGS ============ -->
   <div id="settingsScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>SETTINGS</h2></div>
+    <button class="btn alt sm" id="acctOpenBtn" type="button">ACCOUNT &amp; PLAYERS (GROWN-UPS)</button>
     <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div>
       <div class="help" id="formatHelp"></div>
       <div class="section-label sm7">7v7 PASS RUSH</div><div class="choice-row" id="rush7Row"></div></div>
@@ -279,6 +324,38 @@
     <div class="man-inner">
       <div class="topbar"><button class="back" id="manBack" aria-label="Back">◀</button><h2 id="manTitle">COACH'S MANUAL</h2><button class="quit man-x" id="manClose" aria-label="Close manual">✕</button></div>
       <div id="manBody"></div>
+    </div>
+  </div>
+  <div id="gateSheet" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="modal-box">
+      <h2 id="gateTitle">GROWN-UPS ONLY</h2>
+      <div class="help">Account settings are for parents, guardians and coaches.</div>
+      <div class="film-q" id="gateQ"></div>
+      <div class="film-opts" id="gateOpts"></div>
+      <div class="warn-line" id="gateMsg"></div>
+      <button class="btn alt" id="gateCancel" type="button">CANCEL</button>
+    </div>
+  </div>
+  <div id="switchSheet" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="switchTitle">
+    <div class="modal-box">
+      <h2 id="switchTitle">WHO'S PLAYING?</h2>
+      <div class="switch-list" id="switchList"></div>
+      <button class="btn alt sm" id="switchManage" type="button">MANAGE PLAYERS</button>
+      <button class="btn alt" id="switchClose" type="button">CLOSE</button>
+    </div>
+  </div>
+  <div id="playerForm" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="pfTitle">
+    <div class="modal-box">
+      <h2 id="pfTitle">ADD PLAYER</h2>
+      <label class="fld"><span>Nickname</span><input id="pfNick" class="text-in" maxlength="16" autocomplete="off" placeholder="e.g. Jay, QB1"></label>
+      <div class="help">Use a nickname, not a full name.</div>
+      <div class="section-label sm7">AGE GROUP (OPTIONAL)</div>
+      <div class="chip-row" id="pfBands"></div>
+      <label class="check hidden" id="pfBringRow"><input type="checkbox" id="pfBring"><span id="pfBringText"></span></label>
+      <div class="warn-line" id="pfMsg" role="status"></div>
+      <button class="btn" id="pfSave" type="button">SAVE</button>
+      <button class="btn alt" id="pfCancel" type="button">CANCEL</button>
+      <button class="btn alt sm danger hidden" id="pfRemove" type="button">REMOVE PLAYER</button>
     </div>
   </div>
   <div id="codeSheet" class="modal hidden" role="dialog" aria-modal="true">

@@ -15,11 +15,17 @@ try { esbuild = require("esbuild"); }
 catch (_) { throw new Error("esbuild is missing — run `npm install` first."); }
 
 const { version } = JSON.parse(rd("package.json"));
+// Cloud sync settings (Supabase project URL + public anon key). Empty = accounts switched off; the app stays local-only.
+// The anon key is meant to be public: row-level security in supabase/schema.sql is what protects the data.
+let cloud = { url: "", anonKey: "" };
+try { cloud = Object.assign(cloud, JSON.parse(rd("cloud.config.json"))); } catch (_) {}
+if (process.env.QB_CLOUD_URL) cloud = { url: process.env.QB_CLOUD_URL, anonKey: process.env.QB_CLOUD_KEY || "" };
 
 // 1) JavaScript: ES modules in src/js -> one IIFE
 const js = esbuild.buildSync({
   entryPoints: [path.join(root, "src/js/main.js")], bundle: true, format: "iife", target: "es2019",
-  minify: !dev, legalComments: "none", write: false, logLevel: "warning"
+  minify: !dev, legalComments: "none", write: false, logLevel: "warning",
+  define: { __QB_CLOUD__: JSON.stringify(cloud.url && cloud.anonKey ? { url: cloud.url, anonKey: cloud.anonKey } : null) }
 }).outputFiles[0].text;
 
 // 2) CSS: self-hosted fonts (inlined, so they work offline and in the single-file build) + styles
@@ -58,4 +64,4 @@ fs.mkdirSync(path.join(root, "dist"), { recursive: true });
 fs.writeFileSync(path.join(root, "dist/qb_brain.html"), page(false));
 fs.writeFileSync(path.join(root, "sw.js"), rd("src/sw.js").replace("__VERSION__", version));
 const kb = f => (fs.statSync(path.join(root, f)).size / 1024).toFixed(0) + " KB";
-console.log(`QB Brain v${version} built${dev ? " (dev)" : ""}: index.html ${kb("index.html")}, dist/qb_brain.html ${kb("dist/qb_brain.html")}, sw.js`);
+console.log(`QB Brain v${version} built${dev ? " (dev)" : ""}${cloud.url && cloud.anonKey ? " [cloud: " + new URL(cloud.url).host + "]" : " [cloud off]"}: index.html ${kb("index.html")}, dist/qb_brain.html ${kb("dist/qb_brain.html")}, sw.js`);

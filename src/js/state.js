@@ -1,5 +1,6 @@
 import { MODES } from "./config.js";
 import { BOOKS } from "./plays.js";
+import { getDoc, load, save } from "./store.js";
 
 /* ============================================================
    STATE
@@ -15,10 +16,15 @@ const state = {
 const els = {};
 
 /* ---- remember setup choices between visits (per device; safe if storage is unavailable) ---- */
-const SAVE_KEY="qbbrain.settings.v1";
+let DEFAULT_SETTINGS=null;   // the untouched defaults; never saved, so they can't overrule real choices from another device
+function settingsSnapshot(){
+  const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","rush7","adaptive","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
+  o.driveCfg=JSON.parse(JSON.stringify(state.driveCfg)); return o;
+}
 function loadSettings(){
+  if(DEFAULT_SETTINGS===null) DEFAULT_SETTINGS=JSON.stringify(settingsSnapshot());
   try{
-    const o=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(!o) return;
+    const o=load("settings",null); if(!o) return;
     ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","rush7","adaptive","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
     if(!MODES[state.drillMode] || state.drillMode==="drive") state.drillMode="qb_brain";
     if(o.driveCfg) Object.assign(state.driveCfg,o.driveCfg);
@@ -28,8 +34,9 @@ function loadSettings(){
 }
 function saveSettings(){
   try{
-    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","rush7","adaptive","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
-    o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
+    const o=settingsSnapshot();
+    if(!getDoc("settings") && JSON.stringify(o)===DEFAULT_SETTINGS) return;
+    save("settings",o);
   }catch(_){}
 }
 function currentPlays(){
@@ -47,4 +54,4 @@ export function init(){
   ].forEach(id=>{ els[id]=document.getElementById(id); });
 }
 
-export { state, els, SAVE_KEY, loadSettings, saveSettings, currentPlays };
+export { state, els, loadSettings, saveSettings, currentPlays, settingsSnapshot, DEFAULT_SETTINGS };

@@ -1,5 +1,5 @@
 import { setupCanvas } from "./canvas.js";
-import { DIFFICULTY, MODES, emit } from "./config.js";
+import { DIFFICULTY, MODES, emit, on } from "./config.js";
 import { downText, isDrive, newDrive, spotText } from "./drive.js";
 import { startRep } from "./loop.js";
 import { renderPlaybook } from "./playbook.js";
@@ -153,6 +153,7 @@ export function init(){
     b.addEventListener("click",()=>{ state.throwType=b.dataset.k; syncThrowType(); });
   });
   loadSettings();
+  on("data:changed",k=>{ if(k==="settings"){ loadSettings(); refreshSetupUI(); } });
   refreshSetupUI();
   (function(){
     const tip=document.getElementById("installHint"); if(!tip || !window.QB_PWA) return;

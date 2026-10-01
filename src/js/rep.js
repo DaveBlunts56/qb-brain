@@ -88,7 +88,7 @@ function playerById(rep,id){ return rep.players.find(p=>p.id===id); }
    Once the ball is thrown, the receiver who can get there first reads it and runs to it. */
 const ACCEL=22, CHASE_SPEED=7.8;
 // Scramble rule (tournament): the QB may move around, but can never cross the line of scrimmage.
-const SCRAMBLE_SPEED=6.2, SCRAMBLE_MAX_Y=-0.6, JOY_DEAD=0.15;
+const SCRAMBLE_SPEED=QB_SPEED, SCRAMBLE_MAX_Y=-0.6, JOY_DEAD=0.15;
 function initLive(rep){
   rep.players.forEach(p=>{ p.s={x:p.x0,y:p.y0,vx:0,vy:0}; p.hist=[{t:0,x:p.x0,y:p.y0}]; });
 }
