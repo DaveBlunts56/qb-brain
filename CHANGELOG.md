@@ -1,5 +1,58 @@
 # Changelog
 
+## v1.7.0 — Key defender reads, Film Room, QB Profile
+
+Built around one loop: **see the defense → identify the key → process the movement → decide → get coached → improve the next rep.**
+
+### Key defender reads
+- Concepts now know **who you should be reading**:
+  - Smash: the corner
+  - Slant-Flat, Curl-Flat, Stick, Flood: the flat defender
+  - Drive and Levels: the hook defender
+  - Four Verticals: the deep safety
+  - Your own plays and Big Dawz plays: QB Brain finds the high-low or inside-out pair automatically.
+  - Run and trick plays (and Mesh, which beats man with rubs) don't get a key.
+- The key is picked from the pre-snap **alignment**, then tracked after the snap to see when he commits and which way.
+- The coach shows it after every play:
+  > **KEY DEFENDER: CB** — CB sank with Y's corner at 1.3s → X's hitch was the correct read.
+  > You threw Y's corner at 1.8s. ✗ wrong side of the key.
+  > Late: CB declared at 1.3s; get it out on his first step.
+- If the throw away from the key was covered by help, the coach says so and gives the real answer.
+- **Coach View** traces the key defender's path, marks when he committed, and rings the correct read.
+- With "show progression" on, the play tag shows the key plan before the snap (e.g. "KEY: CB (left) — sinks → hitch, jumps it → corner").
+
+### Film Room (Drills → Film Room)
+- Before the snap: **1** man or zone? **2** likely coverage? **3** tap your key defender. **4** tap your best first read. The first read comes from simulating the play against the look the defense is *showing*.
+- Then run the play.
+- After it: **5** what did they actually play? → **PRE-SNAP LOOK → POST-SNAP COVERAGE** with the clue that gave it away (e.g. "the right safety rotated down at 0.5s — two-high became one-high"), a scorecard, and PRE-SNAP / POST-SNAP replay frames with every defender's path.
+- Film Room disguises more often (at least 35–50% of reps).
+
+### Better disguises
+- New post-snap changes:
+  - **Cover 2 → Cover 3** and **Cover 3 → Cover 2** rotations
+  - **Bluff man → zone** (Man or Cover 1 look → Cover 3 or underneath zone)
+  - **Bluff zone → man** (Cover 2, Cover 3 or underneath look → Man or Cover 1)
+- Every rep knows its pre-snap shell (zero-, one- or two-high) and what it became.
+
+### QB Profile (home screen)
+- Tracks your actual tendencies across sessions, on this device only:
+  - average release time
+  - coverage and man-vs-zone recognition
+  - correct 1st-read decisions
+  - key defender reads (and how often you're late or early)
+  - open receivers missed
+  - turnover-worthy throws
+  - success under pressure vs clean pockets
+  - stare-down rate
+  - best and worst coverages (including rotated shells) and concepts
+  - a trend line
+- **Coach's diagnosis** names your biggest leaks and starts the right drill in one tap, e.g. "You struggle when two-high shells rotate after the snap → Post-Snap Rotation Drill".
+- **Drills:** Post-Snap Rotation, Man or Zone? Bluff, Key Read, Pressure, Eyes Discipline, Find the Open Man, Ball Security, Man vs Zone ID, plus a drill for any coverage.
+- These are training metrics only. No ratings.
+
+### Manual
+- New chapters: **Key defender reads** and **Disguises & rotations**.
+
 ## v1.6.0 — Learn: Tutorial, Coach's Manual, a real coach after every play, share codes
 
 ### Tutorial (Home → Learn)

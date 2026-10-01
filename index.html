@@ -424,6 +424,54 @@ select.play-select{
 .man-table th{font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold);}
 .man-x{width:44px;height:44px;flex:none;background:var(--ink-2) !important;border:var(--px) solid var(--chalk) !important;color:var(--chalk) !important;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #000;}
 #coachBubble .coach-badge{align-self:flex-start;}
+
+.coach-key{background:#0d1117;border:2px solid #ff6b5a;padding:8px 10px;display:flex;flex-direction:column;gap:4px;}
+.coach-key.hidden{display:none;}
+.kd-head{font-family:var(--display);font-size:20px;color:#ff6b5a;letter-spacing:.04em;line-height:1;}
+.kd-line{font-size:13.5px;line-height:1.4;}
+.kd-you.ok{color:#5fe08a;} .kd-you.bad{color:#ff8c7a;}
+.kd-time{color:var(--chalk-dim);} .kd-time.late,.kd-time.early{color:var(--gold);}
+
+/* ---------- film room ---------- */
+#filmSheet{display:flex;flex-direction:column;gap:8px;}
+#filmSheet.hidden{display:none;}
+.film-q{font-family:var(--display);font-size:26px;line-height:1;color:var(--gold);}
+.film-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.film-opt{background:var(--ink-2);border:2px solid var(--ink-3);color:var(--chalk);font-family:var(--display);font-size:21px;padding:10px 8px 8px;box-shadow:0 3px 0 #000;}
+.film-opt.ok{border-color:#5fe08a;color:#5fe08a;} .film-opt.bad{border-color:#ff6b5a;color:#ff8c7a;}
+.film-opt:disabled{opacity:.85;}
+.film-fb{font-size:13.5px;line-height:1.45;min-height:0;}
+.film-fb.ok{color:#5fe08a;} .film-fb.bad{color:#ffb3a8;}
+#filmGo{align-self:flex-end;width:auto;padding-left:18px;padding-right:18px;}
+#filmGo.hidden{display:none;}
+.film-box{background:var(--ink-2);border:2px solid var(--sky);padding:10px 12px;display:flex;flex-direction:column;gap:8px;margin:8px 0;}
+.film-box.hidden{display:none;}
+.film-flow{display:flex;align-items:center;gap:8px;}
+.film-flow div{flex:1;background:#0d1117;border:2px solid var(--ink-3);padding:6px 8px;}
+.film-flow small{display:block;font-size:10.5px;color:var(--chalk-dim);letter-spacing:.06em;}
+.film-flow b{font-family:var(--display);font-size:19px;font-weight:400;line-height:1.05;color:var(--chalk);}
+.film-flow div:last-child b{color:var(--gold);}
+.film-flow span{font-family:var(--display);font-size:24px;color:var(--gold);}
+.film-flow.same div:last-child b{color:#5fe08a;}
+.film-kind{font-family:var(--display);font-size:15px;color:#ff8c5a;letter-spacing:.06em;}
+.film-clue{margin:0;font-size:14px;line-height:1.5;}
+.film-clue b{color:var(--sky);}
+.film-score{font-family:var(--display);font-size:16px;padding:4px 7px 3px;border:2px solid;}
+.film-score.ok{color:#5fe08a;border-color:#5fe08a;} .film-score.bad{color:#ff8c7a;border-color:#ff6b5a;}
+/* ---------- profile ---------- */
+.pf-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pf-tile{background:#000;border:var(--px) solid var(--ink-3);padding:10px 12px;display:flex;flex-direction:column;gap:3px;}
+.pf-tile .n{font-family:var(--display);font-size:34px;line-height:1;color:var(--gold);}
+.pf-tile .l{font-size:12.5px;color:var(--chalk);line-height:1.25;}
+.pf-tile .s{font-size:11px;color:var(--chalk-dim);line-height:1.3;}
+.pf-diag{display:flex;flex-direction:column;gap:10px;}
+.pf-dsub{color:var(--chalk-dim);font-size:12.5px;line-height:1.4;}
+.pf-diag .btn{width:auto;align-self:flex-start;}
+.pf-bar{display:grid;grid-template-columns:minmax(90px,38%) 1fr auto;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--ink-3);font-size:13px;}
+.pf-bar .k{color:var(--chalk);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pf-bar .track{height:10px;background:var(--ink-3);position:relative;}
+.pf-bar .track i{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:0 4px 4px 0;}
+.pf-bar .v{color:var(--chalk-dim);font-size:12px;min-width:62px;text-align:right;}
 </style>
 </head>
 <body>
@@ -460,16 +508,20 @@ select.play-select{
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="1" width="8" height="10" fill="#c8a36a"/><rect x="3" y="3" width="6" height="7" fill="#f4f0e2"/><rect x="4" y="0" width="4" height="2" fill="#8a8f98"/><g fill="#e8412c"><rect x="4" y="4" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/></g><g fill="#2a6fd6"><rect x="6" y="7" width="2" height="2"/></g></svg>
         <b>PLAYBOOK</b><small>Your plays · Create a play</small>
       </button>
-      <button class="tile learn" data-go="learnScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
+      <button class="tile" data-go="profileScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="7" width="2" height="4" fill="#5ab8ff"/><rect x="5" y="4" width="2" height="7" fill="#ffc933"/><rect x="9" y="1" width="2" height="10" fill="#5fe08a"/><rect x="0" y="11" width="12" height="1" fill="#f4f0e2"/></svg>
+        <b>QB PROFILE</b><small id="profileSummary">Your tendencies</small>
+      </button>
+      <button class="tile learn" data-go="learnScreen">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="2" width="10" height="8" fill="#f4f0e2"/><rect x="5" y="2" width="2" height="8" fill="#c8a36a"/><g fill="#2a6fd6"><rect x="2" y="4" width="2" height="1"/><rect x="2" y="6" width="2" height="1"/></g><g fill="#e8412c"><rect x="8" y="4" width="2" height="1"/><rect x="8" y="6" width="2" height="1"/></g></svg>
-        <div><b>LEARN</b><br><small id="learnSummary">Tutorial · Coach's Manual</small></div>
+        <b>LEARN</b><small id="learnSummary">Tutorial · Coach's Manual</small>
       </button>
       <button class="tile" data-go="settingsScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#a9b2a1"><rect x="5" y="0" width="2" height="12"/><rect x="0" y="5" width="12" height="2"/><rect x="2" y="2" width="8" height="8"/></g><rect x="4" y="4" width="4" height="4" fill="#161c26"/></svg>
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.6.0</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.7.0</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -528,6 +580,19 @@ select.play-select{
       <button class="btn alt" id="pbCloseBtn">BACK TO ALL PLAYS</button>
     </div>
     <div class="play-grid" id="pbGrid"></div>
+  </div>
+
+  <!-- ============ QB PROFILE ============ -->
+  <div id="profileScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB PROFILE</h2></div>
+    <div class="help" id="pfSub"></div>
+    <div class="pf-tiles" id="pfTiles"></div>
+    <div class="group"><div class="section-label">COACH'S DIAGNOSIS</div><div class="pf-diag" id="pfDiag"></div></div>
+    <div class="group"><div class="section-label">BY COVERAGE</div><div class="help">Successful reps against each coverage (and rotated shells).</div><div id="pfCov"></div></div>
+    <div class="group"><div class="section-label">BY CONCEPT</div><div class="help">Best and worst concepts you've run.</div><div id="pfCon"></div></div>
+    <div class="help" id="pfTrend"></div>
+    <div class="help">These are training metrics from your own reps — not ratings. They're stored only on this device.</div>
+    <button class="btn alt sm" id="pfReset" type="button">RESET PROFILE</button>
   </div>
 
   <!-- ============ LEARN ============ -->
@@ -622,6 +687,14 @@ select.play-select{
       <div class="mcq" id="mcqOptions"></div>
     </div>
 
+    <div class="sheet hidden" id="filmSheet">
+      <div class="film-q" id="filmQ"></div>
+      <div class="sub" id="filmSub"></div>
+      <div class="film-opts" id="filmOpts"></div>
+      <div class="film-fb" id="filmFb"></div>
+      <button class="btn sm hidden" id="filmGo" type="button">NEXT ▶</button>
+    </div>
+
     <div class="sheet hidden" id="audibleSheet">
       <div class="aud-head"><h2>AUDIBLE</h2><button class="btn sm" id="audClose">DONE</button></div>
       <div class="sub" id="audSub">Tap a receiver on the field to hot-route him, or check to a new play.</div>
@@ -634,8 +707,10 @@ select.play-select{
       <div class="result-tag" id="resultTag"><span class="dot"></span><span id="resultText">GOOD READ</span></div>
       <div class="result-sub" id="resultSub"></div>
       <div class="drive-line hidden" id="driveLine"></div>
+      <div class="film-box hidden" id="filmBox"></div>
       <div class="coach-card hidden" id="coachCard">
         <div class="coach-head"><span class="coach-badge">COACH</span><b id="coachVerdict"></b></div>
+        <div class="coach-key hidden" id="coachKey"></div>
         <div class="coach-lines" id="coachLines"></div>
         <div class="chip-row"><button class="chip" id="coachViewBtn" type="button">COACH VIEW</button><button class="chip" id="coachLearnBtn" type="button">LEARN</button></div>
       </div>
@@ -1193,7 +1268,8 @@ function refreshSetupUI(){
   buildChoiceRow(els.modeRow,[
     {key:"qb_brain",title:"QB Brain",sub:"Call the coverage, then make the read"},
     {key:"coverage_id",title:"Coverage ID",sub:"Identify the defense only, no throw"},
-    {key:"quick_read",title:"Quick Read",sub:"Skip the ID question, find the throw fast"}
+    {key:"quick_read",title:"Quick Read",sub:"Skip the ID question, find the throw fast"},
+    {key:"film",title:"Film Room",sub:"Read the look, name the key, pick the read — then see the rotation"}
   ], state.drillMode, k=>state.drillMode=k);
 
   buildChoiceRow(els.throwRow,[
@@ -1337,6 +1413,7 @@ els.drillsBookSlot.appendChild(els.bookBlock);
 function startSession(mode,extra){
   state.mode=mode;
   state.forceCoverage = extra && extra.coverage || null;
+  state.plan = extra && extra.plan || null;
   saveSettings();
   state.session={reps:0, score:0, log:[]};
   state.drive = mode==="drive" ? newDrive() : null;
@@ -1348,7 +1425,7 @@ function startSession(mode,extra){
 els.startBtn.addEventListener("click",()=>startSession(state.drillMode));
 els.driveStartBtn.addEventListener("click",()=>startSession("drive"));
 els.restartBtn.addEventListener("click",()=>showScreen("homeScreen"));
-els.againBtn.addEventListener("click",()=>startSession(state.mode,{coverage:state.forceCoverage}));
+els.againBtn.addEventListener("click",()=>startSession(state.mode,{coverage:state.forceCoverage, plan:state.plan}));
 els.quitBtn.addEventListener("click", endSession);
 
 function updateHud(){
@@ -1359,7 +1436,7 @@ function updateHud(){
     els.hudRepLbl.textContent="PLAY";
     els.hudRep.textContent = d.over ? d.plays.length : d.plays.length+1;
   } else {
-    els.hudSub.textContent = state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.book==="bigdawz"?" · Big Dawz":state.book==="custom"?" · My Plays":"");
+    els.hudSub.textContent = state.plan && state.plan.name ? state.plan.name : state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.adaptive?" · Adaptive":state.book==="bigdawz"?" · Big Dawz":state.book==="custom"?" · My Plays":"");
     els.hudRepLbl.textContent="REP";
     els.hudRep.textContent = state.session.reps+1;
   }
@@ -1431,22 +1508,26 @@ function buildRep(opts){
   else if(state.forceCoverage && !opts.coverage && !opts.keep) opts=Object.assign({},opts,{coverage:state.forceCoverage});
   const squad = opts.squad||state.squad;
   const diff = DIFFICULTY[opts.difficulty||state.difficulty];
-  const plays = opts.plays || currentPlays();
-  const pick = opts.playName || state.playPick;
+  const plan = opts.keep ? {} : currentPlan();
+  let plays = opts.plays || currentPlays();
+  if(plan.plays && !opts.play){ const f=plays.filter(p=>plan.plays.includes(p.name)); if(f.length) plays=f; }
+  const pick = plan.plays ? "random" : (opts.playName || state.playPick);
   const play = opts.play || (pick!=="random" && plays.find(p=>p.name===pick)) || choice(plays);
   const players = play.players.map(makePlayer);
   const targets = players.filter(p=>p.target);
   const nDef = squad===5?4:6;
 
   const keep = opts.keep;   // audible: same defense, new play
-  const disguised = keep ? keep.disguised : opts.coverage ? false : Math.random() < diff.disguiseChance;
-  const shownCoverage = keep ? keep.shownCoverage : opts.coverage || choice(ALL_COVERAGES);
-  let actualCoverage = keep ? keep.actualCoverage : shownCoverage;
+  let disguised = keep ? keep.disguised : opts.coverage ? false : Math.random() < disguiseChanceFor(plan,diff);
+  const shownCoverage = keep ? keep.shownCoverage : opts.coverage || pickShownCoverage(Object.assign({forceRotation:disguised},plan),squad);
+  let actualCoverage = keep ? keep.actualCoverage : shownCoverage, disguiseKind = keep ? keep.disguiseKind : null;
   if(disguised && !keep){
-    const rotations = {"Cover 2":["Cover 3","Cover 1"],"Cover 1":["Cover 2","Man"],"Cover 3":["Cover 2","Cover 1"],"Man":["Cover 1"],"Underneath Zone":["Cover 3"]};
-    actualCoverage = choice(rotations[shownCoverage]);
+    const a=pickActualCoverage(shownCoverage,plan); actualCoverage=a.cov; disguiseKind=a.kind;
+    if(actualCoverage===shownCoverage) disguised=false;
   }
-  const tune = DEF_TUNE[opts.difficulty||state.difficulty] || DEF_TUNE.varsity;
+  let tune = DEF_TUNE[opts.difficulty||state.difficulty] || DEF_TUNE.varsity;
+  if(plan.eyesMul) tune=Object.assign({},tune,{eyes:Math.min(0.95,tune.eyes*plan.eyesMul)});
+  if(plan.rushPlans) tune=Object.assign({},tune,{plans:plan.rushPlans});
   const defenders = buildDefense(actualCoverage, targets, nDef, tune);
   if(actualCoverage!==shownCoverage) applyShownAlignment(defenders, shownCoverage, targets, nDef, tune);
   const rushPlan = keep ? keep.rushPlan : opts.rushPlan || pickRushPlan(tune);
@@ -1455,14 +1536,16 @@ function buildRep(opts){
   const out = {
     play, players, targets, squad,
     passer: play.passer || [{id:"Q"}],
-    shownCoverage, actualCoverage, disguised, defenders,
+    shownCoverage, actualCoverage, disguised, disguiseKind, defenders, plan,
     rusher:{x:rx,y:7,vel:{x:0,y:0}}, rushStart:null, rushPlan, tune,
     askCoverage: keep ? keep.askCoverage : opts.askCoverage!==undefined ? opts.askCoverage : Math.random() < MODES[state.mode].askCoverageChance,
-    tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed, rushAccel: diff.rushAccel, delayPlan: diff.delayPlan, reactionDelay: diff.reactionDelay,
+    tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed*(plan.rushMul||1), rushAccel: diff.rushAccel, delayPlan: diff.delayPlan, reactionDelay: diff.reactionDelay,
     ball:null
   };
   initLive(out);
   buildBallTimeline(out);
+  setupKeyRead(out);
+  out.shellShown=shellOf(defenders);
   out.goalRel = isDrive()&&state.drive ? state.drive.len-state.drive.ballOn : 1e9;
   return out;
 }
@@ -1819,6 +1902,7 @@ function startRep(opts){
   showPlayTag();
   if(state.rep.askCoverage) showCoverageQuestion(); else beginStudyCountdown();
   tutEvent("ready");
+  if(MODES[state.mode].film && !state.tut) filmStart();
 }
 function label(p){ return p.id+"'s "+p.name; }
 function progText(rep){
@@ -2859,6 +2943,7 @@ function renderResult(resultType, subtitle, explain, chips, points, rep, driveIn
     els.scoreRow.appendChild(d);
   });
   renderCoach(rep,resultType);
+  if(MODES[state.mode].film) filmResult(rep); else els.filmBox.classList.add("hidden");
   const bn=bannerFor(resultType,driveInfo);
   els.resultSheet.classList.add("hidden");
   SFX.whistle();
@@ -2875,7 +2960,7 @@ els.nextRepBtn.addEventListener("click",()=>{
 });
 
 function clearOverlays(){
-  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy","callSheet","audibleSheet","audibleBtn","coachCard","coachBubble"].forEach(k=>els[k].classList.add("hidden"));
+  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy","callSheet","audibleSheet","audibleBtn","coachCard","coachBubble","filmSheet","filmBox"].forEach(k=>els[k].classList.add("hidden"));
   clearTimeout(bannerTimer); clearTimeout(afterTimer);
   if(typeof AUD!=="undefined"){ AUD.open=false; AUD.sel=null; }
   if(afterSkip){ els.fieldWrap.removeEventListener("pointerdown",afterSkip); afterSkip=null; }
@@ -2958,6 +3043,208 @@ function renderSummary(){
 // headless hook for the play analyzer (not used by the UI)
 window.__qbState = state;
 window.__qbSim = {holderAt, BOOKS, buildRep, stepPlayers, releaseBall, flightTime, livePos, updateDefenders, updateRusher, isSacked, posAt, passerPos, passerIdAt, nearestDefender, dist};
+
+/* ============================================================
+   TRAINING PLAN — one place that decides "what defense does the QB see this rep".
+   Drills (from the QB Profile), Film Room and Adaptive all feed this; buildRep consumes it.
+   plan = {name, covWeights:{cov:w}, disguise:0..1, rotations:[[shown,actual],...], eyesMul, rushMul, rushPlans:{plan:w}, plays:[names]}
+============================================================ */
+// Post-snap rotations. kind: rotation (shell changes) | bluff man → zone | bluff zone → man
+const ROTATIONS={
+  "Cover 2":        [["Cover 3","rotation"],["Cover 1","bluff zone → man"]],
+  "Cover 3":        [["Cover 2","rotation"],["Cover 1","bluff zone → man"]],
+  "Cover 1":        [["Cover 3","bluff man → zone"],["Cover 2","bluff man → zone"]],
+  "Man":            [["Cover 3","bluff man → zone"],["Underneath Zone","bluff man → zone"],["Cover 1","rotation"]],
+  "Underneath Zone":[["Man","bluff zone → man"],["Cover 3","rotation"]]
+};
+function weighted(obj){ const ks=Object.keys(obj).filter(k=>obj[k]>0); let s=ks.reduce((a,k)=>a+obj[k],0), r=Math.random()*s; for(const k of ks){ r-=obj[k]; if(r<=0) return k; } return ks[ks.length-1]; }
+function currentPlan(){
+  const p=Object.assign({}, state.plan||{});
+  if(state.adaptive && typeof adaptivePlan==="function" && !state.tut){ const a=adaptivePlan(); if(a) mergePlan(p,a); }
+  return p;
+}
+function mergePlan(p,a){
+  if(a.covWeights && !p.covWeights) p.covWeights=a.covWeights;
+  if(a.disguise!=null) p.disguise=Math.max(p.disguise||0,a.disguise);
+  if(a.rotations && !p.rotations) p.rotations=a.rotations;
+  if(a.eyesMul) p.eyesMul=Math.max(p.eyesMul||1,a.eyesMul);
+  if(a.rushMul) p.rushMul=Math.max(p.rushMul||1,a.rushMul);
+  if(a.rushPlans && !p.rushPlans) p.rushPlans=a.rushPlans;
+  p.adaptiveNote=a.note;
+  return p;
+}
+function coveragePool(squad){ return ALL_COVERAGES; }
+function pickShownCoverage(plan,squad){
+  if(plan.rotations && plan.rotations.length && plan.forceRotation){ return choice(plan.rotations)[0]; }
+  if(plan.covWeights) return weighted(plan.covWeights);
+  return choice(coveragePool(squad));
+}
+function pickActualCoverage(shown,plan){
+  let opts=ROTATIONS[shown]||[];
+  if(plan.rotations && plan.rotations.length){ const f=opts.filter(o=>plan.rotations.some(r=>r[0]===shown && r[1]===o[0])); if(f.length) opts=f; }
+  if(!opts.length) return {cov:shown, kind:null};
+  const o=choice(opts); return {cov:o[0], kind:o[1]};
+}
+function disguiseChanceFor(plan,diff){
+  if(plan.disguise!=null) return plan.disguise;
+  if(MODES[state.mode] && MODES[state.mode].film) return Math.max(diff.disguiseChance, state.difficulty==="rookie"?0.35:0.5);
+  return diff.disguiseChance;
+}
+// how many defenders sit deep (8+ yds) — "one-high", "two-high"...
+// QB language: count the deep defenders. 3 deep = one-high (middle closed), 4 deep = two-high quarters
+function shellName(n){ return n===0?"zero-high":n===1?"one-high":n===2?"two-high":n===3?"one-high, 3 deep":"two-high, quarters"; }
+function shellOf(defs){ return shellName(defs.filter(d=>(d.pos0||d.pos).y>=8.5).length); }
+function actualShell(rep){ return shellName(rep.defenders.filter(d=>d.role==="zone" && d.type==="deep").length); }
+
+/* ============================================================
+   KEY DEFENDER READS
+   For a concept that puts one defender in conflict (high-low, inside-outside, or a deep safety
+   between two verticals) we pick that defender at the snap from his ALIGNMENT (what a QB sees),
+   track what he does after the snap from the play's recorded history, and decide which
+   receiver the QB should have thrown to — and when.
+============================================================ */
+const KEY_CONCEPTS=[
+  {k:/mesh/i,         type:"none"},
+  {k:/smash/i,        type:"hilo",  hi:/corner/i,          lo:/hitch/i},
+  {k:/slant.?flat/i,  type:"inout", a:/slant/i,            b:/flat/i},
+  {k:/curl.?flat/i,   type:"hilo",  hi:/curl|hitch/i,      lo:/flat/i},
+  {k:/stick/i,        type:"inout", a:/stick/i,            b:/flat/i},
+  {k:/snag/i,         type:"hilo",  hi:/snag/i,            lo:/flat/i},
+  {k:/flood|sail/i,   type:"hilo",  hi:/out/i,             lo:/flat/i},
+  {k:/level/i,        type:"hilo",  hi:"deepdig",          lo:"shallowdig"},
+  {k:/drive/i,        type:"hilo",  hi:/dig/i,             lo:/shallow|drag/i},
+  {k:/vert|seam/i,    type:"safety"},
+  {k:/spacing/i,      type:"inout", a:"sitpair",           b:"sitpair"}
+];
+const MAN_FAMILY=c=>c==="Man"||c==="Cover 1"||c==="Robber"||c==="Bracket"||c==="2-Man";
+function routeEnd(p){ const w=p.path.wps; return w[w.length-1]; }
+function readPt(p){ return posAt(p,1.5); }
+function keyShort(rep,d){
+  if(!d) return "?";
+  if(d.isRusher) return "R";
+  if(d.role==="robber") return "ROBBER";
+  if(d.role==="man"){ const off=Math.abs(d.assign.x0-GEO.CX); return off>GEO.W*0.28 ? "CB" : (d.assign.id==="C"?"LB":"NB"); }
+  if(d.type==="deep") return Math.abs(d.lx-GEO.CX)<GEO.W*0.2 ? "S" : (Math.abs(d.lx-GEO.CX)>GEO.W*0.3 && !(rep.actualCoverage==="Cover 2") ? "CB" : "S");
+  if(d.type==="flat") return "CB";
+  return "LB";
+}
+const KEY_LONG={CB:"the corner",S:"the safety",LB:"the hook defender (LB)",NB:"the nickel",R:"the rusher",ROBBER:"the robber"};
+function sideOf(x){ return x<GEO.CX-2?"left":x>GEO.CX+2?"right":"middle"; }
+function keyLabel(rep,d){ const s=keyShort(rep,d); return {short:s, long:KEY_LONG[s]||"the key defender", side:sideOf(d.pos0?d.pos0.x:d.pos.x)}; }
+
+// pick the two receivers the concept puts in conflict
+function findKeyPair(rep){
+  if(rep.play.kind==="run") return null;
+  const T=rep.targets.filter(p=>!p.dashed && !/run|sweep|fake|release|clear|block|stay/i.test(p.name)), con=KEY_CONCEPTS.find(c=>c.k.test(rep.play.name||""));
+  if(con && con.type==="none") return null;
+  const pick=(re,near)=>{ const c=T.filter(p=>re.test(p.name)); if(!c.length) return null; if(!near) return c[0];
+    return c.slice().sort((a,b)=>Math.abs(a.x0-near.x0)-Math.abs(b.x0-near.x0))[0]; };
+  if(con){
+    if(con.type==="safety"){
+      const v=T.filter(p=>/go|seam|vert|fade|post/i.test(p.name)).sort((a,b)=>Math.abs(a.x0-GEO.CX)-Math.abs(b.x0-GEO.CX));
+      const L=v.filter(p=>p.x0<GEO.CX), R=v.filter(p=>p.x0>=GEO.CX);
+      if(L.length && R.length) return {type:"safety", a:L[0], b:R[0]};
+      if(v.length>=2) return {type:"safety", a:v[0], b:v[1]};
+    } else if(con.hi==="deepdig"){
+      const d=T.filter(p=>/dig|in\b/i.test(p.name)).sort((a,b)=>routeEnd(b).y-routeEnd(a).y);
+      if(d.length>=2) return {type:"hilo", hi:d[0], lo:d[d.length-1]};
+    } else if(con.a==="sitpair"){
+      const s=T.filter(p=>/sit|hitch|curl/i.test(p.name)).sort((a,b)=>Math.abs(a.x0-GEO.CX)-Math.abs(b.x0-GEO.CX));
+      if(s.length>=2){ const [a,b]=[s[0],s[1]].sort((p,q)=>p.x0-q.x0); return {type:"inout", a, b}; }
+    } else if(con.type==="hilo"){
+      const lo=pick(con.lo), hi=lo&&pick(con.hi,lo); if(lo&&hi&&lo!==hi) return {type:"hilo", hi, lo};
+    } else if(con.type==="inout"){
+      const b=pick(con.b), a=b&&pick(con.a,b); if(a&&b&&a!==b) return {type:"inout", a, b};
+    }
+  }
+  // generic: a high-low or a horizontal pair on one side (works for custom and Big Dawz plays)
+  if(rep.play.kind==="trick") return null;
+  let best=null;
+  for(let i=0;i<T.length;i++) for(let j=0;j<T.length;j++){ if(i===j) continue;
+    const A=T[i], B=T[j], qa=readPt(A), qb=readPt(B), dx=Math.abs(qa.x-qb.x);
+    if(dx>9) continue;
+    const prio=(rep.play.prog||[]).indexOf(A.id), pr=prio<0?5:prio;
+    if(qb.y<=5 && qa.y>=7 && qa.y<=17){ const sc=pr+dx*0.1; if(!best||sc<best.sc) best={sc,type:"hilo",hi:A,lo:B}; }
+    else if(i<j && Math.abs(qa.y-qb.y)<=2.5 && qa.y>=2.5 && qa.y<=10 && dx>=5){ const sc=pr+1.5; if(!best||sc<best.sc){ const [a,b]=[A,B].sort((p,q)=>Math.abs(readPt(p).x-GEO.CX)-Math.abs(readPt(q).x-GEO.CX)); best={sc,type:"inout",a,b}; } }
+  }
+  return best;
+}
+// called once per rep after the defense is aligned
+function setupKeyRead(rep){
+  rep.keyRead=null;
+  try{
+    rep.defenders.forEach(d=>{ d.pos0={x:d.pos.x,y:d.pos.y}; });
+    const pr=findKeyPair(rep); if(!pr) return;
+    const one=pr.type==="hilo"?pr.hi:pr.a, two=pr.type==="hilo"?pr.lo:pr.b;
+    const qa=readPt(one), qb=readPt(two);
+    let key=null;
+    if(pr.type==="safety"){
+      key=rep.defenders.filter(d=>d.pos.y>=8.5).sort((a,b)=>Math.abs(a.pos.x-GEO.CX)-Math.abs(b.pos.x-GEO.CX))[0]||null;
+    } else {
+      const cp={x:lerp(qb.x,qa.x,0.45), y:lerp(qb.y,qa.y,0.45)};
+      key=rep.defenders.slice().sort((a,b)=>dist(a.pos,cp)-dist(b.pos,cp))[0]||null;
+    }
+    if(!key) return;
+    rep.keyRead={type:pr.type, A:one.id, B:two.id, key, lab:keyLabel(rep,key)};
+  }catch(_){ rep.keyRead=null; }
+}
+function keyPlanText(rep){
+  const k=rep.keyRead; if(!k) return "";
+  const A=playerById(rep,k.A), B=playerById(rep,k.B), L=k.lab;
+  if(k.type==="hilo") return "KEY: "+L.short+" ("+L.side+") — sinks → "+B.id+" "+B.name+", jumps it → "+A.id+" "+A.name;
+  if(k.type==="inout") return "KEY: "+L.short+" ("+L.side+") — toward "+A.id+" → "+B.id+" "+B.name+", toward "+B.id+" → "+A.id+" "+A.name;
+  return "KEY: "+L.short+" — throw the vertical away from him ("+A.id+" or "+B.id+")";
+}
+// after the play: what did the key do, what was right, what did the QB do
+function analyzeKeyRead(rep,tThrow,mineId){
+  const k=rep.keyRead; if(!k || !k.key || !k.key.h || !k.key.h.length) return null;
+  const A=playerById(rep,k.A), B=playerById(rep,k.B); if(!A||!B) return null;
+  const hEnd=k.key.h[k.key.h.length-1].t, tLim=Math.min(2.6, hEnd, tThrow!=null?Math.max(tThrow+0.3,1.2):hEnd);
+  let streak=0, side=0, tCommit=null, commit=null;
+  const leanAt=t=>{ const dp=defAt(k.key,t); return dist(dp,histPos(B,t))-dist(dp,histPos(A,t)); };   // >0 = closer to A
+  const base=leanAt(0.3);
+  for(let t=0.4;t<=tLim+1e-6;t+=0.05){
+    const lean=leanAt(t)-base;
+    const s = lean>1.6 ? 1 : lean<-1.6 ? -1 : 0;
+    if(s!==0 && s===side){ streak++; if(streak>=3 && tCommit===null){ tCommit=+(t-0.1).toFixed(2); commit=s>0?"A":"B"; } }
+    else { side=s; streak = s?1:0; }
+    if(tCommit!==null) break;
+  }
+  const tEval = tThrow!=null ? tThrow : (tCommit!=null ? tCommit+0.4 : 1.6);
+  const snap=opennessAt(rep,tEval), snap2=opennessAt(rep,Math.min(tEval+0.5,hEnd));
+  const sepOf=id=>{ const o=snap.find(z=>z.p.id===id), o2=snap2.find(z=>z.p.id===id); return Math.max(o?o.sep:0, o2?o2.sep*0.9:0); };
+  let correctId, why;
+  const man = MAN_FAMILY(rep.actualCoverage) && k.key.role==="man";
+  if(commit){ correctId = commit==="A" ? k.B : k.A; }
+  else { correctId = sepOf(k.A)>=sepOf(k.B) ? k.A : k.B; }
+  // the "right" side can still be covered by help — then the answer is to move on
+  let covered=false;
+  if(sepOf(correctId)<1.8){ covered=true; const best=snap.slice().sort((a,b)=>b.sep-a.sep)[0]; if(best && best.sep>=3.5 && best.p.id!==correctId) correctId=best.p.id; else correctId=null; }
+  const L=k.lab, key=L.short, pl=id=>{ const p=playerById(rep,id); return p ? id+"'s "+p.name.replace(" (hot)","") : id; };
+  let did;
+  if(commit){
+    const to = commit==="A" ? A : B;
+    if(k.type==="hilo") did = commit==="A" ? key+" sank with "+pl(A.id) : key+" jumped "+pl(B.id);
+    else if(k.type==="inout") did = key+(Math.abs(routeEnd(to).x-GEO.CX)>Math.abs(routeEnd(commit==="A"?B:A).x-GEO.CX)?" widened to ":" squeezed inside to ")+pl(to.id);
+    else did = key+" leaned toward "+pl(to.id);
+    did+=" at "+tCommit.toFixed(1)+"s";
+  } else did = key+" stayed in between and never committed";
+  if(man) did+=" (man coverage — he was locked on his receiver)";
+  let correctTxt = correctId ? pl(correctId)+" was the correct read" : "both were covered — the answer was your next read or the checkdown";
+  if(covered && correctId) correctTxt = "the throw away from him was covered by help, so "+pl(correctId)+" was the right answer";
+  let choice=null, right=null, timing=null;
+  if(tThrow!=null && mineId){
+    right = correctId ? mineId===correctId || (sepOf(mineId)>=sepOf(correctId)-0.8 && sepOf(mineId)>=3.5) : sepOf(mineId)>=3.5;
+    choice="You threw "+pl(mineId)+" at "+tThrow.toFixed(1)+"s.";
+    if(tCommit!=null){ const d=tThrow-tCommit; timing = d< -0.15 ? "early" : d<=0.75 ? "ontime" : "late"; }
+  } else if(tThrow==null){ choice="You never threw it."; right=false; }
+  const timingTxt = timing==="early" ? "Early: you let it go before "+key+" showed you anything — that's a guess, even when it works."
+    : timing==="ontime" ? "On time: the ball came out right as "+key+" declared."
+    : timing==="late" ? "Late: "+key+" declared at "+tCommit.toFixed(1)+"s; get it out on his first step." : "";
+  return {key:k.key, label:L, did, correctId, correctTxt, choice, right, timing, timingTxt, tCommit, commit, type:k.type, A:k.A, B:k.B, man};
+}
+
+window.__qbKey={setupKeyRead,analyzeKeyRead,keyPlanText,findKeyPair,recordDefHist};
 
 /* ============================================================
    CREATE A PLAY — editor, audibles at the line, play calling
@@ -3487,12 +3774,13 @@ function hotRoute(id,type){
   const np=makePlayer(pl(id,tp.x,tp.y,r,{delay:tp.delay, target:tp.target}));
   live.path=np.path; live.name=np.name+(type?" (hot)":"");
   rep.hot=rep.hot||{}; if(type) rep.hot[id]=type; else delete rep.hot[id];
+  setupKeyRead(rep);
   showPlayTag(); renderAudible(); audDraw(); SFX.click();
   if(type) tutEvent("hot");
 }
 function doAudible(play){
   const old=state.rep;
-  const keep={disguised:old.disguised, shownCoverage:old.shownCoverage, actualCoverage:old.actualCoverage, rushPlan:old.rushPlan, rusher:{x:old.rusher.x}, askCoverage:old.askCoverage};
+  const keep={disguised:old.disguised, disguiseKind:old.disguiseKind, shownCoverage:old.shownCoverage, actualCoverage:old.actualCoverage, rushPlan:old.rushPlan, rusher:{x:old.rusher.x}, askCoverage:old.askCoverage};
   const rep=buildRep({play, keep});
   rep.coverageGuess=old.coverageGuess; rep.audibledFrom=old.audibledFrom||old.play.name;
   state.rep=rep; AUD.sel=null;
@@ -3508,6 +3796,7 @@ showPlayTag=function(){
   let extra="";
   if(rep.audibledFrom) extra+='<br><span style="color:#ffc933">AUDIBLE</span> from '+rep.audibledFrom;
   if(rep.hot && Object.keys(rep.hot).length) extra+='<br><span style="color:#ffc933">HOT</span> '+Object.keys(rep.hot).map(k=>k+" "+LIB[rep.hot[k]].name).join(", ");
+  if(state.showProgression && rep.keyRead && !MODES[state.mode].film) extra+='<br><span style="color:#ff6b5a">'+keyPlanText(rep)+'</span>';
   if(extra) els.playTag.innerHTML+=extra;
 };
 
@@ -3826,6 +4115,26 @@ function coachAnalyze(rep,resultType){
   else if(resultType==="OFF TARGET") tip="Aim where he'll be when the ball gets there. Lead crossing routes; put deep balls out in front.";
   else if(resultType==="RISKY") tip = con ? "Trust the key: watch "+con.key+" and throw away from him." : "Throw away from the nearest defender's leverage — if he's inside, throw outside.";
   else if(resultType==="GOOD READ") tip = b && b.tRel>2.3 ? "Pro tip: same read, a beat earlier. Throw as he breaks, before he looks open." : "That's the habit: read it, trust it, ball out on time.";
+  // key defender: what he did, what was right, what you did
+  const ka=analyzeKeyRead(rep, b?b.tRel:null, mineId);
+  out.keyA=ka;
+  if(ka && ka.right===false && ka.correctId && resultType!=="SACKED") tip="Watch "+ka.label.long+", not the receivers. When he goes one way, throw the other.";
+  else if(ka && ka.timing==="late" && (resultType==="GOOD READ"||resultType==="RISKY")) tip="Right read, late ball. Throw on the key's first step — that's the window.";
+  else if(ka && ka.timing==="early" && ka.right) tip="It worked, but you threw before "+ka.label.short+" moved. Wait one beat for the key to declare.";
+  // decision metrics for the QB Profile
+  const rq=hAt(rep.rusher.h,tDec,rep.rusher), qbp=histPos(playerById(rep,passerIdAt(rep,tDec))||rep.players[0],tDec);
+  const pressured = !rep.rusher.dropped && (dist(rq,qbp)<3.2 || (arrive && tDec>=arrive-0.35));
+  const firstOpen = !!(first && first.sep>=4);
+  out.metrics={
+    release: b ? +tDec.toFixed(2) : null,
+    first: readNo===0, firstOpen,
+    firstRight: b ? ((firstOpen && readNo===0) || (!firstOpen && readNo!==0 && mine && mine.sep>=3)) : (firstOpen?false:null),
+    missed: !!(best && best.sep>=4.5 && (!mine || (best.p.id!==mineId && mine.sep<2.5))),
+    tw: resultType==="INTERCEPTED" || (!!mine && mine.sep<1.3 && (resultType==="BROKEN UP"||resultType==="COVERED")),
+    pressure: !!pressured,
+    stare: !!(b && readNo===0 && first && first.sep<2.5 && best && best.p.id!==mineId && best.sep>=4),
+    keyRight: ka ? ka.right : null, keyTiming: ka ? ka.timing : null
+  };
   out.tip=tip;
   out.lines=[v, out.look, readLine, timing, "Coach's tip: "+tip].filter(Boolean);
   out.simple=[v, "Coach's tip: "+tip];
@@ -3833,14 +4142,26 @@ function coachAnalyze(rep,resultType){
 }
 
 /* ---------- rendering in the result sheet ---------- */
-["coachCard","coachVerdict","coachLines","coachViewBtn","coachLearnBtn","coachNotes"].forEach(id=>{ els[id]=document.getElementById(id); });
+function renderKeyBlock(ka){
+  const box=els.coachKey; if(!box) return; box.innerHTML="";
+  if(!ka){ box.classList.add("hidden"); return; }
+  box.classList.remove("hidden");
+  const row=(cls,txt)=>{ const d=document.createElement("div"); d.className=cls; d.textContent=txt; box.appendChild(d); };
+  row("kd-head","KEY DEFENDER: "+ka.label.short+(ka.label.side!=="middle"?" ("+ka.label.side+")":""));
+  row("kd-line", ka.did+(ka.correctId||ka.correctTxt?" → "+ka.correctTxt+".":"."));
+  if(ka.choice) row("kd-line kd-you "+(ka.right===true?"ok":ka.right===false?"bad":""), ka.choice+(ka.right===true?"  ✓ right read":ka.right===false?"  ✗ wrong side of the key":""));
+  if(ka.timingTxt) row("kd-line kd-time "+ka.timing, ka.timingTxt);
+}
+["coachCard","coachVerdict","coachLines","coachViewBtn","coachLearnBtn","coachNotes","coachKey"].forEach(id=>{ els[id]=document.getElementById(id); });
 let COACH_VIEW=false;
 function renderCoach(rep,resultType){
   const info=coachAnalyze(rep,resultType); rep.coach=info;
+  try{ profileRecord(rep,resultType,info); }catch(_){}
   const full=coachTalk()==="full";
   els.coachVerdict.textContent=info.verdict;
   els.coachLines.innerHTML="";
   (full?info.lines.slice(1):info.simple.slice(1)).forEach(t=>{ const p=document.createElement("p"); p.textContent=t; els.coachLines.appendChild(p); });
+  renderKeyBlock(info.keyA);
   els.coachLearnBtn.textContent="LEARN: "+info.chapterLabel.toUpperCase();
   els.coachViewBtn.textContent="COACH VIEW";
   els.coachViewBtn.classList.remove("on");
@@ -3903,10 +4224,18 @@ function drawCoachView(rep){
     ctx.fillStyle=col; ctx.fillText(label,s.x,s.y-VIEW.PR*2-12);
   };
   const snap=opennessAt(rep,t);
-  // key defender
-  if(info.keyDef && info.keyDef.h){ const q=defAt(info.keyDef,t), s=tp(q.x,q.y); ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.8,0,Math.PI*2); ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=3; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  // defender who decided it (when there's no concept key)
+  if(!info.keyA && info.keyDef && info.keyDef.h){ const q=defAt(info.keyDef,t), s=tp(q.x,q.y); ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.8,0,Math.PI*2); ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=3; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
     ctx.font="13px 'Jersey 10', sans-serif"; ctx.fillStyle="#ff6b5a"; ctx.textAlign="center"; ctx.fillText("KEY", s.x, s.y+VIEW.PR*2.6); }
-  if(info.bestId){ const o=snap.find(z=>z.p.id===info.bestId); ring(info.bestId,"#5fe08a","OPEN "+(o?o.sep.toFixed(1):"")+" YD"); }
+  const ka=info.keyA;
+  if(ka && ka.key && ka.key.h){
+    const tE=ka.tCommit!=null?Math.max(ka.tCommit,t):t; ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=2.5; ctx.setLineDash([2,4]); ctx.beginPath();
+    for(let u=0;u<=tE+1e-6;u+=0.1){ const q=defAt(ka.key,u), s=tp(q.x,q.y); u?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); } ctx.stroke(); ctx.setLineDash([]);
+    const q0=defAt(ka.key,t), s0=tp(q0.x,q0.y); ctx.beginPath(); ctx.arc(s0.x,s0.y,VIEW.PR*1.8,0,Math.PI*2); ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=3; ctx.stroke();
+    const lab="KEY "+ka.label.short+(ka.tCommit!=null?" · "+ka.tCommit.toFixed(1)+"s":"");
+    ctx.font="13px 'Jersey 10', sans-serif"; ctx.textAlign="center"; const lw=ctx.measureText(lab).width+10; ctx.fillStyle="rgba(13,17,23,0.88)"; ctx.fillRect(s0.x-lw/2,s0.y+VIEW.PR*2.1,lw,16); ctx.fillStyle="#ff6b5a"; ctx.fillText(lab,s0.x,s0.y+VIEW.PR*2.1+8);
+    if(ka.correctId) ring(ka.correctId,"#5fe08a","CORRECT READ");
+  } else if(info.bestId){ const o=snap.find(z=>z.p.id===info.bestId); ring(info.bestId,"#5fe08a","OPEN "+(o?o.sep.toFixed(1):"")+" YD"); }
   const b=rep.ball;
   if(b){
     const a=tp(b.from.x,b.from.y), e=tp(b.to.x,b.to.y);
@@ -3957,6 +4286,356 @@ function renderCoachNotes(){
     box.appendChild(d);
   });
 }
+
+/* ============================================================
+   FILM ROOM — read the look, name the key, pick the first read, run it, then see what it really was.
+   Flow: pre-snap questions (man/zone · coverage · key defender · first read) → snap & play →
+         post-snap ID → PRE-SNAP LOOK → POST-SNAP COVERAGE with the clue that gave it away.
+============================================================ */
+MODES.film={label:"Film Room", askCoverageChance:0, throws:true, film:true};
+["filmSheet","filmQ","filmSub","filmOpts","filmFb","filmGo","filmBox"].forEach(id=>{ els[id]=document.getElementById(id); });
+const FILM={rep:null, step:0, ans:{}, best:null, await:null};
+const familyOf=c=>MAN_FAMILY(c)?"Man":"Zone";
+
+// what the play "should" look like against the coverage the defense is SHOWING
+function predictInitialRead(rep){
+  try{
+    const ghost=buildRep({play:rep.play, keep:{disguised:false, disguiseKind:null, shownCoverage:rep.shownCoverage, actualCoverage:rep.shownCoverage, rushPlan:rep.rushPlan, rusher:{x:rep.rusher.x}, askCoverage:false}});
+    const score={}; let t=0, n=0; const dt=1/30;
+    while(t<1.8){ t+=dt; stepPlayers(ghost,t,dt); updateDefenders(ghost,t,dt); updateRusher(ghost,t,dt);
+      if(t>=1.0){ n++; ghost.targets.forEach(p=>{ const q=livePos(p); score[p.id]=(score[p.id]||0)+nearestDefender(ghost,q).dist; }); } }
+    const prog=rep.play.prog||[];
+    const arr=Object.keys(score).map(id=>({id, sep:score[id]/Math.max(1,n), pri:prog.indexOf(id)<0?9:prog.indexOf(id)})).sort((a,b)=>b.sep-a.sep || a.pri-b.pri);
+    return {best:arr[0], all:arr};
+  }catch(_){ return null; }
+}
+function filmStart(){
+  const rep=state.rep; FILM.rep=rep; FILM.step=0; FILM.ans={}; FILM.await=null;
+  FILM.best=predictInitialRead(rep);
+  els.studyBanner.classList.add("hidden"); els.playTag.classList.add("hidden");
+  els.controls.classList.add("hidden"); audibleShow(false);
+  els.filmSheet.classList.remove("hidden");
+  filmAsk();
+}
+const FILM_STEPS=["mz","cov","key","read"];
+function filmAsk(){
+  const rep=FILM.rep; let step=FILM_STEPS[FILM.step];
+  if(step==="key" && !rep.keyRead){ FILM.step++; step=FILM_STEPS[FILM.step]; }
+  if(step==="read" && !FILM.best){ FILM.step++; step=FILM_STEPS[FILM.step]; }
+  els.filmFb.textContent=""; els.filmFb.className="film-fb"; els.filmGo.classList.add("hidden");
+  els.filmOpts.innerHTML=""; FILM.await=null;
+  const opt=(label,on)=>{ const b=document.createElement("button"); b.type="button"; b.className="film-opt"; b.textContent=label; b.addEventListener("click",()=>on(b)); els.filmOpts.appendChild(b); return b; };
+  const n=FILM_STEPS.indexOf(step)+1;
+  if(!step){ filmReady(); return; }
+  if(step==="mz"){
+    els.filmQ.textContent="1 · MAN OR ZONE?"; els.filmSub.textContent="Look at the alignment: cushion, eyes, and who's deep.";
+    ["Man","Zone"].forEach(k=>opt(k,()=>filmAnswer("mz",k,k===familyOf(rep.shownCoverage))));
+  } else if(step==="cov"){
+    els.filmQ.textContent="2 · LIKELY COVERAGE?"; els.filmSub.textContent="Count the deep defenders. The look can still change after the snap.";
+    const must=[rep.shownCoverage], others=shuffle(ALL_COVERAGES.filter(c=>c!==rep.shownCoverage));
+    shuffle(must.concat(others).slice(0,4)).forEach(c=>opt(c,()=>filmAnswer("cov",c,c===rep.shownCoverage)));
+  } else if(step==="key"){
+    els.filmQ.textContent="3 · WHO'S YOUR KEY DEFENDER?"; els.filmSub.textContent="Tap the defender this play puts in a bind ("+rep.keyRead.A+" vs "+rep.keyRead.B+").";
+    FILM.await="key"; filmDrawPre();
+  } else if(step==="read"){
+    els.filmQ.textContent="4 · BEST FIRST READ?"; els.filmSub.textContent="Against this look, which receiver do you expect to be your answer? Tap him.";
+    FILM.await="read"; filmDrawPre();
+  }
+}
+function filmAnswer(k,val,ok,extra){
+  const rep=FILM.rep; FILM.ans[k]={val,ok};
+  els.filmOpts.querySelectorAll && els.filmOpts.querySelectorAll("button").forEach(b=>{ b.disabled=true; if(b.textContent===val) b.classList.add(ok?"ok":"bad"); });
+  const C=COV_COACH[rep.shownCoverage]||{};
+  let fb="";
+  if(k==="mz") fb = ok ? "✓ It looks like "+familyOf(rep.shownCoverage).toLowerCase()+"." : "✗ The alignment says "+familyOf(rep.shownCoverage).toLowerCase()+".";
+  if(k==="cov") fb = (ok?"✓ ":"✗ It shows "+rep.shownCoverage+". ")+(C.tell||"");
+  if(k==="key") fb = extra;
+  if(k==="read") fb = extra;
+  els.filmFb.textContent=fb; els.filmFb.className="film-fb "+(ok?"ok":"bad");
+  FILM.await=null;
+  els.filmGo.textContent = FILM.step>=FILM_STEPS.length-1 ? "GOT IT ▶" : "NEXT ▶";
+  els.filmGo.classList.remove("hidden");
+  SFX.click();
+}
+els.filmGo.addEventListener("click",()=>{ FILM.step++; if(FILM.step>=FILM_STEPS.length) filmReady(); else filmAsk(); });
+function filmReady(){
+  els.filmSheet.classList.add("hidden");
+  els.controls.classList.remove("hidden"); els.primaryBtn.classList.remove("hidden"); els.primaryBtn.textContent="SNAP";
+  audibleShow(true);
+  // show the plan on the field tag: the key and the first read you picked
+  const rep=FILM.rep; let html='<b>'+rep.play.name+'</b> · Film Room';
+  if(rep.keyRead) html+='<br><span style="color:#ff6b5a">'+keyPlanText(rep)+'</span>';
+  els.playTag.innerHTML=html; els.playTag.classList.remove("hidden");
+  drawStatic(); filmMarkKey(true);
+}
+function filmDrawPre(){ drawStatic(); }
+function filmMarkKey(onlyKey){
+  const rep=FILM.rep; if(!rep || !rep.keyRead) return;
+  const s=toPx(rep.keyRead.key.pos.x,rep.keyRead.key.pos.y);
+  ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.9,0,Math.PI*2); ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=3; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+}
+// taps on the field answer the key / first-read questions
+els.field.addEventListener("pointerdown",(e)=>{
+  if(!FILM.await || state.phase!=="study" || !MODES[state.mode].film) return;
+  const rep=FILM.rep, pt=ptField(e);
+  if(FILM.await==="key"){
+    let hit=null, hd=40; rep.defenders.forEach(d=>{ const s=toPx(d.pos.x,d.pos.y), dd=Math.hypot(s.x-pt.px,s.y-pt.py); if(dd<hd){ hd=dd; hit=d; } });
+    if(!hit) return;
+    const ok=hit===rep.keyRead.key, L=rep.keyRead.lab, A=playerById(rep,rep.keyRead.A), B=playerById(rep,rep.keyRead.B);
+    filmAnswer("key",null,ok,(ok?"✓ ":"✗ The key is ")+L.long+(L.side!=="middle"?" on the "+L.side:"")+(ok?"":"")+" — he can't cover "+A.id+"'s "+A.name+" and "+B.id+"'s "+B.name+" at the same time.");
+    drawStatic(); filmMarkKey();
+    const s=toPx(hit.pos.x,hit.pos.y); if(!ok){ ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.6,0,Math.PI*2); ctx.strokeStyle="#ffc933"; ctx.lineWidth=2.5; ctx.stroke(); }
+  } else if(FILM.await==="read"){
+    let hit=null, hd=40; rep.targets.forEach(p=>{ if(!p._px) return; const dd=Math.hypot(p._px.x-pt.px,p._px.y-pt.py); if(dd<hd){ hd=dd; hit=p; } });
+    if(!hit) return;
+    const b=FILM.best.best, mine=FILM.best.all.find(x=>x.id===hit.id);
+    const ok = hit.id===b.id || (mine && mine.sep>=b.sep-1.0);
+    const bp=playerById(rep,b.id);
+    filmAnswer("read",hit.id,ok,(ok?"✓ ":"✗ ")+"Against "+rep.shownCoverage+", "+b.id+"'s "+bp.name+" should be your answer (about "+b.sep.toFixed(1)+" yds of room). "+(rep.keyRead?"Then let the key confirm it.":""));
+    drawStatic(); ctx.beginPath(); ctx.arc(bp._px.x,bp._px.y,VIEW.PR*1.9,0,Math.PI*2); ctx.strokeStyle="#5fe08a"; ctx.lineWidth=3; ctx.stroke();
+  }
+});
+
+/* ---------- after the play: post-snap ID, then the reveal ---------- */
+function filmClue(rep){
+  const pre=rep.shownCoverage+" ("+(rep.shellShown||"")+")", post=rep.actualCoverage+" ("+actualShell(rep)+")";
+  const C=COV_COACH[rep.actualCoverage]||{};
+  if(!rep.disguised) return {pre, post, same:true, clue:"No disguise — what you saw is what you got. "+(C.tell||"")};
+  const role=(d,p0)=>{ const sd=sideOf(p0.x); return (p0.y>=8.5?"the "+(sd==="middle"?"":sd+" ")+"safety":Math.abs(p0.x-GEO.CX)>GEO.W*0.28?"the "+sd+" corner":"the "+(sd==="middle"?"middle":sd)+" underneath defender").replace("  "," "); };
+  const moved=d=>{ const p0=d.pos0||(d.h&&d.h[0])||d.pos; for(let t=0.1;t<=1.6;t+=0.05){ if(dist(defAt(d,t),p0)>1.6) return +t.toFixed(1); } return null; };
+  const defs=rep.defenders.filter(d=>!d.isRusher && d.h && d.h.length);
+  let clue="";
+  if(rep.disguiseKind==="bluff man → zone"){
+    const d=defs.find(d=>d.role==="zone" && rep.targets.some(r=>dist(d.pos0||d.h[0],{x:r.x0,y:r.y0})<6)) || defs.find(d=>d.role==="zone");
+    if(d){ const t=moved(d)||0.3; clue=role(d,d.pos0||d.h[0])+" was lined up on a receiver like man, but at "+t+"s he dropped to a spot and turned to face you. Eyes on the QB = zone."; }
+  } else if(rep.disguiseKind==="bluff zone → man"){
+    const d=defs.find(d=>d.role==="man" && (d.pos0||d.h[0]).y>=4);
+    if(d){ const t=moved(d)||0.4; clue=role(d,d.pos0||d.h[0])+" looked like a zone defender, but at "+t+"s he turned and ran with "+d.assign.id+"'s route. Running with a receiver = man."; }
+  } else {
+    const down=defs.find(d=>(d.pos0||d.h[0]).y>=8.5 && !(d.role==="zone" && d.type==="deep"));
+    const up=defs.find(d=>(d.pos0||d.h[0]).y<8.5 && d.role==="zone" && d.type==="deep");
+    if(down){ const t=moved(down)||0.3; clue=role(down,down.pos0||down.h[0])+" rotated down at "+t+"s — "+(rep.shellShown||"the shell")+" became "+actualShell(rep)+"."; }
+    else if(up){ const t=moved(up)||0.3; clue=role(up,up.pos0||up.h[0])+" bailed deep at "+t+"s — "+(rep.shellShown||"the shell")+" became "+actualShell(rep)+"."; }
+  }
+  if(!clue) clue="The defense moved after the snap. "+(C.tell||"");
+  return {pre, post, same:false, clue, kind:rep.disguiseKind};
+}
+function filmResult(rep){
+  if(!MODES[state.mode].film || !els.filmBox) return;
+  els.filmBox.classList.remove("hidden"); els.coachCard.classList.add("hidden");
+  els.filmBox.innerHTML="";
+  const h=document.createElement("div"); h.className="film-q"; h.textContent="5 · POST-SNAP: WHAT DID THEY ACTUALLY PLAY?"; els.filmBox.appendChild(h);
+  const row=document.createElement("div"); row.className="film-opts"; els.filmBox.appendChild(row);
+  const opts=shuffle(Array.from(new Set([rep.actualCoverage,rep.shownCoverage].concat(shuffle(ALL_COVERAGES)))).slice(0,4));
+  opts.forEach(c=>{ const b=document.createElement("button"); b.type="button"; b.className="film-opt"; b.textContent=c;
+    b.addEventListener("click",()=>{ FILM.ans.post={val:c, ok:c===rep.actualCoverage}; profileFilm(FILM.ans); filmReveal(rep); }); row.appendChild(b); });
+}
+function filmReveal(rep){
+  const box=els.filmBox; box.innerHTML="";
+  const cl=filmClue(rep);
+  const flow=document.createElement("div"); flow.className="film-flow";
+  flow.innerHTML='<div><small>PRE-SNAP LOOK</small><b></b></div><span>→</span><div><small>POST-SNAP</small><b></b></div>';
+  flow.children[0].children[1].textContent=cl.pre; flow.children[2].children[1].textContent=cl.post;
+  if(cl.same) flow.classList.add("same");
+  box.appendChild(flow);
+  if(cl.kind){ const k=document.createElement("div"); k.className="film-kind"; k.textContent=cl.kind.toUpperCase(); box.appendChild(k); }
+  const c=document.createElement("p"); c.className="film-clue"; c.innerHTML="<b>THE CLUE:</b> "; c.appendChild(document.createTextNode(cl.clue)); box.appendChild(c);
+  const sc=document.createElement("div"); sc.className="chip-row";
+  [["mz","Man/zone"],["cov","Look"],["key","Key"],["read","1st read"],["post","Post-snap"]].forEach(([k,l])=>{ const a=FILM.ans[k]; if(!a) return;
+    const s=document.createElement("span"); s.className="film-score "+(a.ok?"ok":"bad"); s.textContent=(a.ok?"✓ ":"✗ ")+l; sc.appendChild(s); });
+  box.appendChild(sc);
+  const vr=document.createElement("div"); vr.className="chip-row";
+  [["PRE-SNAP",0],["POST-SNAP",1.0]].forEach(([l,t])=>{ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=l; b.addEventListener("click",()=>{ vr.querySelectorAll("button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); drawFilmFrame(rep,t); }); vr.appendChild(b); });
+  box.appendChild(vr);
+  els.coachCard.classList.remove("hidden");
+}
+// pre-snap alignment, or the coverage a beat after the snap with every defender's path
+function drawFilmFrame(rep,t){
+  drawField(); drawRoutes(true);
+  const tp=(x,y)=>toPx(x,y);
+  if(t>0){
+    rep.defenders.forEach(d=>{
+      if(!d.h||!d.h.length) return;
+      if(d.role==="man" && d.assign){ const a=defAt(d,t), r=histPos(d.assign,t), s=tp(a.x,a.y), rs=tp(r.x,r.y); ctx.strokeStyle="rgba(232,65,44,0.9)"; ctx.lineWidth=2; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(rs.x,rs.y); ctx.stroke(); ctx.setLineDash([]); }
+      else if(d.role==="zone"){ const y0=d.type==="deep"?Math.max(8,d.ly-4):d.type==="flat"?0.5:2.5, y1=d.type==="deep"?d.ly+6:d.type==="flat"?6:10, a=tp(d.x0,y1), c=tp(d.x1,y0);
+        ctx.fillStyle=d.type==="deep"?"rgba(90,184,255,0.16)":"rgba(255,201,51,0.16)"; ctx.fillRect(a.x,a.y,c.x-a.x,c.y-a.y); }
+      ctx.strokeStyle="rgba(255,255,255,0.7)"; ctx.lineWidth=2; ctx.setLineDash([2,4]); ctx.beginPath();
+      for(let u=0;u<=t+1e-6;u+=0.1){ const q=defAt(d,u), s=tp(q.x,q.y); u?ctx.lineTo(s.x,s.y):ctx.moveTo(s.x,s.y); } ctx.stroke(); ctx.setLineDash([]);
+    });
+  }
+  rep.players.forEach(p=>{ const q=t>0?histPos(p,t):{x:p.x0,y:p.y0}, s=tp(q.x,q.y);
+    drawSprite(s.x,s.y,{jersey:p.color,shorts:"#f4f0e2",skin:SKIN[(p.id.charCodeAt(0)*7)%SKIN.length],hair:"#1b1b1b",label:p.id,labelColor:"#0d1117",flags:{},flagColor:"#ffc933",step:0}); });
+  rep.defenders.forEach((d,i)=>{ if(d.isRusher && t===0) return; const q=t>0?defAt(d,t):(d.pos0||d.pos), s=tp(q.x,q.y);
+    drawSprite(s.x,s.y,{jersey:"#e8412c",shorts:"#0d1117",skin:SKIN[(i*3+1)%SKIN.length],hair:"#2b1a10",flags:{},flagColor:"#5ab8ff",step:0,label:""}); });
+  const cap=(t>0?"POST-SNAP · "+t.toFixed(1)+"s · "+rep.actualCoverage:"PRE-SNAP LOOK · "+rep.shownCoverage+" ("+(rep.shellShown||"")+")");
+  ctx.font="16px 'Jersey 10', sans-serif"; ctx.textAlign="left"; ctx.textBaseline="middle";
+  const tw=ctx.measureText(cap).width+16; ctx.fillStyle="rgba(13,17,23,0.9)"; ctx.fillRect(8,10,tw,24); ctx.fillStyle="#ffc933"; ctx.fillText(cap,16,23);
+}
+window.__qbFilm={FILM, keyPx:()=>{ const r=FILM.rep; if(!r||!r.keyRead) return null; return toPx(r.keyRead.key.pos.x,r.keyRead.key.pos.y); }, readPx:()=>{ const r=FILM.rep; if(!FILM.best) return null; const p=playerById(r,FILM.best.best.id); return p._px; }};
+
+/* ============================================================
+   QB PROFILE — your tendencies across sessions (stored on this device).
+   Training metrics only: no ratings, no overall number.
+============================================================ */
+SCREENS.push("profileScreen");
+["profileScreen","pfSub","pfTiles","pfDiag","pfCov","pfCon","pfTrend","pfReset","profileSummary"].forEach(id=>{ els[id]=document.getElementById(id); });
+const PROFILE_KEY="qbbrain.profile.v1", PROFILE_MAX=600;
+let PROFILE={v:1, recs:[]};
+try{ const o=JSON.parse(localStorage.getItem(PROFILE_KEY)||"null"); if(o && Array.isArray(o.recs)) PROFILE=o; }catch(_){}
+function profileSave(){ try{ localStorage.setItem(PROFILE_KEY,JSON.stringify(PROFILE)); }catch(_){} }
+const OK_RESULTS=["GOOD READ","RISKY"];
+// one record per rep (called from the coach after every result)
+function profileRecord(rep,resultType,info){
+  if(state.tut) return;
+  const m=info.metrics||{}, con=conceptFor(rep.play);
+  const r={t:Date.now(), m:state.mode, sq:rep.squad, d:state.difficulty, cov:rep.actualCoverage, sh:rep.shownCoverage, dg:rep.disguised?1:0, dk:rep.disguiseKind||null,
+    shell:rep.shellShown||null, ashell:actualShell(rep), con:con?con.name:rep.play.name, res:resultType==="COVERAGE"?null:resultType,
+    rel:m.release!=null?m.release:null, first:m.first?1:0, fOpen:m.firstOpen?1:0, fr:m.firstRight==null?null:(m.firstRight?1:0),
+    miss:m.missed?1:0, tw:m.tw?1:0, pr:m.pressure?1:0, stare:m.stare?1:0,
+    kr:m.keyRight==null?null:(m.keyRight?1:0), kt:m.keyTiming||null,
+    cid: rep.askCoverage && rep.coverageGuess!==undefined ? (rep.coverageGuess===rep.actualCoverage?1:0) : null,
+    mz: rep.askCoverage && rep.coverageGuess!==undefined ? (familyOf(rep.coverageGuess)===familyOf(rep.actualCoverage)?1:0) : null,
+    ad: state.adaptive?1:0, plan: rep.plan && rep.plan.name || null};
+  PROFILE.recs.push(r); if(PROFILE.recs.length>PROFILE_MAX) PROFILE.recs.splice(0,PROFILE.recs.length-PROFILE_MAX);
+  profileSave();
+}
+function profileFilm(ans){
+  const r=PROFILE.recs[PROFILE.recs.length-1]; if(!r) return;
+  const b=a=>a?(a.ok?1:0):null;
+  r.fmz=b(ans.mz); r.fcov=b(ans.cov); r.fkey=b(ans.key); r.fread=b(ans.read); r.fpost=b(ans.post);
+  r.mz = r.fmz!=null ? r.fmz : r.mz;
+  r.cid = r.fpost!=null ? r.fpost : r.cid;
+  profileSave();
+}
+/* ---------- metrics ---------- */
+const pct=(a,b)=>b?Math.round(100*a/b):null;
+const rate=(arr,f)=>{ const v=arr.filter(r=>f(r)!=null); return {n:v.length, k:v.filter(r=>f(r)===1).length}; };
+const success=r=> r.res==null ? r.cid : (OK_RESULTS.includes(r.res) && !r.tw ? 1 : 0);
+function profileMetrics(recs){
+  recs=recs||PROFILE.recs;
+  const thr=recs.filter(r=>r.res && r.res!=="SACKED" && r.rel!=null);
+  const plays=recs.filter(r=>r.res);
+  const M={n:recs.length, plays:plays.length};
+  M.release = thr.length ? thr.reduce((s,r)=>s+r.rel,0)/thr.length : null;
+  const cid=rate(recs,r=>r.cid); M.covId={pct:pct(cid.k,cid.n), n:cid.n};
+  const mz=rate(recs,r=>r.mz); M.mz={pct:pct(mz.k,mz.n), n:mz.n};
+  const fr=rate(plays,r=>r.fr); M.first={pct:pct(fr.k,fr.n), n:fr.n};
+  const kr=rate(plays,r=>r.kr); M.key={pct:pct(kr.k,kr.n), n:kr.n};
+  const kl=plays.filter(r=>r.kt); M.keyLate={pct:pct(kl.filter(r=>r.kt==="late").length,kl.length), n:kl.length}; M.keyEarly={pct:pct(kl.filter(r=>r.kt==="early").length,kl.length), n:kl.length};
+  M.missed={k:plays.filter(r=>r.miss).length, n:plays.length, pct:pct(plays.filter(r=>r.miss).length,plays.length)};
+  M.tw={k:plays.filter(r=>r.tw).length, n:plays.length, pct:pct(plays.filter(r=>r.tw).length,plays.length)};
+  const pr=plays.filter(r=>r.pr), cl=plays.filter(r=>!r.pr);
+  M.pressure={n:pr.length, pct:pct(pr.filter(r=>success(r)===1).length,pr.length), clean:pct(cl.filter(r=>success(r)===1).length,cl.length), sacks:plays.filter(r=>r.res==="SACKED").length};
+  const fst=plays.filter(r=>r.first && r.rel!=null); M.stare={k:plays.filter(r=>r.stare).length, n:fst.length, pct:pct(plays.filter(r=>r.stare).length,fst.length)};
+  const group=(key,src)=>{ const g={}; src.forEach(r=>{ const k=key(r); if(!k) return; const s=success(r); if(s==null) return; (g[k]=g[k]||{n:0,k:0}); g[k].n++; g[k].k+=s; }); return g; };
+  M.byCov=group(r=>r.cov,recs);
+  M.byCon=group(r=>r.res?r.con:null,plays);
+  M.byShell=group(r=>r.dg?(r.shell||"?")+"→rot":null,recs);
+  const dg=recs.filter(r=>r.dg), nd=recs.filter(r=>!r.dg);
+  M.disg={n:dg.length, pct:pct(dg.filter(r=>success(r)===1).length,dg.length), plain:pct(nd.filter(r=>success(r)===1).length,nd.length)};
+  M.rotTwoHigh=(()=>{ const a=recs.filter(r=>r.dg && r.shell==="two-high" && r.ashell && r.ashell!==r.shell); return {n:a.length, pct:pct(a.filter(r=>success(r)===1).length,a.length)}; })();
+  M.bluff=(()=>{ const a=recs.filter(r=>r.dg && r.dk && r.dk.indexOf("bluff")===0); return {n:a.length, pct:pct(a.filter(r=>success(r)===1).length,a.length)}; })();
+  const last=recs.slice(-20), prev=recs.slice(-40,-20);
+  M.trend={last:pct(last.filter(r=>success(r)===1).length,last.filter(r=>success(r)!=null).length), prev:prev.length>=8?pct(prev.filter(r=>success(r)===1).length,prev.filter(r=>success(r)!=null).length):null};
+  const rank=(g,min)=>Object.keys(g).filter(k=>g[k].n>=min).map(k=>({k,n:g[k].n,pct:pct(g[k].k,g[k].n)})).sort((a,b)=>b.pct-a.pct);
+  M.covRank=rank(M.byCov,3); M.conRank=rank(M.byCon,3);
+  return M;
+}
+/* ---------- drills: each is a training plan ---------- */
+const DRILLS={
+  rotation:{name:"Post-Snap Rotation Drill", mode:"film", plan:{disguise:0.85, rotations:[["Cover 2","Cover 3"],["Cover 2","Cover 1"],["Cover 3","Cover 2"],["Cover 3","Cover 1"]]},
+    sub:"Film Room reps where the shell rotates after the snap. Check the safeties again once the ball is snapped."},
+  bluff:{name:"Man or Zone? Bluff Drill", mode:"film", plan:{disguise:0.8, rotations:[["Man","Cover 3"],["Man","Underneath Zone"],["Cover 1","Cover 3"],["Underneath Zone","Man"],["Cover 2","Cover 1"],["Cover 3","Cover 1"]]},
+    sub:"Defenders show one thing and play another. Watch hips (man) vs eyes on you (zone)."},
+  key:{name:"Key Read Drill", mode:"quick_read", book:"standard", plan:{plays:["Smash","Slant-Flat","Flood","Stick","Drive","Levels","Snag"], covWeights:{"Cover 2":2,"Cover 3":2,"Underneath Zone":1,"Cover 1":1}},
+    sub:"High-low and inside-out concepts only. Watch the key defender and throw away from him."},
+  pressure:{name:"Pressure Drill", mode:"quick_read", book:"standard", plan:{rushMul:1.12, rushPlans:{straight:0.4,edge:0.45,delay:0.15}, plays:["Slant-Flat","Stick","Spacing","Mesh","Snag"]},
+    sub:"Faster, varied rush with quick-game concepts. Decide pre-snap, ball out on time."},
+  eyes:{name:"Eyes Discipline Drill", mode:"quick_read", plan:{eyesMul:2.2, covWeights:{"Cover 3":2,"Cover 2":2,"Underneath Zone":2,"Cover 1":1}},
+    sub:"Zone defenders and safeties chase your eyes hard. Look one way, throw the other."},
+  open:{name:"Find the Open Man Drill", mode:"quick_read", plan:{covWeights:{"Cover 3":1,"Cover 2":1,"Underneath Zone":1,"Man":1}, rushMul:0.85},
+    sub:"A little more time. Work 1-2-3 and take the receiver who's open — don't force #1."},
+  security:{name:"Ball Security Drill", mode:"quick_read", plan:{covWeights:{"Underneath Zone":2,"Cover 2":1,"Cover 3":1}, eyesMul:1.5},
+    sub:"Lots of underneath defenders. Throw to grass and away from leverage, or check it down."},
+  manzone:{name:"Man vs Zone ID Drill", mode:"coverage_id", plan:{disguise:0.5}, sub:"Name the coverage every rep, with disguises mixed in."}
+};
+const COV_BEATERS={"Man":["Mesh","Slant-Flat","Snag","Drive"],"Cover 1":["Slant-Flat","Mesh","Flood","Four Verticals"],"Cover 2":["Smash","Four Verticals","Spacing","Stick"],"Cover 3":["Flood","Slant-Flat","Stick","Snag","Levels"],"Underneath Zone":["Four Verticals","Levels","Smash","Flood"]};
+function covDrill(cov){ return {name:cov+" Drill", mode:"qb_brain", book:"standard", plan:{covWeights:{[cov]:1}, plays:COV_BEATERS[cov]||null}, sub:"Reps against "+cov+" with the concepts that beat it."}; }
+function startDrill(dr){
+  closeManual();
+  state.plan=Object.assign({name:dr.name}, dr.plan);
+  if(dr.book) state.book=dr.book;
+  state.playPick="random";
+  refreshSetupUI();
+  startSession(dr.mode,{plan:state.plan});
+}
+/* ---------- diagnosis: weaknesses → drills ---------- */
+function profileDiagnose(M){
+  const out=[];
+  const add=(sev,text,dr)=>out.push({sev,text,dr});
+  if(M.rotTwoHigh.n>=3 && M.rotTwoHigh.pct<50) add(90-M.rotTwoHigh.pct*0.5,"You struggle when two-high shells rotate after the snap ("+M.rotTwoHigh.pct+"% on "+M.rotTwoHigh.n+" reps).",DRILLS.rotation);
+  else if(M.disg.n>=4 && M.disg.pct!=null && M.disg.plain!=null && M.disg.pct < M.disg.plain-20) add(75,"Disguised coverages cost you: "+M.disg.pct+"% vs "+M.disg.plain+"% against honest looks.",DRILLS.rotation);
+  if(M.bluff.n>=3 && M.bluff.pct<50) add(80-M.bluff.pct*0.4,"Bluffs fool you — man that turns into zone (or the reverse): "+M.bluff.pct+"% on "+M.bluff.n+" reps.",DRILLS.bluff);
+  if(M.mz.n>=5 && M.mz.pct<70) add(78-M.mz.pct*0.3,"Man vs zone recognition is "+M.mz.pct+"%. That's the first read of every snap.",DRILLS.manzone);
+  if(M.key.n>=4 && M.key.pct<60) add(85-M.key.pct*0.4,"You threw to the wrong side of the key defender "+(100-M.key.pct)+"% of the time.",DRILLS.key);
+  else if(M.keyLate.n>=4 && M.keyLate.pct>=40) add(70,"You find the right read but late: "+M.keyLate.pct+"% of key reads came after the defender had already declared.",DRILLS.key);
+  if(M.stare.n>=5 && M.stare.pct>=25) add(72,"You stare down your first read — "+M.stare.pct+"% of first-read throws went in while someone else was open.",DRILLS.eyes);
+  if(M.pressure.n>=4 && M.pressure.pct!=null && M.pressure.clean!=null && M.pressure.pct < M.pressure.clean-20) add(74,"Under pressure your success drops from "+M.pressure.clean+"% to "+M.pressure.pct+"%.",DRILLS.pressure);
+  else if(M.release!=null && M.release>2.5 && M.plays>=6) add(65,"Average release is "+M.release.toFixed(1)+"s — slow against a 7-yard rusher.",DRILLS.pressure);
+  if(M.missed.n>=6 && M.missed.pct>=30) add(68,"You missed an open receiver on "+M.missed.pct+"% of plays.",DRILLS.open);
+  if(M.tw.n>=6 && M.tw.pct>=15) add(76,M.tw.pct+"% of your throws were turnover-worthy (picks or balls thrown into tight coverage).",DRILLS.security);
+  const worst=M.covRank.length?M.covRank[M.covRank.length-1]:null;
+  if(worst && worst.pct<45) add(60+(45-worst.pct)*0.4,"Your toughest coverage is "+worst.k+" ("+worst.pct+"% on "+worst.n+" reps).",covDrill(worst.k));
+  return out.sort((a,b)=>b.sev-a.sev).slice(0,4);
+}
+/* ---------- screen ---------- */
+function tile(v,l,sub){ const d=document.createElement("div"); d.className="pf-tile"; d.innerHTML='<div class="n"></div><div class="l"></div><div class="s"></div>';
+  d.children[0].textContent=v; d.children[1].textContent=l; d.children[2].textContent=sub||""; return d; }
+function bars(box,rows){
+  box.innerHTML="";
+  if(!rows.length){ const p=document.createElement("div"); p.className="help"; p.textContent="Not enough reps yet (3+ per item)."; box.appendChild(p); return; }
+  rows.forEach(r=>{ const row=document.createElement("div"); row.className="pf-bar";
+    row.innerHTML='<span class="k"></span><span class="track"><i></i></span><span class="v"></span>';
+    row.children[0].textContent=r.k; row.children[1].firstChild.style.width=Math.max(3,r.pct)+"%"; row.children[2].textContent=r.pct+"% · "+r.n;
+    box.appendChild(row); });
+}
+function renderProfile(){
+  const M=profileMetrics();
+  els.pfSub.textContent = M.n ? "Based on your last "+M.n+" rep"+(M.n===1?"":"s")+" on this device." : "Play some reps (drills, Film Room or drives) and your profile builds itself.";
+  const T=els.pfTiles; T.innerHTML="";
+  const f=(v,suf)=>v==null?"—":v+(suf||"");
+  T.append(
+    tile(M.release==null?"—":M.release.toFixed(2)+"s","Avg release time", M.release==null?"":(M.release<1.8?"quick":M.release<2.5?"on time":"slow vs a rush")),
+    tile(f(M.covId.pct,"%"),"Coverage recognition", M.covId.n?M.covId.n+" IDs":""),
+    tile(f(M.mz.pct,"%"),"Man vs zone ID", M.mz.n?M.mz.n+" IDs":""),
+    tile(f(M.first.pct,"%"),"Correct 1st-read decision", M.first.n?"throw it when open, move on when not":""),
+    tile(f(M.key.pct,"%"),"Key defender reads", M.key.n?(M.keyLate.pct?M.keyLate.pct+"% late":"")+(M.keyEarly.pct?" · "+M.keyEarly.pct+"% early":""):""),
+    tile(M.plays?M.missed.k+"":"—","Open receivers missed", M.plays?M.missed.pct+"% of plays":""),
+    tile(f(M.tw.pct,"%"),"Turnover-worthy throws", M.plays?M.tw.k+" of "+M.tw.n:""),
+    tile(f(M.pressure.pct,"%"),"Success under pressure", M.pressure.clean!=null?"vs "+M.pressure.clean+"% clean · "+M.pressure.sacks+" sacks":""),
+    tile(f(M.stare.pct,"%"),"Stare-down rate", M.stare.n?"of first-read throws":"")
+  );
+  // diagnosis
+  const D=profileDiagnose(M); els.pfDiag.innerHTML="";
+  if(!D.length){ const p=document.createElement("div"); p.className="coach-note"; p.innerHTML="<p></p>";
+    p.firstChild.textContent = M.n<10 ? "Get 10+ reps in and I'll start spotting patterns." : "No big leaks right now. Keep stacking reps on Varsity/Elite, or try Film Room with Adaptive on."; els.pfDiag.appendChild(p); }
+  D.forEach(x=>{ const d=document.createElement("div"); d.className="coach-note"; const p=document.createElement("p"); p.textContent=x.text; d.appendChild(p);
+    const s=document.createElement("small"); s.className="pf-dsub"; s.textContent="Recommended: "+x.dr.name+" — "+x.dr.sub; d.appendChild(s);
+    const b=document.createElement("button"); b.type="button"; b.className="btn sm"; b.textContent="START "+x.dr.name.toUpperCase(); b.addEventListener("click",()=>startDrill(x.dr)); d.appendChild(b);
+    els.pfDiag.appendChild(d); });
+  bars(els.pfCov, M.covRank.concat(Object.keys(M.byShell).filter(k=>M.byShell[k].n>=3).map(k=>({k:k.replace("→rot"," rotated"),n:M.byShell[k].n,pct:pct(M.byShell[k].k,M.byShell[k].n)}))));
+  const cr=M.conRank; bars(els.pfCon, cr.length>6 ? cr.slice(0,3).concat(cr.slice(-3)) : cr);
+  els.pfTrend.textContent = M.trend.last==null ? "" : "Last 20 reps: "+M.trend.last+"% successful"+(M.trend.prev!=null?" (previous 20: "+M.trend.prev+"%)":"")+".";
+  if(els.profileSummary) els.profileSummary.textContent = M.n ? M.n+" reps tracked" : "Your tendencies";
+}
+els.pfReset.addEventListener("click",()=>{
+  if(els.pfReset.dataset.arm!=="1"){ els.pfReset.dataset.arm="1"; els.pfReset.textContent="TAP AGAIN TO ERASE YOUR PROFILE"; return; }
+  PROFILE={v:1,recs:[]}; profileSave(); els.pfReset.dataset.arm=""; els.pfReset.textContent="RESET PROFILE"; renderProfile();
+});
+const _showScreenP=showScreen;
+showScreen=function(id){ _showScreenP(id); if(id==="profileScreen"){ els.pfReset.dataset.arm=""; els.pfReset.textContent="RESET PROFILE"; renderProfile(); } };
+if(els.profileSummary){ const n=PROFILE.recs.length; els.profileSummary.textContent = n ? n+" reps tracked" : "Your tendencies"; }
+window.__qbProfile={profileMetrics,profileDiagnose,DRILLS,startDrill,get recs(){ return PROFILE.recs; }};
 
 /* ============================================================
    LEARN — Coach's Manual (chapters + diagrams) and the interactive Tutorial
@@ -4178,10 +4857,12 @@ const MANUAL=[
       "<b>Scramble:</b> use the stick in the corner (WASD/arrows on a computer). You can't cross the blue line.",
       "<b>Audible:</b> before the snap tap AUDIBLE to check to another play or hot-route one receiver.",
       "<b>Full Drive:</b> call your play before every down, move the chains, score.",
-      "<b>After each play</b> your coach explains what happened. Tap <b>COACH VIEW</b> to freeze the moment you threw and see who was open."
+      "<b>After each play</b> your coach explains what happened — including your <b>key defender</b> read. Tap <b>COACH VIEW</b> to freeze the moment you threw and see who was open.",
+      "<b>Film Room</b> (in Drills): call man/zone, the coverage, your key defender and your first read before the snap — then see whether the defense rotated.",
+      "<b>QB Profile</b> tracks your tendencies across sessions and recommends drills."
     ]],
     ["h","Modes"],
-    ["ul",["<b>QB Brain:</b> sometimes asks you to call the coverage, then you make the throw.","<b>Coverage ID:</b> name the coverage only — great for learning tells.","<b>Quick Read:</b> no questions, just find the throw fast.","<b>Full Drive:</b> real downs and distance."]]
+    ["ul",["<b>QB Brain:</b> sometimes asks you to call the coverage, then you make the throw.","<b>Coverage ID:</b> name the coverage only — great for learning tells.","<b>Quick Read:</b> no questions, just find the throw fast.","<b>Film Room:</b> pre-snap quiz, live rep, then the PRE-SNAP → POST-SNAP reveal.","<b>Full Drive:</b> real downs and distance."]]
   ]},
   {id:"throw-types",title:"Lob vs bullet",level:"rookie",group:"THROWING",blocks:[
     ["fig","lobbullet",null,"A bullet stays low, so a defender in the lane can tip it. A lob goes over him but hangs in the air longer."],
@@ -4296,6 +4977,30 @@ const MANUAL=[
     ["note","The timing table is our coaching rule of thumb based on how fast QB Brain's rusher arrives; real games vary."],
     ["pro","Read the <b>key defender</b>, not the receivers. On Smash you watch the corner: he decides between the hitch and the corner route for you."],
     ["src",[SRC.prog,SRC.reads,SRC.qbreads]]
+  ]},
+  {id:"read-disguise",title:"Disguises & rotations",level:"pro",group:"READING THE DEFENSE",blocks:[
+    ["p","Good defenses show you one thing before the snap and play another. That's why the pre-snap read is a <b>guess</b> and the post-snap read is the <b>answer</b>. The Film Room trains exactly this."],
+    ["table",[["<b>Disguise</b>","<b>What you see → what it becomes</b>","<b>The clue</b>"],
+      ["Rotation","Two-high (Cover 2) → one-high (Cover 3 or Cover 1), or the reverse","A safety rotates down or a corner bails deep right at the snap"],
+      ["Bluff man → zone","Defenders tight on receivers → they drop to spots","They turn their eyes to the QB instead of running with the receiver"],
+      ["Bluff zone → man","Soft, spread-out look → everyone matches a receiver","A 'zone' defender turns his hips and runs with a route"]]],
+    ["tip","Pre-snap: make your best guess and pick your key. At the snap: look at the safeties again. Did the shell change? Then let your key defender tell you where to go."],
+    ["pro","Your key defender doesn't care about the disguise. Whatever the coverage turns into, he still has to pick one of your two receivers."],
+    ["src",[SRC.readcov,SRC.youngqb,["PlaybookTech — 5v5 defense changeup","https://firstdown.playbooktech.com/coaches-community/5v5-flag-football-defense-changeup"]]]
+  ]},
+  {id:"read-keydef",title:"Key defender reads",level:"all",group:"READING THE DEFENSE",blocks:[
+    ["fig","play",{play:STANDARD5.find(p=>p.name==="Smash"),prog:true,key:[5,4]},"Smash: the corner (KEY) can't take both the hitch and the corner route."],
+    ["p","Most good pass concepts put <b>one defender</b> in a bind. Find him before the snap, watch him after it, and throw to the receiver he didn't take."],
+    ["table",[["<b>Concept</b>","<b>Key</b>","<b>If he… → throw</b>"],
+      ["Smash","Corner","sinks → hitch · squats → corner route"],
+      ["Slant-Flat","Flat defender","widens → slant · squeezes → flat"],
+      ["Curl-Flat","Flat defender","jumps the flat → curl · sinks → flat"],
+      ["Stick","Flat/hook defender","widens → stick · sits on stick → flat"],
+      ["Flood","Flat defender","widens → out · sinks → flat"],
+      ["Drive / Levels","Middle (hook) defender","sits shallow → dig · drops → shallow"],
+      ["Four Verticals","Deep safety","leans one way → throw the other seam"]]],
+    ["tip","QB Brain grades this after every play: who the key was, what he did and when, the correct read, and whether your ball came out on time."],
+    ["src",[SRC.slantflat,SRC.curlflat,SRC.smash,SRC.stick,SRC.flood,SRC.verts]]
   ]},
   conChapter("con-slantflat","Slant-Flat","Horizontal + inside/outside","Cover 3 and Cover 1",
     "Key the flat defender. He widens → throw the slant. He squeezes the slant → throw the flat.",

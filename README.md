@@ -23,6 +23,9 @@ It launches full-screen from its own icon, remembers your settings, and works of
 - **Tap to throw (Settings → Throw control → Tap receiver):** quick tap on a receiver = **bullet**, press and hold = **lob**.
 - **Scramble:** use the joystick (bottom-left, or bottom-right in Settings) to move the QB around the backfield. He can't cross the line of scrimmage, so there are no QB runs. Pull back with your other thumb to throw on the run. On a computer, use WASD or the arrow keys.
 - **Sound:** synthesized whistle, catch, flag pull and crowd sounds. Toggle it in Settings.
+- **Key defender reads:** the coach tells you who to read, what he did, the correct read and whether your ball came out on time.
+- **Film Room:** pre-snap quiz (man/zone, coverage, key, first read) → live rep → PRE-SNAP → POST-SNAP reveal with the clue.
+- **QB Profile:** your tendencies across sessions and recommended drills. No ratings — training metrics only.
 - **Learn:** Home → Learn has the interactive Tutorial (8 lessons) and the Coach's Manual (coverages, routes, reads, progressions, concepts — with diagrams and sources).
 - **Your coach:** after every play you get a breakdown and Coach View (the moment you threw, with the coverage drawn on the field).
 - **Share codes:** share any play as a code; import a teammate's code in My Plays.
