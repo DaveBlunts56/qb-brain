@@ -273,6 +273,15 @@ select.play-select{
 @media (prefers-reduced-motion: reduce){ *{animation:none !important;transition:none !important;} }
 .screen > *{flex-shrink:0;}
 #bigBanner div{font-size:min(56px, 12vw);white-space:nowrap;}
+
+/* scramble joystick */
+#joy{position:absolute;left:14px;bottom:16px;width:132px;height:132px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;touch-action:none;user-select:none;-webkit-user-select:none;z-index:5;}
+#joy.right{left:auto;right:14px;}
+#joy span{display:none;}
+#joyBase{width:112px;height:112px;border-radius:50%;background:rgba(13,17,23,.38);border:3px solid rgba(255,255,255,.55);box-shadow:inset 0 0 0 3px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;pointer-events:none;}
+#joyKnob{width:50px;height:50px;border-radius:50%;background:var(--gold);border:3px solid #000;box-shadow:0 3px 0 #000;pointer-events:none;}
+#joy.on #joyBase{border-color:var(--gold);background:rgba(13,17,23,.5);}
+#joy.hidden{display:none;}
 </style>
 </head>
 <body>
@@ -313,7 +322,7 @@ select.play-select{
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.3.2</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.4.0</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -377,6 +386,8 @@ select.play-select{
     <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div></div>
     <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
       <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.</div></div>
+    <div class="group"><div class="section-label">SCRAMBLE STICK</div><div class="choice-row" id="stickRow"></div>
+      <div class="help">Move the QB with the stick and throw with your other thumb. He can't cross the line of scrimmage. On a computer, use WASD or the arrow keys.</div></div>
     <div class="group">
       <div class="toggle-row" id="progToggleRow">
         <div class="t-label"><b>SHOW PROGRESSION</b><span>Flash 1-2-3 over the read before the snap</span></div>
@@ -405,6 +416,7 @@ select.play-select{
       <div id="rushCue" class="hidden"><div class="pill">RUSH <span id="rushCount">3</span></div></div>
       <div id="aimHint" class="hidden"><div class="pill">Pull back to throw</div></div>
       <div id="playTag" class="hidden"></div>
+      <div id="joy" class="hidden" aria-label="Scramble joystick"><div id="joyBase"><div id="joyKnob"></div></div><span>SCRAMBLE</span></div>
       <div id="bigBanner" class="hidden"><div id="bigBannerText">TOUCHDOWN!</div></div>
     </div>
 
@@ -743,7 +755,7 @@ function posAt(p,t){
    STATE
 ============================================================ */
 const state = {
-  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, throwMode:"pull",
+  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, stickSide:"left", throwMode:"pull",
   book:"standard", playPick:"random", throwType:"bullet", drillMode:"qb_brain",
   driveCfg:{len:50, width:30, widthTouched:false, fd:"mid"}, drive:null,
   session:{reps:0, score:0, log:[]},
@@ -751,7 +763,7 @@ const state = {
 };
 
 const els = {};
-["homeScreen","drillsScreen","driveScreen","playbookScreen","settingsScreen","drillsBookSlot","driveBookSlot","bookBlock","driveStartBtn","settingsSummary","bigBanner","bigBannerText","pbTabs","pbGrid","pbDetail","pbDetailCanvas","pbDetailName","pbDetailProg","pbDetailNote","pbRunBtn","pbCloseBtn","logTitle","driveGroup","lenRange","lenVal","widRange","widVal","fdRow","driveLine","hudRepLbl","summaryTitle","againBtn","bookRow","playSelect","throwType","playNote","throwRow","aimHint","playTag","controls","gameScreen","summaryScreen","field","fieldWrap","hud","hudMode","hudSub","hudRep","hudScore",
+["homeScreen","drillsScreen","driveScreen","playbookScreen","settingsScreen","drillsBookSlot","driveBookSlot","bookBlock","driveStartBtn","settingsSummary","bigBanner","bigBannerText","pbTabs","pbGrid","pbDetail","pbDetailCanvas","pbDetailName","pbDetailProg","pbDetailNote","pbRunBtn","pbCloseBtn","logTitle","driveGroup","lenRange","lenVal","widRange","widVal","fdRow","driveLine","hudRepLbl","summaryTitle","againBtn","bookRow","playSelect","throwType","playNote","throwRow","stickRow","joy","joyBase","joyKnob","aimHint","playTag","controls","gameScreen","summaryScreen","field","fieldWrap","hud","hudMode","hudSub","hudRep","hudScore",
  "timerBarWrap","timerBar","studyBanner","studyCount","rushCue","rushCount","coverageSheet","mcqOptions",
  "resultSheet","resultTag","resultText","resultSub","resultExplain","scoreRow","nextRepBtn","primaryBtn",
  "quitBtn","startBtn","restartBtn","squadRow","diffRow","modeRow","progSwitch","soundSwitch",
@@ -763,7 +775,7 @@ const SAVE_KEY="qbbrain.settings.v1";
 function loadSettings(){
   try{
     const o=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(!o) return;
-    ["squad","difficulty","mode","drillMode","showProgression","sound","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
+    ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
     if(!MODES[state.drillMode] || state.drillMode==="drive") state.drillMode="qb_brain";
     if(o.driveCfg) Object.assign(state.driveCfg,o.driveCfg);
     if(!MODES[state.mode]) state.mode="qb_brain";
@@ -772,7 +784,7 @@ function loadSettings(){
 }
 function saveSettings(){
   try{
-    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
+    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
     o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
   }catch(_){}
 }
@@ -828,6 +840,11 @@ function refreshSetupUI(){
     {key:"pull",title:"Pullback",sub:"Pull back = lob · 2nd finger = bullet"},
     {key:"tap",title:"Tap receiver",sub:"Tap a receiver to throw"}
   ], state.throwMode, k=>state.throwMode=k);
+
+  buildChoiceRow(els.stickRow,[
+    {key:"left",title:"Left thumb",sub:"Stick bottom-left · throw with your right"},
+    {key:"right",title:"Right thumb",sub:"Stick bottom-right · throw with your left"}
+  ], state.stickSide, k=>state.stickSide=k);
 
   const plays=currentPlays();
   els.playSelect.innerHTML="";
@@ -1092,7 +1109,7 @@ function playerById(rep,id){ return rep.players.find(p=>p.id===id); }
    Once the ball is thrown, the receiver who can get there first reads it and runs to it. */
 const ACCEL=22, CHASE_SPEED=7.8;
 // Scramble rule (tournament): the QB may move around, but can never cross the line of scrimmage.
-const SCRAMBLE_SPEED=6.2, SCRAMBLE_MAX_Y=-0.6;
+const SCRAMBLE_SPEED=6.2, SCRAMBLE_MAX_Y=-0.6, JOY_DEAD=0.15;
 function initLive(rep){
   rep.players.forEach(p=>{ p.s={x:p.x0,y:p.y0,vx:0,vy:0}; p.hist=[{t:0,x:p.x0,y:p.y0}]; });
 }
@@ -1111,13 +1128,18 @@ function stepPlayers(rep,t,dt){
     if(p===rep.carrier) return;
     const s=p.s;
     let tx,ty,vmax=p.path.speed+0.3,gain=6;
-    const scr=rep.scr, holding = !b && scr && scr.id===p.id;
+    const scr=rep.scr;
+    if(scr && !b){ const h=holderAt(rep,t); if(h) scr.id=h; }      // the stick always drives whoever has the ball
+    const holding = scr && scr.id===p.id && !(b && b.chaser===p);
     if(b && b.chaser===p && t>=b.tRel+b.react){
       tx=b.to.x; ty=b.to.y; vmax=CHASE_SPEED; gain=9;          // go get the ball
     } else if(holding){
-      // scramble: run toward the finger; let go and he coasts to a stop
-      if(scr.active){ tx=scr.tx; ty=Math.min(scr.ty,SCRAMBLE_MAX_Y); vmax=SCRAMBLE_SPEED; gain=7; }
-      else { tx=s.x+s.vx*0.15; ty=s.y+s.vy*0.15; vmax=SCRAMBLE_SPEED; gain=4; }
+      // scramble with the joystick: push further = run faster; let go and he settles
+      const m=Math.hypot(scr.jx,scr.jy);
+      if(!b && scr.active && m>JOY_DEAD){
+        const k=Math.min(1,(m-JOY_DEAD)/(1-JOY_DEAD));
+        tx=s.x+scr.jx/m*3; ty=Math.min(s.y+scr.jy/m*3,SCRAMBLE_MAX_Y); vmax=SCRAMBLE_SPEED*k; gain=8;
+      } else { tx=s.x; ty=s.y; vmax=SCRAMBLE_SPEED; gain=4; }
     } else {
       const q=posAt(p,t+0.12); tx=q.x; ty=q.y;                  // run the route
     }
@@ -1485,7 +1507,7 @@ function doSnap(){
   els.playTag.classList.add("hidden");
   const throws=MODES[state.mode].throws;
   if(throws){
-    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Drag the QB to scramble · pull back anywhere to throw" : "Drag the QB to scramble · tap a receiver to throw";
+    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Stick to scramble · pull back anywhere to throw" : "Stick to scramble · tap a receiver to throw";
     els.aimHint.classList.remove("hidden");
     els.timerBarWrap.classList.remove("hidden");
   }
@@ -1494,6 +1516,8 @@ function doSnap(){
   state.phase="decision";
   tSnap = performance.now();
   done=false;
+  joy.keys={};
+  joyVisible(!!throws);
   fxList=[];
   SFX.snap();
   runLoop();
@@ -1875,19 +1899,8 @@ els.field.addEventListener("pointerdown",(e)=>{
   if(state.phase!=="decision"||!MODES[state.mode].throws||rep.ball) return;
   e.preventDefault();
   // a second finger while aiming switches lob <-> bullet
-  if(aim.active && e.pointerId!==aim.pointerId && !(rep.scr && rep.scr.active && rep.scr.pointerId===e.pointerId)){ toggleThrowType(); return; }
+  if(aim.active && e.pointerId!==aim.pointerId){ toggleThrowType(); return; }
   const pt=ptField(e);
-  // touch the ball carrier (QB) and drag = scramble
-  const tt0=(performance.now()-tSnap)/1000, hid=holderAt(rep,tt0);
-  if(hid && !(rep.scr && rep.scr.active)){
-    const hp=playerById(rep,hid), hs=toPx(hp.s.x,hp.s.y);
-    if(Math.hypot(hs.x-pt.px,hs.y-pt.py) < Math.max(34, VIEW.PR*3)){
-      rep.scr={active:true,id:hid,pointerId:e.pointerId,tx:hp.s.x,ty:hp.s.y};
-      els.aimHint.classList.add("hidden");
-      try{ els.field.setPointerCapture(e.pointerId); }catch(_){}
-      return;
-    }
-  }
   if(state.throwMode==="tap"){
     let hit=null, hd=999;
     rep.targets.forEach(p=>{ if(!p._px) return; const dd=Math.hypot(p._px.x-pt.px,p._px.y-pt.py); if(dd<32&&dd<hd){hd=dd;hit=p;} });
@@ -1908,17 +1921,48 @@ els.field.addEventListener("pointerdown",(e)=>{
 });
 els.field.addEventListener("pointermove",(e)=>{
   const rep=state.rep;
-  if(rep && rep.scr && rep.scr.active && e.pointerId===rep.scr.pointerId){ const q=ptField(e); rep.scr.tx=q.x; rep.scr.ty=q.y; return; }
   if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e);
   // QB eyes: where you're aiming drags nearby zone defenders toward it
   if(rep && !rep.ball){ const tq=(performance.now()-tSnap)/1000, L=aimLanding(passerPos(rep,tq),aimType()); rep.eyesRaw = L.valid ? {x:L.x,y:L.y} : null; }
 });
-function endScramble(e){
-  const rep=state.rep;
-  if(rep && rep.scr && rep.scr.active && e.pointerId===rep.scr.pointerId){ rep.scr.active=false; return true; }
-  return false;
+/* ---- JOYSTICK: left thumb scrambles, right thumb throws. WASD / arrow keys on a computer. ---- */
+const joy={pointerId:null, cx:0, cy:0, R:46, keys:{}};
+function joyVisible(on){
+  els.joy.classList.toggle("hidden",!on);
+  els.joy.classList.toggle("right", state.stickSide==="right");
+  if(!on) joyRelease();
 }
+function joySet(jx,jy){
+  const rep=state.rep; if(!rep || state.phase!=="decision") return;
+  if(!rep.scr) rep.scr={active:false,id:null,jx:0,jy:0};
+  rep.scr.jx=jx; rep.scr.jy=jy; rep.scr.active = Math.hypot(jx,jy)>0;
+  els.joyKnob.style.transform="translate("+(jx*joy.R)+"px,"+(-jy*joy.R)+"px)";
+  if(rep.scr.active) els.aimHint.classList.add("hidden");
+}
+function joyRelease(){ joy.pointerId=null; els.joy.classList.remove("on"); const rep=state.rep; if(rep && rep.scr){ rep.scr.jx=0; rep.scr.jy=0; rep.scr.active=false; } els.joyKnob.style.transform=""; }
+function joyMove(e){
+  let dx=e.clientX-joy.cx, dy=e.clientY-joy.cy; const d=Math.hypot(dx,dy);
+  if(d>joy.R){ dx*=joy.R/d; dy*=joy.R/d; }
+  joySet(dx/joy.R,-dy/joy.R);
+}
+els.joy.addEventListener("pointerdown",(e)=>{
+  e.preventDefault(); e.stopPropagation();
+  if(joy.pointerId!==null) return;
+  const r=els.joyBase.getBoundingClientRect(); joy.cx=r.left+r.width/2; joy.cy=r.top+r.height/2; joy.R=r.width*0.42;
+  joy.pointerId=e.pointerId; els.joy.classList.add("on");
+  try{ els.joy.setPointerCapture(e.pointerId); }catch(_){}
+  joyMove(e);
+});
+els.joy.addEventListener("pointermove",(e)=>{ if(e.pointerId===joy.pointerId){ e.preventDefault(); joyMove(e); } });
+["pointerup","pointercancel","lostpointercapture"].forEach(ev=>els.joy.addEventListener(ev,(e)=>{ if(e.pointerId===joy.pointerId) joyRelease(); }));
+const JOY_KEYS={ArrowUp:[0,1],KeyW:[0,1],ArrowDown:[0,-1],KeyS:[0,-1],ArrowLeft:[-1,0],KeyA:[-1,0],ArrowRight:[1,0],KeyD:[1,0]};
+function joyKeys(){
+  let x=0,y=0; for(const k in joy.keys){ if(joy.keys[k]){ x+=JOY_KEYS[k][0]; y+=JOY_KEYS[k][1]; } }
+  const m=Math.hypot(x,y)||1; joySet(x/m, y/m);
+}
+window.addEventListener("keydown",(e)=>{ if(JOY_KEYS[e.code] && state.phase==="decision" && !els.joy.classList.contains("hidden")){ e.preventDefault(); joy.keys[e.code]=true; joyKeys(); } });
+window.addEventListener("keyup",(e)=>{ if(JOY_KEYS[e.code]){ joy.keys[e.code]=false; if(state.phase==="decision") joyKeys(); } });
 els.field.addEventListener("contextmenu",(e)=>{ e.preventDefault(); toggleThrowType(); });
 window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && aim.active){ e.preventDefault(); toggleThrowType(); } });
 function endAim(e,cancel){
@@ -1941,8 +1985,8 @@ function releaseBall(rep,t,from,to,type){
   rep.ball.chaser=pickChaser(rep,to,fl);
   SFX.throwIt(type==="lob");
 }
-els.field.addEventListener("pointerup",(e)=>{ if(!endScramble(e)) endAim(e,false); });
-els.field.addEventListener("pointercancel",(e)=>{ if(!endScramble(e)) endAim(e,true); });
+els.field.addEventListener("pointerup",(e)=>endAim(e,false));
+els.field.addEventListener("pointercancel",(e)=>endAim(e,true));
 
 function arcCtrl(a,b,type){
   const d=Math.hypot(a.x-b.x,a.y-b.y);
@@ -2004,7 +2048,7 @@ function drawThrowOverlay(t){
     // how-to strip at the bottom of the field
     const hint = lob ? "LOB  ·  tap with another finger for BULLET" : "BULLET  ·  tap again for LOB";
     ctx.font="600 12px 'Pixelify Sans', sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
-    const hw=ctx.measureText(hint).width+24, hy=ch-22;
+    const hw=ctx.measureText(hint).width+24, hy= els.joy.classList.contains("hidden") ? ch-22 : 26;
     ctx.fillStyle="rgba(21,33,25,0.85)"; ctx.fillRect(cw/2-hw/2,hy-13,hw,26);
     ctx.fillStyle=lob?"#ffffff":"#ffd166"; ctx.fillText(hint,cw/2,hy+1);
   }
@@ -2051,6 +2095,7 @@ function commonTail(rep,explain){
 }
 function finishRep(rep,resultType,subtitle,explain,chips,points,coverageCorrect,time,outcome){
   state.phase="result";
+  joyVisible(false);
   cancelAnimationFrame(rafId);
   els.timerBarWrap.classList.add("hidden");
   els.rushCue.classList.add("hidden");
@@ -2215,6 +2260,7 @@ function downText(d){
 // Run after the catch: the carrier heads upfield and bends away from pursuit; everyone chases to pull the flag.
 function startYac(rep,carrier,t,pend){
   rep.carrier=carrier; rep.yacT0=t; rep.pending=pend;
+  joyVisible(false);
   rep.defenders.forEach(d=>{ d.v={x:0,y:0}; });
   state.phase="yac";
   els.timerBarWrap.classList.add("hidden");
@@ -2417,7 +2463,7 @@ els.nextRepBtn.addEventListener("click",()=>{
 });
 
 function clearOverlays(){
-  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner"].forEach(k=>els[k].classList.add("hidden"));
+  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy"].forEach(k=>els[k].classList.add("hidden"));
   clearTimeout(bannerTimer); clearTimeout(afterTimer);
   if(afterSkip){ els.fieldWrap.removeEventListener("pointerdown",afterSkip); afterSkip=null; }
   fxList=[];

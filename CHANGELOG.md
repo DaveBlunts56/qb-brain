@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.0 — Scramble joystick
+
+- **Scramble with a joystick** instead of dragging the QB. It shows up at the snap in the bottom corner. Push further to run faster, and let go to settle. The QB still can't cross the line of scrimmage.
+- **Two-thumb play:** the stick under one thumb, and pull back anywhere with the other to throw on the run. Tapping a third finger still switches lob and bullet.
+- **Pick your stick side** in Settings: **Left thumb** (default) or **Right thumb**.
+- On a computer: **WASD** or the **arrow keys** scramble.
+- While the stick is showing, the lob/bullet hint moves to the top of the field.
+
 ## v1.3.2 — Safeties play deep, no more fake blitzes
 
 - **Safeties line up deeper:** the Cover 1 and Cover 3 middle safety is at about 12½ yds, the Cover 2 halves safeties at 12, and the Cover 3 deep corners at 10 (they were at 9–10).
