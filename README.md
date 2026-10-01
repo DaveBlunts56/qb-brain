@@ -23,6 +23,9 @@ It launches full-screen from its own icon, remembers your settings, and works of
 - **Tap to throw (Settings → Throw control → Tap receiver):** quick tap on a receiver = **bullet**, press and hold = **lob**.
 - **Scramble:** use the joystick (bottom-left, or bottom-right in Settings) to move the QB around the backfield. He can't cross the line of scrimmage, so there are no QB runs. Pull back with your other thumb to throw on the run. On a computer, use WASD or the arrow keys.
 - **Sound:** synthesized whistle, catch, flag pull and crowd sounds. Toggle it in Settings.
+- **Create a Play:** Playbook → My Plays → + Create a play. Drag players, pick or draw routes, set the QB's drop, the read order, a pitch, and audibles.
+- **Audibles:** before the snap tap AUDIBLE to check to another play or hot-route a receiver.
+- **Play calling:** in Full Drive you call the play before every down.
 - **Home screen:** Play Drive · Drills (QB Brain, Coverage ID, Quick Read) · Playbook (every play drawn out; tap one to run it) · Settings.
 - **Full Drive:** set field length (50–100 yds, plus two 10-yd end zones), width (20–53 yds) and the first-down rule (midfield or every 10).
 

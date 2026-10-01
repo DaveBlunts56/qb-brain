@@ -1,5 +1,29 @@
 # Changelog
 
+## v1.5.0 — Create a Play, audibles and play calling
+
+### Create a Play (Playbook → My Plays → + Create a play)
+- Build **5v5 or 7v7** plays from scratch, or **copy and edit** any Big Dawz or standard play.
+- **Formation:** pick a preset (Spread, Twins, Trips, Bunch, Stack, Offset, Empty) or drag any player anywhere behind the line. The center stays on the ball to snap it.
+- **Routes:** choose from 18 routes, including go, slant, hitch, out, in, flat, sit, stick, curl, comeback, dig, corner, post, drag, seam, wheel and swing.
+  - Set the **depth** yard by yard and **flip** the break.
+  - Or **draw your own** path point by point and drag the points to fine-tune it.
+  - For every receiver, choose what happens at the end (keep running, sit down or stop), when he releases (on the snap up to +1.5 s), and whether he gets a dashed fake/motion line.
+- **QB:** pick the alignment (under center, pistol or shotgun) and what he does after the snap (3-step drop, 5-step drop, stay, rollout or bootleg either way), or draw his path.
+- **Read order:** tap your receivers in the order you read them.
+- **Pitch (trick play):** pitch to any player at a time you choose. He becomes the passer.
+- Add a **name**, a **coaching note** and up to **4 audibles**.
+- **Save & test it** runs the play right away. Plays are saved on your device.
+
+### Audibles at the line
+- Before the snap, tap **AUDIBLE** to:
+  - **Check to another play:** your preset audibles for that play, or any play if you haven't set any. The defense stays the same, so you're audibling against the look you saw.
+  - **Hot-route a receiver:** tap him on the field and pick go, slant, hitch, out, in, flat, sit, corner, post or drag.
+- Set audibles for any play, built-in or yours, from the Playbook.
+
+### Play calling in Full Drive
+- Before every down, call your play from **My Plays**, **Big Dawz** or **Standard**, or hit **Surprise me**.
+
 ## v1.4.1 — Tap = bullet, hold = lob
 
 - In **Tap receiver** throw mode, a **quick tap** on a receiver throws a **bullet** as soon as you lift your finger.

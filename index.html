@@ -282,6 +282,75 @@ select.play-select{
 #joyKnob{width:50px;height:50px;border-radius:50%;background:var(--gold);border:3px solid #000;box-shadow:0 3px 0 #000;pointer-events:none;}
 #joy.on #joyBase{border-color:var(--gold);background:rgba(13,17,23,.5);}
 #joy.hidden{display:none;}
+
+/* ---------- create a play ---------- */
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--ink-2);border:2px solid var(--ink-3);color:var(--chalk);font-family:var(--display);font-size:19px;line-height:1;padding:7px 10px 6px;box-shadow:0 3px 0 #000;min-height:34px;}
+.chip:active{transform:translateY(2px);box-shadow:0 1px 0 #000;}
+.chip.on{border-color:var(--gold);color:var(--gold);background:#2a2410;}
+.chip.ghost{border-style:dashed;color:var(--chalk-dim);}
+.chip:disabled{opacity:.35;}
+.btn.sm{font-size:21px;padding:9px 12px 8px;box-shadow:0 4px 0 #000;}
+.btn.alt.sm{box-shadow:0 4px 0 #000;}
+.btn.danger{border-color:var(--red);color:#ffb3a8;}
+.text-in{width:100%;background:var(--ink-2);border:var(--px) solid var(--ink-3);color:var(--chalk);font:16px 'Pixelify Sans',system-ui,sans-serif;padding:10px 12px;border-radius:0;resize:vertical;}
+.text-in:focus{outline:none;border-color:var(--gold);}
+#edName{font-family:var(--display);font-size:28px;padding:8px 12px 6px;}
+.ed-field{position:relative;border:var(--px) solid #000;box-shadow:0 4px 0 #000;}
+#edCanvas{display:block;width:100%;aspect-ratio:1/1;touch-action:none;background:var(--turf);}
+.ed-hint{position:absolute;left:0;right:0;bottom:0;background:rgba(13,17,23,.82);color:var(--chalk);font-size:12.5px;padding:5px 8px;text-align:center;pointer-events:none;}
+.ed-hint.warn{color:var(--gold);}
+.ed-tools{background:var(--ink-2);border:var(--px) solid var(--gold);box-shadow:0 4px 0 #000;padding:10px 12px;display:flex;flex-direction:column;gap:9px;}
+.ed-tools.empty{border-color:var(--ink-3);}
+.ed-sel{display:flex;align-items:center;gap:10px;}
+.ed-sel .pid{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:24px;color:#0d1117;border:2px solid #000;}
+.ed-sel b{font-family:var(--display);font-size:24px;font-weight:400;flex:1;line-height:1;}
+.mini-label{font-family:var(--display);font-size:17px;color:var(--gold);letter-spacing:.05em;line-height:1;margin-top:2px;}
+.stepper{display:flex;align-items:center;gap:8px;}
+.stepper b{font-family:var(--display);font-size:22px;font-weight:400;min-width:64px;text-align:center;}
+.aud-line{font-size:13px;color:var(--chalk-dim);}
+.aud-line b{color:var(--gold);font-weight:600;}
+/* in-game */
+.ctl-row{display:flex;gap:10px;}
+.ctl-row .btn{flex:1;}
+.ctl-row #audibleBtn{flex:0 0 38%;font-size:24px;}
+.ctl-row .btn.hidden{display:none;}
+#audibleSheet{max-height:58%;overflow-y:auto;display:flex;flex-direction:column;gap:8px;}
+#audibleSheet.hidden{display:none;}
+.aud-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.aud-head h2{font-family:var(--display);font-size:30px;line-height:1;}
+.aud-list{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.aud-list button{background:var(--ink-2);border:2px solid var(--ink-3);color:var(--chalk);text-align:left;padding:8px 10px;box-shadow:0 3px 0 #000;}
+.aud-list button b{display:block;font-family:var(--display);font-size:20px;font-weight:400;line-height:1;}
+.aud-list button small{color:var(--chalk-dim);font-size:11px;}
+.aud-list button.cur{border-color:var(--gold);}
+#callSheet{position:absolute;inset:0;background:var(--ink);overflow-y:auto;padding:12px 12px 24px;display:flex;flex-direction:column;gap:10px;z-index:7;}
+#callSheet.hidden{display:none;}
+.call-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.call-head b{display:block;font-family:var(--display);font-size:30px;font-weight:400;line-height:1;color:var(--gold);}
+.call-head span{font-size:13px;color:var(--chalk-dim);}
+.call-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.call-grid .play-card{padding:6px;gap:4px;}
+.call-grid .play-card b{font-size:17px;}
+.call-grid .play-card small{font-size:10.5px;}
+/* modal picker */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;}
+.modal.hidden{display:none;}
+.modal-box{width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:var(--ink);border:var(--px) solid var(--gold);box-shadow:0 6px 0 #000;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.modal-box h2{font-family:var(--display);font-size:32px;line-height:1;}
+.pick-list{display:flex;flex-direction:column;gap:6px;}
+.pick-list .mini-label{margin-top:8px;}
+.pick-list button{display:flex;align-items:center;gap:10px;background:var(--ink-2);border:2px solid var(--ink-3);color:var(--chalk);padding:8px 10px;text-align:left;}
+.pick-list button i{width:20px;height:20px;border:2px solid var(--chalk-dim);flex:none;font-style:normal;display:flex;align-items:center;justify-content:center;color:#0d1117;font-size:14px;}
+.pick-list button.on{border-color:var(--gold);}
+.pick-list button.on i{background:var(--gold);border-color:var(--gold);}
+.pick-list button b{font-family:var(--display);font-size:20px;font-weight:400;flex:1;}
+.pick-list button small{color:var(--chalk-dim);font-size:11px;}
+.play-card .tag{font-family:var(--display);font-size:14px;color:var(--gold);}
+.call-head .btn,.aud-head .btn{width:auto;flex:0 0 auto;padding-left:16px;padding-right:16px;}
+.call-head>div{flex:1;min-width:0;}
+#pbTabs .choice b,#bookRow .choice b{font-size:20px;overflow-wrap:anywhere;}
+#pbTabs .choice,#bookRow .choice{padding-left:10px;padding-right:8px;}
 </style>
 </head>
 <body>
@@ -315,14 +384,14 @@ select.play-select{
       </button>
       <button class="tile" data-go="playbookScreen">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="1" width="8" height="10" fill="#c8a36a"/><rect x="3" y="3" width="6" height="7" fill="#f4f0e2"/><rect x="4" y="0" width="4" height="2" fill="#8a8f98"/><g fill="#e8412c"><rect x="4" y="4" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/></g><g fill="#2a6fd6"><rect x="6" y="7" width="2" height="2"/></g></svg>
-        <b>PLAYBOOK</b><small>Your plays, drawn out</small>
+        <b>PLAYBOOK</b><small>Your plays · Create a play</small>
       </button>
       <button class="tile" data-go="settingsScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#a9b2a1"><rect x="5" y="0" width="2" height="12"/><rect x="0" y="5" width="12" height="2"/><rect x="2" y="2" width="8" height="8"/></g><rect x="4" y="4" width="4" height="4" fill="#161c26"/></svg>
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.4.1</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.5.0</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -373,10 +442,41 @@ select.play-select{
       <h3 id="pbDetailName"></h3>
       <div class="prog" id="pbDetailProg"></div>
       <p id="pbDetailNote"></p>
+      <div class="aud-line" id="pbAudLine"></div>
       <button class="btn" id="pbRunBtn">RUN THIS PLAY</button>
+      <button class="btn alt" id="pbEditBtn">EDIT PLAY</button>
+      <button class="btn alt" id="pbAudBtn">SET AUDIBLES</button>
       <button class="btn alt" id="pbCloseBtn">BACK TO ALL PLAYS</button>
     </div>
     <div class="play-grid" id="pbGrid"></div>
+  </div>
+
+  <!-- ============ PLAY EDITOR ============ -->
+  <div id="editorScreen" class="screen hidden">
+    <div class="topbar"><button class="back" id="edBack" aria-label="Back">◀</button><h2 id="edTitle">CREATE A PLAY</h2></div>
+    <div class="group">
+      <input id="edName" class="text-in" maxlength="28" placeholder="Name your play" aria-label="Play name" autocomplete="off">
+      <div class="chip-row" id="edSquadRow"></div>
+    </div>
+    <div class="ed-field">
+      <canvas id="edCanvas" aria-label="Play diagram editor"></canvas>
+      <div class="ed-hint" id="edHint">Tap a player to edit him · drag to move him</div>
+    </div>
+    <div class="ed-tools" id="edTools"></div>
+    <div class="group"><div class="section-label">FORMATION</div><div class="chip-row" id="edFormRow"></div></div>
+    <div class="group"><div class="section-label">READ ORDER</div><div class="chip-row" id="edProgRow"></div>
+      <button class="btn alt sm" id="edProgBtn">SET READ ORDER</button></div>
+    <div class="group"><div class="section-label">PITCH · TRICK PLAY</div>
+      <div class="chip-row" id="edPitchRow"></div><div class="chip-row" id="edPitchTime"></div>
+      <div class="help">The QB pitches to this player, who becomes the passer. Give him a route behind the line so he can catch it.</div></div>
+    <div class="group"><div class="section-label">AUDIBLES</div><div class="chip-row" id="edAudRow"></div>
+      <button class="btn alt sm" id="edAudBtn">CHOOSE AUDIBLES</button>
+      <div class="help">Plays you can switch to at the line (up to 4).</div></div>
+    <div class="group"><div class="section-label">COACHING NOTE</div>
+      <textarea id="edNote" class="text-in" rows="3" maxlength="300" placeholder="What does it beat? What's the read?"></textarea></div>
+    <button class="btn" id="edSave">SAVE PLAY</button>
+    <button class="btn alt" id="edTest">SAVE &amp; TEST IT</button>
+    <button class="btn alt danger hidden" id="edDelete">DELETE PLAY</button>
   </div>
 
   <!-- ============ SETTINGS ============ -->
@@ -417,6 +517,11 @@ select.play-select{
       <div id="aimHint" class="hidden"><div class="pill">Pull back to throw</div></div>
       <div id="playTag" class="hidden"></div>
       <div id="joy" class="hidden" aria-label="Scramble joystick"><div id="joyBase"><div id="joyKnob"></div></div><span>SCRAMBLE</span></div>
+      <div id="callSheet" class="hidden">
+        <div class="call-head"><div><b>PLAY CALL</b><span id="callHead">1st &amp; 10 · OWN 5</span></div><button class="btn sm" id="callRandom">SURPRISE ME</button></div>
+        <div class="chip-row" id="callTabs"></div>
+        <div class="call-grid" id="callGrid"></div>
+      </div>
       <div id="bigBanner" class="hidden"><div id="bigBannerText">TOUCHDOWN!</div></div>
     </div>
 
@@ -424,6 +529,14 @@ select.play-select{
       <h2>WHAT COVERAGE IS THIS?</h2>
       <div class="sub">Pick before the snap — the look can still change after it.</div>
       <div class="mcq" id="mcqOptions"></div>
+    </div>
+
+    <div class="sheet hidden" id="audibleSheet">
+      <div class="aud-head"><h2>AUDIBLE</h2><button class="btn sm" id="audClose">DONE</button></div>
+      <div class="sub" id="audSub">Tap a receiver on the field to hot-route him, or check to a new play.</div>
+      <div id="audHot" class="hidden"><div class="mini-label" id="audHotLabel"></div><div class="chip-row" id="audHotRow"></div></div>
+      <div class="mini-label" id="audListLabel">CHECK TO</div>
+      <div class="aud-list" id="audList"></div>
     </div>
 
     <div class="result-sheet hidden" id="resultSheet">
@@ -437,7 +550,7 @@ select.play-select{
     </div>
 
     <div id="controls">
-      <button class="btn" id="primaryBtn">SNAP</button>
+      <div class="ctl-row"><button class="btn alt hidden" id="audibleBtn">AUDIBLE</button><button class="btn" id="primaryBtn">SNAP</button></div>
       <div class="seg hidden" id="throwType">
         <button data-k="bullet" class="on">BULLET</button>
         <button data-k="lob">LOB</button>
@@ -459,6 +572,14 @@ select.play-select{
     <button class="btn alt" id="restartBtn">MAIN MENU</button>
   </div>
 
+  <div id="pickSheet" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <h2 id="pickTitle">AUDIBLES</h2>
+      <div class="help" id="pickSub">Pick up to 4 plays to check to at the line.</div>
+      <div class="pick-list" id="pickList"></div>
+      <button class="btn" id="pickDone">DONE</button>
+    </div>
+  </div>
 </div>
 <script>
 window.QB_PWA=true;
@@ -704,6 +825,125 @@ const BOOKS = {
 };
 
 /* ============================================================
+   MY PLAYS — plays you build in the editor, saved on this device.
+   Stored format (template yards, ball at x=15, LOS y=0):
+   {uid,name,squad,form,note,players:[{id,x,y,route:{mode:"lib",type,depth,flip}|{mode:"draw",rel:[[dx,dy]...]}|{mode:"qb",action},after,delay}],prog,pitch}
+============================================================ */
+// Route library used by the editor and hot routes. i = +1 means "toward the ball".
+const LIB = {
+  go:      {name:"go",       after:"run", d:null, f:(x,y,d,i)=>[[x,y],[x,y+18]]},
+  seam:    {name:"seam",     after:"run", d:null, f:(x,y,d,i)=>[[x,y],[x+i*0.8,y+18]]},
+  slant:   {name:"slant",    after:"run", d:5,    f:(x,y,d,i)=>[[x,y],[x,y+1.5],[x+i*6,y+1.5+d]]},
+  hitch:   {name:"hitch",    after:"sit", d:5.5,  f:(x,y,d,i)=>[[x,y],[x,y+d+0.7],[x+i*0.4,y+d]]},
+  stick:   {name:"stick",    after:"sit", d:5.5,  f:(x,y,d,i)=>[[x,y],[x,y+d],[x+i*1.8,y+d]]},
+  sit:     {name:"sit",      after:"sit", d:5,    f:(x,y,d,i)=>[[x,y],[x,y+d]]},
+  curl:    {name:"curl",     after:"sit", d:10,   f:(x,y,d,i)=>[[x,y],[x,y+d+1],[x+i*1.5,y+d-0.5]]},
+  comeback:{name:"comeback", after:"sit", d:12,   f:(x,y,d,i)=>[[x,y],[x,y+d],[x-i*2,y+d-2.5]]},
+  out:     {name:"out",      after:"run", d:6,    f:(x,y,d,i)=>[[x,y],[x,y+d],[x-i*5,y+d]]},
+  in:      {name:"in",       after:"run", d:6,    f:(x,y,d,i)=>[[x,y],[x,y+d],[x+i*6,y+d]]},
+  dig:     {name:"dig",      after:"run", d:10,   f:(x,y,d,i)=>[[x,y],[x,y+d],[x+i*9,y+d]]},
+  corner:  {name:"corner",   after:"run", d:10,   f:(x,y,d,i)=>[[x,y],[x,y+d],[x-i*5,y+d+5]]},
+  post:    {name:"post",     after:"run", d:10,   f:(x,y,d,i)=>[[x,y],[x,y+d],[x+i*5,y+d+5]]},
+  flat:    {name:"flat",     after:"run", d:2,    f:(x,y,d,i)=>[[x,y],[x-i*1.5,y+1.5],[x-i*6,y+d]]},
+  drag:    {name:"drag",     after:"run", d:3,    f:(x,y,d,i)=>[[x,y],[x+i*1.5,y+d],[x+i*14,y+d+0.4]]},
+  wheel:   {name:"wheel",    after:"run", d:null, f:(x,y,d,i)=>[[x,y],[x-i*4,y+1],[x-i*6,y+5],[x-i*6.3,y+16]]},
+  swing:   {name:"swing",    after:"run", d:null, f:(x,y,d,i)=>[[x,y],[x-i*3,y-1],[x-i*7,y+0.5],[x-i*8,y+3]]},
+  stay:    {name:"stay home",after:"stop",d:null, f:(x,y,d,i)=>[[x,y]]}
+};
+const LIB_ORDER=["go","slant","hitch","out","in","flat","sit","stick","curl","comeback","dig","corner","post","drag","seam","wheel","swing","stay"];
+const HOT_ROUTES=["go","slant","hitch","out","in","flat","sit","corner","post","drag"];
+// QB actions after the snap (template coords around his alignment)
+const QB_ACTIONS = {
+  drop3:  {name:"3-step drop", f:(x,y)=>[[x,y],[x,y-2.25]], speed:3, stride:0.75},
+  drop5:  {name:"5-step drop", f:(x,y)=>[[x,y],[x,y-3.75]], speed:3.4, stride:0.75},
+  stay:   {name:"stays in pocket", f:(x,y)=>[[x,y],[x,y-0.05]]},
+  rollR:  {name:"rollout", f:(x,y)=>[[x,y],[x+1.5,y-1.5],[x+6,y-2]]},
+  rollL:  {name:"rollout", f:(x,y)=>[[x,y],[x-1.5,y-1.5],[x-6,y-2]]},
+  bootR:  {name:"bootleg", f:(x,y)=>[[x,y],[x-1,y-1.5],[x+2,y-3],[x+6,y-3.2]]},
+  bootL:  {name:"bootleg", f:(x,y)=>[[x,y],[x+1,y-1.5],[x-2,y-3],[x-6,y-3.2]]}
+};
+function libPts(type,x,y,depth,flip){
+  const L=LIB[type]||LIB.go, i=sideIn(x)*(flip?-1:1);
+  return L.f(x,y,depth==null?L.d:depth,i);
+}
+// absolute template points for a stored player's route
+function storedRoutePts(p){
+  const r=p.route||{mode:"lib",type:"go"};
+  if(r.mode==="lib") return libPts(r.type,p.x,p.y,r.depth,r.flip);
+  if(r.mode==="qb") return (QB_ACTIONS[r.action]||QB_ACTIONS.drop3).f(p.x,p.y);
+  return [[p.x,p.y]].concat((r.rel||[]).map(q=>[p.x+q[0],p.y+q[1]]));
+}
+function storedRouteName(p){
+  const r=p.route||{};
+  if(r.mode==="lib") return (LIB[r.type]||LIB.go).name;
+  if(r.mode==="qb") return (QB_ACTIONS[r.action]||QB_ACTIONS.drop3).name;
+  return r.name||"custom route";
+}
+function storedAfter(p){
+  if(p.after) return p.after;
+  const r=p.route||{};
+  if(r.mode==="lib") return (LIB[r.type]||LIB.go).after;
+  if(r.mode==="qb") return "stop";
+  return "run";
+}
+// stored play -> engine play (same shape as the built-in books)
+function myToPlay(sp){
+  const pitchTo = sp.pitch && sp.pitch.to;
+  const players = sp.players.map(p=>{
+    const pts=storedRoutePts(p), name=storedRouteName(p), after=storedAfter(p);
+    const opts={};
+    if(p.delay!=null) opts.delay=p.delay;
+    if(p.id==="Q"){
+      opts.target=false;
+      const A=p.route&&p.route.mode==="qb" ? QB_ACTIONS[p.route.action]||QB_ACTIONS.drop3 : null;
+      if(A && A.speed){ opts.speed=A.speed; opts.stride=A.stride; if(opts.delay==null) opts.delay=0.1; }
+    }
+    if(p.id===pitchTo) opts.target=false;
+    if(p.motion) opts.dashed=true;
+    return pl(p.id,p.x,p.y,C_(pts,name,after),opts);
+  });
+  const targets=players.filter(q=>q.target).map(q=>q.id);
+  const prog=(sp.prog||[]).filter(id=>targets.includes(id));
+  targets.forEach(id=>{ if(!prog.includes(id)) prog.push(id); });
+  const play={name:sp.name, form:sp.form||"Custom", kind: pitchTo?"trick":"pass", prog, note:sp.note||"", players, custom:true, uid:sp.uid, squad:sp.squad};
+  if(pitchTo) play.passer=[{id:"Q",until:sp.pitch.at||0.9},{id:pitchTo}];
+  return play;
+}
+const MYPLAYS_KEY="qbbrain.myplays.v1", AUD_KEY="qbbrain.audibles.v1";
+let MY_PLAYS=[];          // stored format
+let AUDIBLES={};          // play key -> [play keys]
+function loadMyPlays(){
+  try{ MY_PLAYS=JSON.parse(localStorage.getItem(MYPLAYS_KEY)||"[]")||[]; }catch(_){ MY_PLAYS=[]; }
+  try{ AUDIBLES=JSON.parse(localStorage.getItem(AUD_KEY)||"{}")||{}; }catch(_){ AUDIBLES={}; }
+  rebuildCustomBook();
+}
+function saveMyPlays(){
+  try{ localStorage.setItem(MYPLAYS_KEY,JSON.stringify(MY_PLAYS)); localStorage.setItem(AUD_KEY,JSON.stringify(AUDIBLES)); }catch(_){}
+  rebuildCustomBook();
+}
+function rebuildCustomBook(){
+  const out={5:[],7:[]};
+  MY_PLAYS.forEach(sp=>{ try{ const p=myToPlay(sp); p.key="my:"+sp.uid; (out[sp.squad]||out[5]).push(p); }catch(_){} });
+  BOOKS.custom.plays=out;
+}
+BOOKS.custom={label:"My Plays", sub:"Plays you built", plays:{5:[],7:[]}};
+// stable keys for built-in plays (used by audible lists)
+["standard","bigdawz"].forEach(bk=>{ const b=BOOKS[bk]; Object.keys(b.plays).forEach(sq=>b.plays[sq].forEach(p=>{ p.key=bk+":"+sq+":"+p.name; p.squad=+sq; })); });
+function booksForSquad(sq){
+  const list=[];
+  if(BOOKS.custom.plays[sq] && BOOKS.custom.plays[sq].length) list.push({key:"custom",label:"My Plays",plays:BOOKS.custom.plays[sq]});
+  if(sq===5) list.push({key:"bigdawz",label:"Big Dawz",plays:BOOKS.bigdawz.plays[5]});
+  list.push({key:"standard",label:"Standard",plays:BOOKS.standard.plays[sq]});
+  return list;
+}
+function playByKey(key){
+  for(const bk of ["custom","bigdawz","standard"]){ const b=BOOKS[bk]; for(const sq in b.plays){ const f=b.plays[sq].find(p=>p.key===key); if(f) return f; } }
+  return null;
+}
+function audiblesFor(play){ return (AUDIBLES[play.key]||[]).map(playByKey).filter(p=>p && p.squad===play.squad && p.key!==play.key); }
+loadMyPlays();
+
+/* ============================================================
    PATHS
 ============================================================ */
 function mkPath(pts,speed,after,delay){
@@ -788,7 +1028,10 @@ function saveSettings(){
     o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
   }catch(_){}
 }
-function currentPlays(){ return (BOOKS[state.book].plays[state.squad])||[]; }
+function currentPlays(){
+  const b=BOOKS[state.book]; const pl=b && b.plays[state.squad];
+  return (pl && pl.length) ? pl : BOOKS.standard.plays[state.squad];
+}
 
 /* ============================================================
    SETUP SCREEN
@@ -805,9 +1048,11 @@ function buildChoiceRow(container, items, currentKey, onPick){
   });
 }
 function refreshSetupUI(){
+  const myN=(BOOKS.custom.plays[state.squad]||[]).length;
   buildChoiceRow(els.bookRow,[
     {key:"standard",title:BOOKS.standard.label,sub:BOOKS.standard.sub},
-    {key:"bigdawz",title:BOOKS.bigdawz.label,sub:BOOKS.bigdawz.sub}
+    {key:"bigdawz",title:BOOKS.bigdawz.label,sub:BOOKS.bigdawz.sub},
+    {key:"custom",title:"My Plays",sub: myN ? myN+" for "+state.squad+"v"+state.squad : "None for "+state.squad+"v"+state.squad+" yet", disabled:!myN && state.book!=="custom"}
   ], state.book, k=>{ state.book=k; state.playPick="random"; if(k==="bigdawz") state.squad=5; });
 
   const lock7 = state.book==="bigdawz";
@@ -958,6 +1203,7 @@ function openPlay(p){
 els.pbCloseBtn.addEventListener("click",()=>{ els.pbDetail.classList.add("hidden"); els.pbGrid.classList.remove("hidden"); });
 els.pbRunBtn.addEventListener("click",()=>{
   if(!pbOpen) return;
+  if(pbOpen.custom){ state.book="custom"; state.squad=pbOpen.squad; }
   state.playPick=pbOpen.name; refreshSetupUI(); showScreen("drillsScreen");
 });
 
@@ -997,7 +1243,7 @@ function updateHud(){
     els.hudRepLbl.textContent="PLAY";
     els.hudRep.textContent = d.over ? d.plays.length : d.plays.length+1;
   } else {
-    els.hudSub.textContent = state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.book==="bigdawz"?" · Big Dawz":"");
+    els.hudSub.textContent = state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.book==="bigdawz"?" · Big Dawz":state.book==="custom"?" · My Plays":"");
     els.hudRepLbl.textContent="REP";
     els.hudRep.textContent = state.session.reps+1;
   }
@@ -1061,7 +1307,7 @@ function makePlayer(p){
   // the center has to snap first, so his release is a beat late
   const delay = p.delay!==undefined ? p.delay : (p.id==="C" ? 0.3 : 0);
   return {id:p.id, color:COLORS[p.id]||"#f2c14e", x0:clamp(TX(p.x),1,GEO.W-1), y0:p.y, name:p.route.name,
-    path:mkPath(p.route.pts,speed,p.route.after,delay), target:p.target, dashed:!!p.dashed};
+    path:mkPath(p.route.pts,speed,p.route.after,delay), target:p.target, dashed:!!p.dashed, stride:p.stride};
 }
 function buildRep(opts){
   opts=opts||{};
@@ -1069,30 +1315,31 @@ function buildRep(opts){
   const diff = DIFFICULTY[opts.difficulty||state.difficulty];
   const plays = opts.plays || currentPlays();
   const pick = opts.playName || state.playPick;
-  const play = (pick!=="random" && plays.find(p=>p.name===pick)) || choice(plays);
+  const play = opts.play || (pick!=="random" && plays.find(p=>p.name===pick)) || choice(plays);
   const players = play.players.map(makePlayer);
   const targets = players.filter(p=>p.target);
   const nDef = squad===5?4:6;
 
-  const disguised = opts.coverage ? false : Math.random() < diff.disguiseChance;
-  const shownCoverage = opts.coverage || choice(ALL_COVERAGES);
-  let actualCoverage = shownCoverage;
-  if(disguised){
+  const keep = opts.keep;   // audible: same defense, new play
+  const disguised = keep ? keep.disguised : opts.coverage ? false : Math.random() < diff.disguiseChance;
+  const shownCoverage = keep ? keep.shownCoverage : opts.coverage || choice(ALL_COVERAGES);
+  let actualCoverage = keep ? keep.actualCoverage : shownCoverage;
+  if(disguised && !keep){
     const rotations = {"Cover 2":["Cover 3","Cover 1"],"Cover 1":["Cover 2","Man"],"Cover 3":["Cover 2","Cover 1"],"Man":["Cover 1"],"Underneath Zone":["Cover 3"]};
     actualCoverage = choice(rotations[shownCoverage]);
   }
   const tune = DEF_TUNE[opts.difficulty||state.difficulty] || DEF_TUNE.varsity;
   const defenders = buildDefense(actualCoverage, targets, nDef, tune);
   if(actualCoverage!==shownCoverage) applyShownAlignment(defenders, shownCoverage, targets, nDef, tune);
-  const rushPlan = opts.rushPlan || pickRushPlan(tune);
-  const rx = rushPlan==="edge" ? GEO.CX+(Math.random()<0.5?-1:1)*Math.min(7,GEO.W*0.25) : GEO.CX;
+  const rushPlan = keep ? keep.rushPlan : opts.rushPlan || pickRushPlan(tune);
+  const rx = keep ? keep.rusher.x : rushPlan==="edge" ? GEO.CX+(Math.random()<0.5?-1:1)*Math.min(7,GEO.W*0.25) : GEO.CX;
 
   const out = {
     play, players, targets, squad,
     passer: play.passer || [{id:"Q"}],
     shownCoverage, actualCoverage, disguised, defenders,
     rusher:{x:rx,y:7,vel:{x:0,y:0}}, rushStart:null, rushPlan, tune,
-    askCoverage: opts.askCoverage!==undefined ? opts.askCoverage : Math.random() < MODES[state.mode].askCoverageChance,
+    askCoverage: keep ? keep.askCoverage : opts.askCoverage!==undefined ? opts.askCoverage : Math.random() < MODES[state.mode].askCoverageChance,
     tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed, rushAccel: diff.rushAccel, delayPlan: diff.delayPlan, reactionDelay: diff.reactionDelay,
     ball:null
   };
@@ -1437,13 +1684,15 @@ const aim = {active:false,start:null,cur:null,lob:true,pointerId:null,flash:0};
 function aimType(){ return aim.lob ? "lob" : "bullet"; }
 function toggleThrowType(){ if(!aim.active) return; aim.lob=!aim.lob; aim.flash=performance.now(); lobBeep=aim.lob; SFX.toggle(); }
 
-function startRep(){
+function startRep(opts){
+  opts=opts||{};
   clearOverlays();
   lastFrameT=null;
   if(isDrive()){ const d=state.drive; setGeometry(d.width, -d.ballOn-10, d.len-d.ballOn+10); }
   else setGeometry(30, -14, 45);
   updateView();
-  state.rep = buildRep();
+  if(isDrive() && !opts.play){ updateHud(); showCallSheet(); return; }   // call your play first
+  state.rep = buildRep(opts.play ? {play:opts.play} : undefined);
   state.phase = "study";
   aim.active=false;
   updateHud();
@@ -1491,6 +1740,7 @@ function beginStudyCountdown(){
   els.studyCount.textContent = remaining.toFixed(1);
   els.primaryBtn.textContent="SNAP";
   els.primaryBtn.classList.remove("hidden");
+  audibleShow(!!MODES[state.mode].throws);
   els.throwType.classList.add("hidden");
   clearInterval(studyTimer);
   studyTimer = setInterval(()=>{
@@ -1502,6 +1752,7 @@ function beginStudyCountdown(){
   els.primaryBtn.onclick = ()=>doSnap();
 }
 function doSnap(){
+  closeAudible(); audibleShow(false);
   clearInterval(studyTimer);
   els.studyBanner.classList.add("hidden");
   els.playTag.classList.add("hidden");
@@ -2492,8 +2743,9 @@ els.nextRepBtn.addEventListener("click",()=>{
 });
 
 function clearOverlays(){
-  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy"].forEach(k=>els[k].classList.add("hidden"));
+  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy","callSheet","audibleSheet","audibleBtn"].forEach(k=>els[k].classList.add("hidden"));
   clearTimeout(bannerTimer); clearTimeout(afterTimer);
+  if(typeof AUD!=="undefined"){ AUD.open=false; AUD.sel=null; }
   if(afterSkip){ els.fieldWrap.removeEventListener("pointerdown",afterSkip); afterSkip=null; }
   fxList=[];
   els.controls.classList.remove("hidden");
@@ -2572,6 +2824,592 @@ function renderSummary(){
 // headless hook for the play analyzer (not used by the UI)
 window.__qbState = state;
 window.__qbSim = {holderAt, BOOKS, buildRep, stepPlayers, releaseBall, flightTime, livePos, updateDefenders, updateRusher, isSacked, posAt, passerPos, passerIdAt, nearestDefender, dist};
+
+/* ============================================================
+   CREATE A PLAY — editor, audibles at the line, play calling
+============================================================ */
+["editorScreen","edBack","edTitle","edName","edSquadRow","edCanvas","edHint","edTools","edFormRow","edProgRow","edProgBtn",
+ "edPitchRow","edPitchTime","edAudRow","edAudBtn","edNote","edSave","edTest","edDelete",
+ "pickSheet","pickTitle","pickSub","pickList","pickDone",
+ "audibleSheet","audClose","audSub","audHot","audHotLabel","audHotRow","audList","audListLabel","audibleBtn",
+ "callSheet","callHead","callTabs","callGrid","callRandom","pbEditBtn","pbAudBtn","pbAudLine"
+].forEach(id=>{ els[id]=document.getElementById(id); });
+SCREENS.push("editorScreen");
+
+const SQUAD_IDS={5:["Q","C","X","Y","Z"], 7:["Q","C","X","H","Y","Z","F"]};
+const FORMS={
+  5:{"Spread":{X:[3,0],Y:[9,0],Z:[27,0]}, "Twins":{X:[3,0],Y:[7.5,0],Z:[27,0]},
+     "Trips Rt":{Y:[19,0],Z:[23,0],X:[27,0]}, "Trips Lt":{X:[3,0],Z:[7,0],Y:[11,0]},
+     "Bunch Rt":{X:[21,0],Y:[22.5,-1.3],Z:[24,0]}, "Bunch Lt":{Z:[6,0],Y:[7.5,-1.3],X:[9,0]},
+     "Stack Rt":{X:[3,0],Y:[24,0],Z:[24,-1.5]}, "Stack Lt":{Y:[6,0],Z:[6,-1.5],X:[27,0]},
+     "Offset":{X:[10.5,0],Z:[18.7,0],Y:[17,-2.3]}},
+  7:{"Spread":{X:[2,0],H:[8,0],Y:[21,0],Z:[28,0],F:[11,-1.5]}, "Twins":{X:[2,0],H:[6,0],Y:[24,0],Z:[28,0],F:[12,-3]},
+     "Trips Rt":{X:[2,0],H:[19,0],Y:[23.5,0],Z:[28,0],F:[11,-1.5]}, "Trips Lt":{Z:[2,0],Y:[6.5,0],H:[11,0],X:[28,0],F:[19,-1.5]},
+     "Bunch Rt":{X:[2,0],H:[20.5,0],Y:[23,0],Z:[25.5,0],F:[11,-1.5]}, "Bunch Lt":{Z:[4.5,0],Y:[7,0],H:[9.5,0],X:[28,0],F:[19,-1.5]},
+     "Empty":{X:[2,0],H:[7,0],F:[11,0],Y:[23,0],Z:[28,0]}}
+};
+const DEFAULT_ROUTES={X:"go",Y:"slant",Z:"go",H:"out",F:"flat",C:"sit"};
+const QB_ALIGN=[["Under center",-1.2],["Pistol",-2.8],["Shotgun",-4.3]];
+
+function newUid(){ return "p"+Date.now().toString(36)+Math.floor(Math.random()*46656).toString(36); }
+function newStoredPlay(squad){
+  const sp={uid:newUid(), name:"", squad, form:"Spread", note:"", players:[], prog:[], pitch:null};
+  SQUAD_IDS[squad].forEach(id=>{
+    if(id==="Q") sp.players.push({id,x:15,y:-2.8,route:{mode:"qb",action:"drop3"}});
+    else if(id==="C") sp.players.push({id,x:15,y:0,route:{mode:"lib",type:"sit",depth:5}});
+    else sp.players.push({id,x:15,y:0,route:{mode:"lib",type:DEFAULT_ROUTES[id]||"go"}});
+  });
+  applyFormation(sp,"Spread");
+  return sp;
+}
+function applyFormation(sp,name){
+  const f=FORMS[sp.squad][name]; if(!f) return;
+  Object.keys(f).forEach(id=>{ const p=sp.players.find(q=>q.id===id); if(p){ p.x=f[id][0]; p.y=f[id][1]; } });
+  sp.form=name;
+}
+// built-in or custom engine play -> editable stored copy
+function playToStored(play){
+  const sp={uid:newUid(), name:(play.name+" copy").slice(0,28), squad:play.squad||state.squad, form:play.form||"Custom", note:play.note||"", players:[], prog:(play.prog||[]).slice(), pitch:null};
+  play.players.forEach(p=>{
+    const r=p.route, o={id:p.id,x:p.x,y:p.y};
+    if(r.pts.length>1) o.route={mode:"draw", rel:r.pts.slice(1).map(q=>[+(q[0]-p.x).toFixed(2),+(q[1]-p.y).toFixed(2)]), name:r.name};
+    else if(p.id==="Q"){ o.route={mode:"qb",action:"drop3"}; o.y=-2.8; }   // built-in QBs take a 3-step drop from the pistol
+    else o.route={mode:"lib",type:"stay"};
+    if(r.pts.length>1) o.after=r.after;
+    if(p.delay!==undefined && !(p.id==="Q" && o.route.mode==="qb")) o.delay=p.delay;
+    if(p.dashed) o.motion=true;
+    sp.players.push(o);
+  });
+  if(play.passer && play.passer.length>1) sp.pitch={to:play.passer[1].id, at:play.passer[0].until||0.9};
+  return sp;
+}
+
+/* ---------------- editor state + drawing ---------------- */
+const ED={sp:null, sel:null, mode:"edit", order:[], drag:null, w:300, dpr:1, dirty:false, aud:[], delArm:false, backArm:false};
+const EDV={x0:0, y1:21};   // view: x 0..30, y -9..21 (template yards)
+function edScale(){ return ED.w/30; }
+function edP(x,y){ const s=edScale(); return [(x-EDV.x0)*s, (EDV.y1-y)*s]; }
+function edF(px,py){ const s=edScale(); return [px/s+EDV.x0, EDV.y1-py/s]; }
+function edPlayer(id){ return ED.sp.players.find(p=>p.id===id); }
+function edTargets(){ const pt=ED.sp.pitch&&ED.sp.pitch.to; return ED.sp.players.filter(p=>p.id!=="Q" && p.id!==pt).map(p=>p.id); }
+function edSize(){
+  const cv=els.edCanvas; const w=cv.clientWidth||Math.min(520,(window.innerWidth||360)-32);
+  ED.dpr=Math.min(window.devicePixelRatio||1,2.5); ED.w=w;
+  cv.width=Math.round(w*ED.dpr); cv.height=Math.round(w*ED.dpr);
+}
+function edHint(text,warn){ els.edHint.textContent=text; els.edHint.classList.toggle("warn",!!warn); }
+function edDefaultHint(){
+  if(ED.mode==="order") return edHint("Tap your receivers in the order you read them ("+(ED.order.length+1)+" of "+edTargets().length+")",true);
+  const p=ED.sel&&edPlayer(ED.sel);
+  if(p && p.route && p.route.mode==="draw") return edHint("Tap the field to add a point · drag a point to move it");
+  if(p) return edHint(p.id==="C" ? "The center stays on the ball to snap it · edit his route below" : "Drag "+p.id+" to move him · pick his route below");
+  edHint("Tap a player to edit him · drag to move him");
+}
+function drawArrowHead(g,a,b,col,h){
+  const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+  g.fillStyle=col; g.beginPath(); g.moveTo(b[0]+Math.cos(ang)*h,b[1]+Math.sin(ang)*h);
+  g.lineTo(b[0]+Math.cos(ang+2.4)*h,b[1]+Math.sin(ang+2.4)*h); g.lineTo(b[0]+Math.cos(ang-2.4)*h,b[1]+Math.sin(ang-2.4)*h); g.fill();
+}
+function edDraw(){
+  const cv=els.edCanvas, g=cv.getContext && cv.getContext("2d"); if(!g || !ED.sp || !g.setTransform) return;
+  g.setTransform(ED.dpr,0,0,ED.dpr,0,0);
+  const W=ED.w, s=edScale(), sp=ED.sp;
+  g.fillStyle="#4f9c45"; g.fillRect(0,0,W,W);
+  // backfield shade
+  const los=edP(0,0)[1];
+  g.fillStyle="rgba(0,0,0,0.10)"; g.fillRect(0,los,W,W-los);
+  for(let y=-5;y<=20;y+=5){
+    const py=edP(0,y)[1];
+    g.fillStyle="rgba(244,240,226,0.32)"; g.fillRect(0,py-1,W,2);
+    if(y>0){ g.fillStyle="rgba(244,240,226,0.55)"; g.font="12px 'Jersey 10', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(String(y),4,py-8); }
+  }
+  for(let y=1;y<=20;y++){ if(y%5===0) continue; const py=edP(0,y)[1]; g.fillStyle="rgba(244,240,226,0.14)"; g.fillRect(W*0.33-3,py,6,1); g.fillRect(W*0.67-3,py,6,1); }
+  g.fillStyle="#5ab8ff"; g.fillRect(0,los-1.5,W,3);
+  const pitchTo=sp.pitch&&sp.pitch.to, R=Math.max(9,s*0.62);
+  // routes
+  sp.players.forEach(p=>{
+    const pts=storedRoutePts(p).map(q=>edP(q[0],q[1])), col=COLORS[p.id]||"#ffc933";
+    const dim = ED.sel && ED.sel!==p.id;
+    if(pts.length<2) return;
+    g.globalAlpha=dim?0.35:1;
+    g.strokeStyle=col; g.lineWidth=ED.sel===p.id?4:3; g.lineJoin="round"; g.lineCap="round";
+    g.setLineDash(p.motion?[7,6]:[]);
+    g.beginPath(); pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])); g.stroke(); g.setLineDash([]);
+    const a=pts[pts.length-2], b=pts[pts.length-1], after=storedAfter(p);
+    if(after==="run") drawArrowHead(g,a,b,col,R*0.8);
+    else if(after==="sit"){ const ang=Math.atan2(b[1]-a[1],b[0]-a[0])+Math.PI/2; g.lineWidth=4; g.beginPath(); g.moveTo(b[0]+Math.cos(ang)*R*0.7,b[1]+Math.sin(ang)*R*0.7); g.lineTo(b[0]-Math.cos(ang)*R*0.7,b[1]-Math.sin(ang)*R*0.7); g.stroke(); }
+    else { g.fillStyle=col; g.beginPath(); g.arc(b[0],b[1],3.5,0,Math.PI*2); g.fill(); }
+    g.globalAlpha=1;
+    // waypoint handles on the selected drawn route
+    if(ED.sel===p.id && p.route.mode==="draw"){
+      pts.slice(1).forEach((q,i)=>{ g.beginPath(); g.arc(q[0],q[1],8,0,Math.PI*2); g.fillStyle="rgba(13,17,23,0.75)"; g.fill(); g.lineWidth=2.5; g.strokeStyle="#ffffff"; g.stroke();
+        g.fillStyle="#ffffff"; g.font="11px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),q[0],q[1]+0.5); });
+    }
+  });
+  // pitch
+  if(pitchTo){
+    const q=edPlayer("Q"), t=edPlayer(pitchTo);
+    if(q&&t){ const a=edP(q.x,q.y), b=edP(t.x,t.y); g.strokeStyle="#ffffff"; g.lineWidth=2; g.setLineDash([3,5]); g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(b[0],b[1]); g.stroke(); g.setLineDash([]);
+      g.fillStyle="#ffffff"; g.font="13px 'Jersey 10', sans-serif"; g.textAlign="center"; g.fillText("PITCH",(a[0]+b[0])/2,(a[1]+b[1])/2-8); }
+  }
+  // players
+  const order = ED.mode==="order" ? ED.order : (sp.prog||[]);
+  sp.players.forEach(p=>{
+    const a=edP(p.x,p.y), col=COLORS[p.id]||"#ffc933";
+    if(ED.sel===p.id){ g.beginPath(); g.arc(a[0],a[1],R+5,0,Math.PI*2); g.strokeStyle="#ffc933"; g.lineWidth=3; g.stroke(); }
+    g.beginPath(); g.arc(a[0],a[1],R,0,Math.PI*2); g.fillStyle=col; g.fill(); g.lineWidth=2.5; g.strokeStyle="#0d1117"; g.stroke();
+    g.fillStyle="#0d1117"; g.font=Math.round(R*1.45)+"px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(p.id,a[0],a[1]+1);
+    const k=order.indexOf(p.id);
+    if(k>=0 && p.id!=="Q"){ const bx=a[0]+R*0.85, by=a[1]-R*0.85; g.beginPath(); g.arc(bx,by,7.5,0,Math.PI*2); g.fillStyle="#ffffff"; g.fill(); g.strokeStyle="#0d1117"; g.lineWidth=1.5; g.stroke();
+      g.fillStyle="#0d1117"; g.font="12px 'Jersey 10', sans-serif"; g.fillText(String(k+1),bx,by+0.5); }
+  });
+}
+
+/* ---------------- editor panels ---------------- */
+function chip(label,on,onClick,cls){
+  const b=document.createElement("button"); b.className="chip"+(on?" on":"")+(cls?" "+cls:""); b.type="button"; b.textContent=label;
+  b.addEventListener("click",(e)=>{ e.preventDefault(); onClick(); }); return b;
+}
+function edChanged(){ ED.dirty=true; ED.backArm=false; edDraw(); }
+function edRenderTools(){
+  const box=els.edTools; box.innerHTML="";
+  const p=ED.sel&&edPlayer(ED.sel);
+  box.classList.toggle("empty",!p);
+  if(!p){
+    const d=document.createElement("div"); d.className="help";
+    d.innerHTML="<b>Tap any player on the field</b> to change his route, or drag him to a new spot. Tap the <b>QB</b> to set his alignment and drop.";
+    box.appendChild(d); edDefaultHint(); return;
+  }
+  const head=document.createElement("div"); head.className="ed-sel";
+  const pid=document.createElement("span"); pid.className="pid"; pid.style.background=COLORS[p.id]||"#ffc933"; pid.textContent=p.id;
+  const nm=document.createElement("b"); nm.textContent=storedRouteName(p)+(p.id===(ED.sp.pitch&&ED.sp.pitch.to)?" · gets the pitch":"");
+  head.append(pid,nm,chip("✕",false,()=>{ ED.sel=null; edRenderTools(); edDraw(); },"ghost"));
+  box.appendChild(head);
+  const label=t=>{ const l=document.createElement("div"); l.className="mini-label"; l.textContent=t; box.appendChild(l); };
+  const row=()=>{ const r=document.createElement("div"); r.className="chip-row"; box.appendChild(r); return r; };
+  const r=p.route;
+  if(p.id==="Q"){
+    label("ALIGNMENT");
+    const ra=row(); QB_ALIGN.forEach(([n,y])=>ra.appendChild(chip(n,Math.abs(p.y-y)<0.05,()=>{ p.y=y; edChanged(); edRenderTools(); })));
+    label("AFTER THE SNAP");
+    const rq=row();
+    [["drop3","3-step drop"],["drop5","5-step drop"],["stay","Stay"],["rollR","Rollout ▶"],["rollL","◀ Rollout"],["bootR","Bootleg ▶"],["bootL","◀ Bootleg"]].forEach(([k,n])=>
+      rq.appendChild(chip(n, r.mode==="qb"&&r.action===k, ()=>{ p.route={mode:"qb",action:k}; delete p.after; edChanged(); edRenderTools(); })));
+    rq.appendChild(chip("✎ Draw path", r.mode==="draw", ()=>{ edToDraw(p); edRenderTools(); }));
+  } else {
+    label("ROUTE");
+    const rr=row();
+    LIB_ORDER.forEach(k=>rr.appendChild(chip(LIB[k].name, r.mode==="lib"&&r.type===k, ()=>{
+      p.route={mode:"lib",type:k, flip: r.mode==="lib"?r.flip:false}; delete p.after; edChanged(); edRenderTools(); })));
+    rr.appendChild(chip("✎ Draw", r.mode==="draw", ()=>{ edToDraw(p); edRenderTools(); }));
+    if(r.mode==="lib"){
+      const L=LIB[r.type];
+      if(L.d!=null){
+        label("DEPTH");
+        const st=document.createElement("div"); st.className="stepper";
+        const dv=document.createElement("b"); const cur=()=>r.depth==null?L.d:r.depth; dv.textContent=cur()+" yd";
+        st.append(chip("−",false,()=>{ r.depth=Math.max(1,cur()-1); dv.textContent=cur()+" yd"; edChanged(); }), dv,
+                  chip("+",false,()=>{ r.depth=Math.min(20,cur()+1); dv.textContent=cur()+" yd"; edChanged(); }));
+        box.appendChild(st);
+      }
+      if(r.type!=="go" && r.type!=="sit" && r.type!=="stay"){
+        label("DIRECTION");
+        const rd=row();
+        rd.appendChild(chip("Normal",!r.flip,()=>{ r.flip=false; edChanged(); edRenderTools(); }));
+        rd.appendChild(chip("Flipped ↔",!!r.flip,()=>{ r.flip=true; edChanged(); edRenderTools(); }));
+      }
+    }
+  }
+  if(r.mode==="draw"){
+    const h=document.createElement("div"); h.className="help"; h.textContent="Tap the field to add points to the path. Drag a numbered point to move it."; box.appendChild(h);
+    const rw=row();
+    rw.appendChild(chip("Undo point",false,()=>{ r.rel.pop(); edChanged(); }));
+    rw.appendChild(chip("Clear path",false,()=>{ r.rel=[]; edChanged(); }));
+  }
+  if(p.id!=="Q"){
+    label("AT THE END");
+    const re=row(); const af=storedAfter(p);
+    [["run","Keep running"],["sit","Sit down"],["stop","Stop"]].forEach(([k,n])=>re.appendChild(chip(n,af===k,()=>{ p.after=k; edChanged(); edRenderTools(); })));
+    label("RELEASE");
+    const rs=row(); const dflt=p.id==="C"?0.3:0, dl=p.delay==null?dflt:p.delay;
+    [[0,"On the snap"],[0.3,"+0.3s"],[0.6,"+0.6s"],[1,"+1s"],[1.5,"+1.5s"]].forEach(([v,n])=>rs.appendChild(chip(n,Math.abs(dl-v)<0.01,()=>{ p.delay=v; edChanged(); edRenderTools(); })));
+    const rm=row(); rm.appendChild(chip(p.motion?"Dashed line (fake/motion) ✓":"Dashed line (fake/motion)",!!p.motion,()=>{ p.motion=!p.motion; edChanged(); edRenderTools(); }));
+  }
+  edDefaultHint();
+}
+function edToDraw(p){
+  if(p.route.mode!=="draw"){
+    const pts=storedRoutePts(p), after=storedAfter(p);
+    p.route={mode:"draw", rel:pts.slice(1).map(q=>[+(q[0]-p.x).toFixed(2),+(q[1]-p.y).toFixed(2)]), name: p.id==="Q"?"QB path":storedRouteName(p)};
+    if(p.id!=="Q") p.after=after; else p.after="stop";
+  }
+  edChanged();
+}
+function edRenderMain(){
+  const sp=ED.sp;
+  els.edTitle.textContent = ED.isNew ? "CREATE A PLAY" : "EDIT PLAY";
+  els.edName.value=sp.name; els.edNote.value=sp.note||"";
+  // format
+  els.edSquadRow.innerHTML="";
+  [5,7].forEach(sq=>els.edSquadRow.appendChild(chip(sq+"v"+sq,sp.squad===sq,()=>{
+    if(sp.squad===sq) return;
+    const keep={uid:sp.uid,name:sp.name,note:sp.note};
+    ED.sp=Object.assign(newStoredPlay(sq),keep); ED.sel=null; ED.mode="edit"; ED.aud=[]; edChanged(); edRenderMain();
+    edHint("Switched to "+sq+"v"+sq+" — formation reset",true);
+  })));
+  // formations
+  els.edFormRow.innerHTML="";
+  Object.keys(FORMS[sp.squad]).forEach(f=>els.edFormRow.appendChild(chip(f,sp.form===f,()=>{ applyFormation(sp,f); edChanged(); edRenderMain(); })));
+  if(!FORMS[sp.squad][sp.form]) els.edFormRow.appendChild(chip(sp.form||"Custom",true,()=>{}));
+  edRenderProg(); edRenderPitch(); edRenderAud();
+  els.edDelete.classList.toggle("hidden",ED.isNew);
+  els.edDelete.textContent="DELETE PLAY"; ED.delArm=false;
+  edRenderTools(); edDraw();
+}
+function edRenderProg(){
+  const sp=ED.sp, row=els.edProgRow; row.innerHTML="";
+  const t=edTargets(); const prog=(sp.prog||[]).filter(id=>t.includes(id)); t.forEach(id=>{ if(!prog.includes(id)) prog.push(id); }); sp.prog=prog;
+  const list = ED.mode==="order" ? ED.order : prog;
+  list.forEach((id,i)=>{ const c=chip((i+1)+" · "+id+" "+storedRouteName(edPlayer(id)),false,()=>{}); c.style.borderColor=COLORS[id]; row.appendChild(c); });
+  els.edProgBtn.textContent = ED.mode==="order" ? "DONE" : "SET READ ORDER";
+}
+function edFinishOrder(){
+  const t=edTargets(); const o=ED.order.slice(); t.forEach(id=>{ if(!o.includes(id)) o.push(id); });
+  ED.sp.prog=o; ED.mode="edit"; ED.order=[]; edChanged(); edRenderProg(); edDefaultHint();
+}
+els.edProgBtn.addEventListener("click",()=>{
+  if(ED.mode==="order"){ edFinishOrder(); return; }
+  ED.mode="order"; ED.order=[]; ED.sel=null; edRenderTools(); edRenderProg(); edDraw(); edDefaultHint();
+});
+function edRenderPitch(){
+  const sp=ED.sp; els.edPitchRow.innerHTML=""; els.edPitchTime.innerHTML="";
+  els.edPitchRow.appendChild(chip("No pitch",!sp.pitch,()=>{ sp.pitch=null; edChanged(); edRenderMain(); }));
+  sp.players.filter(p=>p.id!=="Q").forEach(p=>els.edPitchRow.appendChild(chip("Pitch to "+p.id,sp.pitch&&sp.pitch.to===p.id,()=>{ sp.pitch={to:p.id,at:sp.pitch?sp.pitch.at:0.9}; edChanged(); edRenderMain(); })));
+  if(sp.pitch){
+    [0.5,0.9,1.2,1.5].forEach(v=>els.edPitchTime.appendChild(chip("at "+v+"s",Math.abs(sp.pitch.at-v)<0.01,()=>{ sp.pitch.at=v; edChanged(); edRenderPitch(); })));
+  }
+}
+function edRenderAud(){
+  els.edAudRow.innerHTML="";
+  const list=ED.aud.map(playByKey).filter(Boolean);
+  if(!list.length){ const d=document.createElement("div"); d.className="help"; d.textContent="None yet."; els.edAudRow.appendChild(d); }
+  list.forEach(p=>els.edAudRow.appendChild(chip(p.name,false,()=>{})));
+}
+els.edAudBtn.addEventListener("click",()=>{
+  openPicker("AUDIBLES · "+(ED.sp.name||"this play"), ED.sp.squad, "my:"+ED.sp.uid, ED.aud, (keys)=>{ ED.aud=keys; ED.dirty=true; edRenderAud(); });
+});
+els.edName.addEventListener("input",()=>{ ED.sp.name=els.edName.value; ED.dirty=true; });
+els.edNote.addEventListener("input",()=>{ ED.sp.note=els.edNote.value; ED.dirty=true; });
+
+/* ---------------- canvas input ---------------- */
+function edLocal(e){ const r=els.edCanvas.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; }
+function edHitPlayer(px,py){
+  let best=null, bd=1e9, R=Math.max(16,edScale()*0.9);
+  ED.sp.players.forEach(p=>{ const a=edP(p.x,p.y), d=Math.hypot(a[0]-px,a[1]-py); if(d<R && d<bd){ bd=d; best=p; } });
+  return best;
+}
+const snapH=v=>Math.round(v*2)/2;
+els.edCanvas.addEventListener("pointerdown",(e)=>{
+  if(!ED.sp) return; e.preventDefault();
+  const [px,py]=edLocal(e), [fx,fy]=edF(px,py);
+  const hit=edHitPlayer(px,py);
+  if(ED.mode==="order"){
+    if(hit && edTargets().includes(hit.id) && !ED.order.includes(hit.id)){ ED.order.push(hit.id); if(ED.order.length>=edTargets().length) edFinishOrder(); else { edRenderProg(); edDraw(); edDefaultHint(); } }
+    return;
+  }
+  const sel=ED.sel&&edPlayer(ED.sel);
+  if(sel && sel.route.mode==="draw"){
+    const pts=storedRoutePts(sel);
+    for(let k=pts.length-1;k>=1;k--){ const a=edP(pts[k][0],pts[k][1]); if(Math.hypot(a[0]-px,a[1]-py)<16){ ED.drag={kind:"pt",k}; try{ els.edCanvas.setPointerCapture(e.pointerId); }catch(_){} return; } }
+  }
+  if(hit){
+    if(ED.sel!==hit.id){ ED.sel=hit.id; edRenderTools(); }
+    ED.drag={kind:"player",id:hit.id,sx:px,sy:py,ox:hit.x,oy:hit.y,moved:false};
+    try{ els.edCanvas.setPointerCapture(e.pointerId); }catch(_){}
+    edDraw(); return;
+  }
+  if(sel && sel.route.mode==="draw"){
+    sel.route.rel.push([+(clamp(fx,0.3,29.7)-sel.x).toFixed(2), +(clamp(fy,-9,30)-sel.y).toFixed(2)]);
+    ED.drag={kind:"pt",k:sel.route.rel.length};
+    try{ els.edCanvas.setPointerCapture(e.pointerId); }catch(_){}
+    edChanged(); return;
+  }
+  if(ED.sel){ ED.sel=null; edRenderTools(); edDraw(); }
+});
+els.edCanvas.addEventListener("pointermove",(e)=>{
+  if(!ED.drag) return; e.preventDefault();
+  const [px,py]=edLocal(e), [fx,fy]=edF(px,py), d=ED.drag;
+  if(d.kind==="pt"){
+    const p=edPlayer(ED.sel); if(!p||p.route.mode!=="draw") return;
+    p.route.rel[d.k-1]=[+(clamp(fx,0.3,29.7)-p.x).toFixed(2), +(clamp(fy,-9,30)-p.y).toFixed(2)];
+    edChanged(); return;
+  }
+  const p=edPlayer(d.id); if(!p) return;
+  if(!d.moved && Math.hypot(px-d.sx,py-d.sy)<5) return;
+  d.moved=true;
+  const s=edScale(), nx=snapH(d.ox+(px-d.sx)/s), ny=snapH(d.oy-(py-d.sy)/s);
+  if(p.id==="C"){ edHint("The center snaps the ball, so he stays on the ball",true); return; }
+  if(p.id==="Q"){ p.y=clamp(ny,-7,-1); }
+  else { p.x=clamp(nx,0.5,29.5); p.y=clamp(ny,-7,0); }
+  edChanged();
+});
+function edEndDrag(){
+  const d=ED.drag; ED.drag=null; if(!d) return;
+  if(d.kind==="player" && d.moved){
+    const p=edPlayer(d.id);
+    if(p && p.id!=="Q" && p.id!=="C" && FORMS[ED.sp.squad][ED.sp.form]){ ED.sp.form="Custom"; edRenderMain(); }
+    else { edRenderTools(); edDraw(); }
+  }
+}
+els.edCanvas.addEventListener("pointerup",edEndDrag);
+els.edCanvas.addEventListener("pointercancel",edEndDrag);
+
+/* ---------------- open / save / test / delete ---------------- */
+function openEditor(sp,isNew){
+  ED.sp=JSON.parse(JSON.stringify(sp)); ED.isNew=!!isNew; ED.sel=null; ED.mode="edit"; ED.order=[]; ED.dirty=!!isNew&&false; ED.backArm=false;
+  ED.aud=(AUDIBLES["my:"+sp.uid]||[]).slice();
+  showScreen("editorScreen");
+  edSize(); edRenderMain();
+}
+function edValidate(){
+  const sp=ED.sp;
+  if(!edTargets().length) return "You need at least one receiver who isn't getting the pitch.";
+  for(const p of sp.players){ if(p.id!=="Q" && p.y>0.01) return p.id+" is lined up past the line of scrimmage."; }
+  return null;
+}
+function edSave(){
+  const sp=ED.sp;
+  const err=edValidate(); if(err){ edHint(err,true); return false; }
+  let name=(sp.name||"").trim();
+  if(!name){ let n=MY_PLAYS.length+1; name="My Play "+n; while(MY_PLAYS.some(q=>q.name===name && q.uid!==sp.uid)) name="My Play "+(++n); }
+  let base=name, k=2; while(MY_PLAYS.some(q=>q.name===name && q.squad===sp.squad && q.uid!==sp.uid)) name=base+" "+(k++);
+  sp.name=name; els.edName.value=name;
+  edRenderProg();
+  const copy=JSON.parse(JSON.stringify(sp));
+  const i=MY_PLAYS.findIndex(q=>q.uid===sp.uid);
+  if(i>=0) MY_PLAYS[i]=copy; else MY_PLAYS.push(copy);
+  AUDIBLES["my:"+sp.uid]=ED.aud.slice();
+  saveMyPlays();
+  ED.isNew=false; ED.dirty=false; els.edTitle.textContent="EDIT PLAY"; els.edDelete.classList.remove("hidden");
+  edHint("Saved to My Plays ✓",true);
+  return true;
+}
+els.edSave.addEventListener("click",()=>{ edSave(); });
+els.edTest.addEventListener("click",()=>{
+  if(!edSave()) return;
+  state.book="custom"; state.squad=ED.sp.squad; state.playPick=ED.sp.name; state.drillMode="quick_read";
+  refreshSetupUI(); startSession("quick_read");
+});
+els.edDelete.addEventListener("click",()=>{
+  if(!ED.delArm){ ED.delArm=true; els.edDelete.textContent="TAP AGAIN TO DELETE"; return; }
+  const uid=ED.sp.uid, key="my:"+uid;
+  MY_PLAYS=MY_PLAYS.filter(q=>q.uid!==uid);
+  delete AUDIBLES[key]; Object.keys(AUDIBLES).forEach(k=>{ AUDIBLES[k]=AUDIBLES[k].filter(x=>x!==key); });
+  saveMyPlays();
+  if(state.book==="custom" && state.playPick===ED.sp.name) state.playPick="random";
+  saveSettings();
+  state.book="custom"; showScreen("playbookScreen");
+});
+els.edBack.addEventListener("click",()=>{
+  if(ED.dirty && !ED.backArm){ ED.backArm=true; edHint("Unsaved changes — tap ◀ again to leave without saving",true); return; }
+  showScreen("playbookScreen");
+});
+window.addEventListener("resize",()=>{ if(!els.editorScreen.classList.contains("hidden")){ edSize(); edDraw(); } });
+
+/* ---------------- audible picker (modal) ---------------- */
+let PICK=null;
+function openPicker(title,squad,selfKey,current,onDone){
+  PICK={sel:current.slice(), onDone};
+  els.pickTitle.textContent=title;
+  els.pickList.innerHTML="";
+  booksForSquad(squad).forEach(bk=>{
+    const plays=bk.plays.filter(p=>p.key!==selfKey); if(!plays.length) return;
+    const l=document.createElement("div"); l.className="mini-label"; l.textContent=bk.label.toUpperCase(); els.pickList.appendChild(l);
+    plays.forEach(p=>{
+      const b=document.createElement("button"); b.type="button";
+      const sync=()=>{ const on=PICK.sel.includes(p.key); b.classList.toggle("on",on); b.firstChild.textContent=on?"✓":""; };
+      b.innerHTML="<i></i><b></b><small></small>"; b.children[1].textContent=p.name; b.children[2].textContent=playKindLabel(p)+" · "+p.form;
+      b.addEventListener("click",()=>{
+        const k=PICK.sel.indexOf(p.key);
+        if(k>=0) PICK.sel.splice(k,1); else if(PICK.sel.length<4) PICK.sel.push(p.key);
+        else { els.pickSub.textContent="That's 4 already — untick one first."; return; }
+        els.pickSub.textContent="Pick up to 4 plays to check to at the line."; sync();
+      });
+      els.pickList.appendChild(b); sync();
+    });
+  });
+  els.pickSub.textContent="Pick up to 4 plays to check to at the line.";
+  els.pickSheet.classList.remove("hidden");
+}
+els.pickDone.addEventListener("click",()=>{ els.pickSheet.classList.add("hidden"); if(PICK){ PICK.onDone(PICK.sel.slice()); PICK=null; } });
+
+/* ---------------- playbook screen: My Plays tab, create, edit, audibles ---------------- */
+renderPlaybook=function(){
+  const books=[{key:"custom",title:"My Plays",sub:MY_PLAYS.length+" saved"},{key:"bigdawz",title:"Big Dawz",sub:"15 plays · 5v5"},{key:"standard",title:"Standard",sub:"Concepts · "+state.squad+"v"+state.squad}];
+  buildChoiceRow(els.pbTabs,books,state.book,k=>{ state.book=k; state.playPick="random"; if(k==="bigdawz") state.squad=5; });
+  els.pbGrid.innerHTML="";
+  const c=document.createElement("button"); c.className="play-card create"; c.type="button";
+  c.innerHTML='<b>+ CREATE A PLAY</b><small>5v5 or 7v7 · your routes</small>';
+  c.addEventListener("click",()=>openEditor(newStoredPlay(state.squad),true));
+  const plays = state.book==="custom" ? [5,7].reduce((a,sq)=>a.concat(BOOKS.custom.plays[sq]),[]) : currentPlays();
+  if(state.book==="custom") els.pbGrid.appendChild(c);
+  plays.forEach(p=>{
+    const b=document.createElement("button"); b.className="play-card"; b.type="button";
+    const cv=document.createElement("canvas"); cv.width=300; cv.height=300; b.appendChild(cv);
+    const t=document.createElement("b"); t.textContent=p.name; b.appendChild(t);
+    const sm=document.createElement("small"); sm.textContent=playKindLabel(p)+" · "+p.form+(p.custom?" · "+p.squad+"v"+p.squad:""); b.appendChild(sm);
+    b.addEventListener("click",()=>openPlay(p));
+    els.pbGrid.appendChild(b); drawPlayDiagram(cv,p);
+  });
+  if(state.book!=="custom") els.pbGrid.appendChild(c);
+};
+const _openPlay=openPlay;
+openPlay=function(p){
+  _openPlay(p);
+  els.pbEditBtn.textContent = p.custom ? "EDIT PLAY" : "COPY & EDIT";
+  pbAudSync(p);
+};
+function pbAudSync(p){
+  const list=audiblesFor(p);
+  els.pbAudLine.innerHTML = list.length ? "<b>Audibles:</b> "+list.map(q=>q.name).join(" · ") : "<b>Audibles:</b> none set";
+  els.pbAudBtn.textContent = list.length ? "CHANGE AUDIBLES" : "SET AUDIBLES";
+}
+els.pbEditBtn.addEventListener("click",()=>{
+  if(!pbOpen) return;
+  if(pbOpen.custom){ const sp=MY_PLAYS.find(q=>q.uid===pbOpen.uid); if(sp) openEditor(sp,false); }
+  else openEditor(playToStored(pbOpen),true);
+});
+els.pbAudBtn.addEventListener("click",()=>{
+  if(!pbOpen) return; const p=pbOpen;
+  openPicker("AUDIBLES · "+p.name, p.squad, p.key, AUDIBLES[p.key]||[], keys=>{ AUDIBLES[p.key]=keys; saveMyPlays(); pbAudSync(playByKey(p.key)||p); });
+});
+
+/* ============================================================
+   AUDIBLES AT THE LINE — check to another play, or hot-route a receiver
+============================================================ */
+const AUD={open:false, sel:null};
+function audibleShow(on){ els.audibleBtn.classList.toggle("hidden", !on); }
+function openAudible(){
+  if(state.phase!=="study" || !state.rep) return;
+  AUD.open=true; AUD.sel=null;
+  els.controls.classList.add("hidden"); els.audibleSheet.classList.remove("hidden");
+  renderAudible(); audDraw();
+}
+function closeAudible(){
+  if(!AUD.open) return;
+  AUD.open=false; AUD.sel=null;
+  els.audibleSheet.classList.add("hidden");
+  if(state.phase==="study"){ els.controls.classList.remove("hidden"); drawStatic(); }
+}
+els.audibleBtn.addEventListener("click",openAudible);
+els.audClose.addEventListener("click",closeAudible);
+function renderAudible(){
+  const rep=state.rep, base=rep.play;
+  // hot route chips
+  if(AUD.sel){
+    const p=playerById(rep,AUD.sel), cur=rep.hot&&rep.hot[AUD.sel];
+    els.audHot.classList.remove("hidden");
+    els.audHotLabel.textContent="HOT ROUTE · "+AUD.sel+" (now: "+p.name.replace(" (hot)","")+")";
+    els.audHotRow.innerHTML="";
+    HOT_ROUTES.forEach(k=>els.audHotRow.appendChild(chip(LIB[k].name,cur===k,()=>{ hotRoute(AUD.sel,k); })));
+    if(cur) els.audHotRow.appendChild(chip("↺ Original",false,()=>{ hotRoute(AUD.sel,null); },"ghost"));
+    els.audSub.textContent="Pick "+AUD.sel+"'s new route, or tap another receiver.";
+  } else {
+    els.audHot.classList.add("hidden");
+    els.audSub.textContent="Tap a receiver on the field to hot-route him, or check to a new play.";
+  }
+  // check-to list
+  let list=audiblesFor(base), lab="CHECK TO";
+  if(!list.length){ list=currentPlays().filter(p=>p.key!==base.key); lab="CHECK TO · no audibles set for "+base.name+", any play:"; }
+  els.audListLabel.textContent=lab;
+  els.audList.innerHTML="";
+  list.forEach(p=>{
+    const b=document.createElement("button"); b.type="button";
+    b.innerHTML="<b></b><small></small>"; b.children[0].textContent=p.name; b.children[1].textContent=playKindLabel(p)+" · "+p.form;
+    b.addEventListener("click",()=>doAudible(p));
+    els.audList.appendChild(b);
+  });
+}
+function audDraw(){
+  drawStatic();
+  const rep=state.rep;
+  rep.targets.forEach(p=>{
+    const s=p._px; if(!s) return;
+    ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.7,0,Math.PI*2);
+    ctx.strokeStyle = AUD.sel===p.id ? "#ffc933" : "rgba(255,255,255,0.45)"; ctx.lineWidth = AUD.sel===p.id ? 3.5 : 2; ctx.setLineDash(AUD.sel===p.id?[]:[4,4]); ctx.stroke(); ctx.setLineDash([]);
+  });
+}
+// tap receivers on the field while the audible sheet is open
+els.field.addEventListener("pointerdown",(e)=>{
+  if(!AUD.open || state.phase!=="study") return;
+  const pt=ptField(e); let hit=null, hd=999;
+  state.rep.targets.forEach(p=>{ if(!p._px) return; const d=Math.hypot(p._px.x-pt.px,p._px.y-pt.py); if(d<34 && d<hd){ hd=d; hit=p; } });
+  if(hit){ AUD.sel=hit.id; renderAudible(); audDraw(); }
+});
+function hotRoute(id,type){
+  const rep=state.rep, tp=rep.play.players.find(q=>q.id===id), live=playerById(rep,id);
+  if(!tp||!live) return;
+  const r = type ? {pts:libPts(type,tp.x,tp.y,null,false), after:LIB[type].after, name:LIB[type].name} : tp.route;
+  const np=makePlayer(pl(id,tp.x,tp.y,r,{delay:tp.delay, target:tp.target}));
+  live.path=np.path; live.name=np.name+(type?" (hot)":"");
+  rep.hot=rep.hot||{}; if(type) rep.hot[id]=type; else delete rep.hot[id];
+  showPlayTag(); renderAudible(); audDraw(); SFX.click();
+}
+function doAudible(play){
+  const old=state.rep;
+  const keep={disguised:old.disguised, shownCoverage:old.shownCoverage, actualCoverage:old.actualCoverage, rushPlan:old.rushPlan, rusher:{x:old.rusher.x}, askCoverage:old.askCoverage};
+  const rep=buildRep({play, keep});
+  rep.coverageGuess=old.coverageGuess; rep.audibledFrom=old.audibledFrom||old.play.name;
+  state.rep=rep; AUD.sel=null;
+  showPlayTag(); renderAudible(); audDraw(); SFX.click();
+}
+// play tag shows audibles / hot routes
+const _showPlayTag=showPlayTag;
+showPlayTag=function(){
+  _showPlayTag();
+  const rep=state.rep; if(!rep || state.mode==="coverage_id") return;
+  let extra="";
+  if(rep.audibledFrom) extra+='<br><span style="color:#ffc933">AUDIBLE</span> from '+rep.audibledFrom;
+  if(rep.hot && Object.keys(rep.hot).length) extra+='<br><span style="color:#ffc933">HOT</span> '+Object.keys(rep.hot).map(k=>k+" "+LIB[rep.hot[k]].name).join(", ");
+  if(extra) els.playTag.innerHTML+=extra;
+};
+
+/* ============================================================
+   PLAY CALLING (Full Drive): pick the play before every down
+============================================================ */
+const CALL={tab:null};
+function showCallSheet(){
+  state.phase="call";
+  els.controls.classList.add("hidden");
+  const d=state.drive;
+  els.callHead.textContent=downText(d)+" · "+spotText(d,d.ballOn);
+  const books=booksForSquad(state.squad);
+  if(!CALL.tab || !books.find(b=>b.key===CALL.tab)) CALL.tab = (books.find(b=>b.key===state.book)||books[0]).key;
+  els.callTabs.innerHTML="";
+  books.forEach(b=>els.callTabs.appendChild(chip(b.label,b.key===CALL.tab,()=>{ CALL.tab=b.key; showCallSheet(); })));
+  els.callGrid.innerHTML="";
+  const plays=books.find(b=>b.key===CALL.tab).plays;
+  plays.forEach(p=>{
+    const b=document.createElement("button"); b.className="play-card"; b.type="button";
+    const cv=document.createElement("canvas"); cv.width=200; cv.height=200; b.appendChild(cv);
+    const t=document.createElement("b"); t.textContent=p.name; b.appendChild(t);
+    const sm=document.createElement("small"); sm.textContent=playKindLabel(p)+" · "+p.form; b.appendChild(sm);
+    const au=audiblesFor(p); if(au.length){ const tg=document.createElement("span"); tg.className="tag"; tg.textContent=au.length+" AUDIBLE"+(au.length>1?"S":""); b.appendChild(tg); }
+    b.addEventListener("click",()=>pickCall(p));
+    els.callGrid.appendChild(b); drawPlayDiagram(cv,p);
+  });
+  els.callSheet.classList.remove("hidden");
+  els.callSheet.scrollTop=0;
+}
+function pickCall(play){
+  if(!play){ const b=booksForSquad(state.squad).find(x=>x.key===CALL.tab)||booksForSquad(state.squad)[0]; play=choice(b.plays); }
+  els.callSheet.classList.add("hidden");
+  startRep({play});
+}
+els.callRandom.addEventListener("click",()=>pickCall(null));
+window.__qbPickCall=pickCall;
+window.__qbMy={myToPlay,newStoredPlay,playToStored,LIB_ORDER,QB_ACTIONS,SQUAD_IDS};
+
 })();
 
 </script>
