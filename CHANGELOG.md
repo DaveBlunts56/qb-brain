@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.1 — Tap = bullet, hold = lob
+
+- In **Tap receiver** throw mode, a **quick tap** on a receiver throws a **bullet** as soon as you lift your finger.
+- **Press and hold** a receiver for a **lob**. A ring fills around him while you hold, and the lob goes out after about a quarter second without waiting for you to let go.
+- Both throws lead the receiver to where he'll be when the ball arrives.
+- Tap mode now throws a real ball in every mode, not just Full Drive. Drills grade where the ball actually lands, so defenders can break on it, tip it or pick it off, just like the pullback meter.
+
 ## v1.4.0 — Scramble joystick
 
 - **Scramble with a joystick** instead of dragging the QB. It shows up at the snap in the bottom corner. Push further to run faster, and let go to settle. The QB still can't cross the line of scrimmage.

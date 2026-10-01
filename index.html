@@ -322,7 +322,7 @@ select.play-select{
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.4.0</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.4.1</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -385,7 +385,7 @@ select.play-select{
     <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div></div>
     <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div></div>
     <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
-      <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.</div></div>
+      <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.<br>Tap receiver: a quick tap throws a bullet; press and hold him for a lob.</div></div>
     <div class="group"><div class="section-label">SCRAMBLE STICK</div><div class="choice-row" id="stickRow"></div>
       <div class="help">Move the QB with the stick and throw with your other thumb. He can't cross the line of scrimmage. On a computer, use WASD or the arrow keys.</div></div>
     <div class="group">
@@ -838,7 +838,7 @@ function refreshSetupUI(){
 
   buildChoiceRow(els.throwRow,[
     {key:"pull",title:"Pullback",sub:"Pull back = lob · 2nd finger = bullet"},
-    {key:"tap",title:"Tap receiver",sub:"Tap a receiver to throw"}
+    {key:"tap",title:"Tap receiver",sub:"Tap = bullet · hold = lob"}
   ], state.throwMode, k=>state.throwMode=k);
 
   buildChoiceRow(els.stickRow,[
@@ -1507,7 +1507,7 @@ function doSnap(){
   els.playTag.classList.add("hidden");
   const throws=MODES[state.mode].throws;
   if(throws){
-    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Stick to scramble · pull back anywhere to throw" : "Stick to scramble · tap a receiver to throw";
+    els.aimHint.firstElementChild.textContent = state.throwMode==="pull" ? "Stick to scramble · pull back anywhere to throw" : "Stick to scramble · tap a receiver = bullet, hold = lob";
     els.aimHint.classList.remove("hidden");
     els.timerBarWrap.classList.remove("hidden");
   }
@@ -1516,7 +1516,7 @@ function doSnap(){
   state.phase="decision";
   tSnap = performance.now();
   done=false;
-  joy.keys={};
+  joy.keys={}; tapHold=null;
   joyVisible(!!throws);
   fxList=[];
   SFX.snap();
@@ -1540,6 +1540,7 @@ function runLoop(){
       rafId = requestAnimationFrame(frame);
       return;
     }
+    checkTapHold();
     stepPlayers(rep, t, dt);
     updateDefenders(rep, t, dt);
     updateRusher(rep, t, dt);
@@ -1871,7 +1872,7 @@ function drawPlayers(t){
   }
 }
 function drawStatic(){ drawField(); drawRoutes(false); drawPlayers(null); }
-function drawFrame(t){ drawField(); drawRoutes(true); drawPlayers(t); drawThrowOverlay(t); drawFx(); }
+function drawFrame(t){ drawField(); drawRoutes(true); drawPlayers(t); drawThrowOverlay(t); drawTapHold(); drawFx(); }
 
 /* ============================================================
    THROWING — pullback meter with bullet / lob
@@ -1905,13 +1906,11 @@ els.field.addEventListener("pointerdown",(e)=>{
     let hit=null, hd=999;
     rep.targets.forEach(p=>{ if(!p._px) return; const dd=Math.hypot(p._px.x-pt.px,p._px.y-pt.py); if(dd<32&&dd<hd){hd=dd;hit=p;} });
     const tt=(performance.now()-tSnap)/1000;
-    if(hit && holderAt(rep,tt)){
-      if(isDrive()){
-        const from=passerPos(rep,tt); let L=posAt(hit,tt);
-        for(let i=0;i<5;i++) L=posAt(hit,tt+flightTime("bullet",dist(from,L)));
-        releaseBall(rep,tt,from,L,"bullet");
-        els.aimHint.classList.add("hidden");
-      } else finalizeTap(hit,tt);
+    if(hit && holderAt(rep,tt) && !tapHold){
+      // quick tap = bullet (thrown when you lift), hold = lob (thrown as soon as the hold registers)
+      tapHold={target:hit, pointerId:e.pointerId, t0:performance.now()};
+      els.aimHint.classList.add("hidden");
+      try{ els.field.setPointerCapture(e.pointerId); }catch(_){}
     }
   } else {
     aim.active=true; aim.start=pt; aim.cur=pt; aim.lob=true; aim.pointerId=e.pointerId; aim.flash=0;
@@ -1965,6 +1964,36 @@ window.addEventListener("keydown",(e)=>{ if(JOY_KEYS[e.code] && state.phase==="d
 window.addEventListener("keyup",(e)=>{ if(JOY_KEYS[e.code]){ joy.keys[e.code]=false; if(state.phase==="decision") joyKeys(); } });
 els.field.addEventListener("contextmenu",(e)=>{ e.preventDefault(); toggleThrowType(); });
 window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && aim.active){ e.preventDefault(); toggleThrowType(); } });
+/* ---- TAP TO THROW: tap a receiver = bullet, hold him = lob ---- */
+const TAP_HOLD_MS=280;
+let tapHold=null;
+function tapThrow(type){
+  const h=tapHold; tapHold=null;
+  const rep=state.rep; if(!h || !rep || state.phase!=="decision" || rep.ball) return;
+  const tt=(performance.now()-tSnap)/1000;
+  if(!holderAt(rep,tt)) return;
+  const from=passerPos(rep,tt); let L=posAt(h.target,tt);
+  for(let i=0;i<5;i++) L=posAt(h.target,tt+flightTime(type,dist(from,L)));   // lead him to where he'll be
+  L={x:clamp(L.x,0.5,GEO.W-0.5), y:clamp(L.y,GEO.yMin+0.5,GEO.yMax-0.5)};
+  releaseBall(rep,tt,from,L,type);
+}
+// called every frame: a hold that lasts long enough becomes a lob
+function checkTapHold(){ if(tapHold && performance.now()-tapHold.t0>=TAP_HOLD_MS) tapThrow("lob"); }
+function endTap(e,cancel){
+  if(!tapHold || e.pointerId!==tapHold.pointerId) return false;
+  if(cancel) tapHold=null; else tapThrow("bullet");
+  return true;
+}
+function drawTapHold(){
+  if(!tapHold || !tapHold.target._px) return;
+  const k=clamp((performance.now()-tapHold.t0)/TAP_HOLD_MS,0,1), s=tapHold.target._px, r=VIEW.PR*1.9;
+  ctx.beginPath(); ctx.arc(s.x,s.y,r,0,Math.PI*2); ctx.strokeStyle="rgba(0,0,0,0.45)"; ctx.lineWidth=5; ctx.stroke();
+  ctx.beginPath(); ctx.arc(s.x,s.y,r,-Math.PI/2,-Math.PI/2+k*Math.PI*2); ctx.strokeStyle="#ffffff"; ctx.lineWidth=4; ctx.stroke();
+  ctx.font="16px 'Jersey 10', sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+  const lab=k<1?"HOLD = LOB":"LOB"; const tw=ctx.measureText(lab).width+12;
+  ctx.fillStyle="rgba(13,17,23,0.85)"; ctx.fillRect(s.x-tw/2,s.y-r-24,tw,18);
+  ctx.fillStyle="#ffffff"; ctx.fillText(lab,s.x,s.y-r-15);
+}
 function endAim(e,cancel){
   if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e); aim.active=false;
@@ -1985,8 +2014,8 @@ function releaseBall(rep,t,from,to,type){
   rep.ball.chaser=pickChaser(rep,to,fl);
   SFX.throwIt(type==="lob");
 }
-els.field.addEventListener("pointerup",(e)=>endAim(e,false));
-els.field.addEventListener("pointercancel",(e)=>endAim(e,true));
+els.field.addEventListener("pointerup",(e)=>{ if(!endTap(e,false)) endAim(e,false); });
+els.field.addEventListener("pointercancel",(e)=>{ if(!endTap(e,true)) endAim(e,true); });
 
 function arcCtrl(a,b,type){
   const d=Math.hypot(a.x-b.x,a.y-b.y);
@@ -2095,7 +2124,7 @@ function commonTail(rep,explain){
 }
 function finishRep(rep,resultType,subtitle,explain,chips,points,coverageCorrect,time,outcome){
   state.phase="result";
-  joyVisible(false);
+  joyVisible(false); tapHold=null;
   cancelAnimationFrame(rafId);
   els.timerBarWrap.classList.add("hidden");
   els.rushCue.classList.add("hidden");
