@@ -313,7 +313,7 @@ select.play-select{
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.3.1</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.3.2</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -1216,7 +1216,7 @@ function buildDefense(coverage, targets, nDef, tune){
   if(coverage==="Man"){
     targets.slice(0,nDef).forEach(r=>defs.push(manDef(r,tune)));
   } else if(coverage==="Cover 1"){
-    defs.push(zoneDef("deep",15,13,0,30,[15,10]));
+    defs.push(zoneDef("deep",15,15,0,30,[15,12.5]));
     let man=targets.slice();
     if(man.length>nDef-1){
       const free=man.slice().sort((a,b)=>Math.abs(a.x0-GEO.CX)-Math.abs(b.x0-GEO.CX))[0];
@@ -1224,11 +1224,11 @@ function buildDefense(coverage, targets, nDef, tune){
     }
     man.slice(0,nDef-1).forEach(r=>defs.push(manDef(r,tune)));
   } else if(coverage==="Cover 2"){
-    defs.push(zoneDef("deep",7.5,13,0,15.5,[7.5,10]), zoneDef("deep",22.5,13,14.5,30,[22.5,10]));
+    defs.push(zoneDef("deep",7.5,14,0,15.5,[7.5,12]), zoneDef("deep",22.5,14,14.5,30,[22.5,12]));
     if(nDef<=4) defs.push(zoneDef("flat",6,5,0,13,[5,4]), zoneDef("flat",24,5,17,30,[25,4]));
     else defs.push(zoneDef("flat",4,4,0,9,[4,4]), zoneDef("hook",11,7,7,15.5,[11,5.5]), zoneDef("hook",19,7,14.5,23,[19,5.5]), zoneDef("flat",26,4,21,30,[26,4]));
   } else if(coverage==="Cover 3"){
-    defs.push(zoneDef("deep",5,13,0,10.5,[5,9]), zoneDef("deep",15,15,9.5,20.5,[15,10.5]), zoneDef("deep",25,13,19.5,30,[25,9]));
+    defs.push(zoneDef("deep",5,13.5,0,10.5,[5,10]), zoneDef("deep",15,15.5,9.5,20.5,[15,12.5]), zoneDef("deep",25,13.5,19.5,30,[25,10]));
     if(nDef<=4) defs.push(zoneDef("hook",15,6,5,25,[15,5]));
     else defs.push(zoneDef("flat",5,5,0,11,[5,4]), zoneDef("hook",15,7,9,21,[15,5.5]), zoneDef("flat",25,5,19,30,[25,4]));
   } else { // Underneath Zone: no deep help — hook players carry verticals to ~12 then let them go
@@ -1279,6 +1279,8 @@ function updateEyes(rep,dt){
     rep.eyesStr=Math.min(1,(rep.eyesStr||0)+dt*1.6);
   } else rep.eyesStr=Math.max(0,(rep.eyesStr||0)-dt*1.2);
 }
+// how shallow a zone defender will come before the ball is thrown (yds past the LOS)
+const ZONE_FLOOR={flat:2.5, hook:4.0, deep:9};
 function zoneTarget(rep,d,lookT,qb,tune){
   const seen=rep.targets.map(p=>({p,q:histPos(p,lookT)}));
   const inX=(q,pad)=>q.x>=d.x0-(pad||0) && q.x<=d.x1+(pad||0);
@@ -1296,7 +1298,7 @@ function zoneTarget(rep,d,lookT,qb,tune){
     const shallow = d.type==="flat";
     // flat defender: jump anything in the flat, otherwise sink under the curl
     // hook defender: wall off whoever is crossing my area, carry seams to ~12
-    const cand=seen.filter(s=>inX(s.q,0.5) && s.q.y>-1.5 && s.q.y<13);
+    const cand=seen.filter(s=>inX(s.q,0.5) && s.q.y>0.5 && s.q.y<13);   // ignore anyone still in the backfield
     let T=null;
     if(shallow){
       const flat=cand.filter(s=>s.q.y<5.5).sort((a,b)=>dist(a.q,{x:d.lx,y:d.ly})-dist(b.q,{x:d.lx,y:d.ly}))[0];
@@ -1308,7 +1310,7 @@ function zoneTarget(rep,d,lookT,qb,tune){
     if(T){
       const lp=lanePoint(qb,T.q,tune.lane);
       tx=clamp(lp.x,d.x0-1,d.x1+1);
-      ty=T.q.y>11 ? Math.min(T.q.y-1,13) : clamp(lp.y,1,12);   // carry a vertical a few steps
+      ty=T.q.y>11 ? Math.min(T.q.y-1,13) : clamp(lp.y,ZONE_FLOOR[d.type],12);   // carry a vertical a few steps
     }
   }
   // QB eyes pull zone players toward where you're looking
@@ -1317,6 +1319,7 @@ function zoneTarget(rep,d,lookT,qb,tune){
     tx=lerp(tx,rep.eyesSm.x,w);
     ty = d.type==="deep" ? Math.max(ty, lerp(ty,rep.eyesSm.y+1.5,w)) : lerp(ty,rep.eyesSm.y-1,w*0.6);
   }
+  if(d.type!=="deep") ty=Math.max(ty,ZONE_FLOOR[d.type]);
   return {x:tx,y:ty};
 }
 function updateDefenders(rep, t, dt){
@@ -1349,7 +1352,7 @@ function updateDefenders(rep, t, dt){
         const z=zoneTarget(rep,d,lookT,qb,tune); tx=z.x; ty=z.y;
         if(ty>d.pos.y+0.5) vmax = d.type==="deep" ? DEF_SPEED : BACKPEDAL;
       }
-      if(!b && !rep.qbRunning) ty=Math.max(0.3,ty);   // only the rusher crosses the line before the ball is out
+      if(!b) ty=Math.max(1.0,ty);   // only the rusher attacks the backfield; coverage players stay in coverage
     }
     // traffic: a man defender who has to go around another offensive player loses a step (rubs/picks)
     if(d.role==="man" && !b){
@@ -1357,6 +1360,8 @@ function updateDefenders(rep, t, dt){
     }
     steer(d,d.pos,tx,ty,vmax,accel,dt,5);
     d.pos.x=clamp(d.pos.x,0.5,GEO.W-0.5);
+    // nobody but the rusher crosses into the backfield before the ball is thrown
+    if(!b && d.pos.y<0.5){ d.pos.y=0.5; if(d.vel.y<0) d.vel.y=0; }
   });
 }
 /* Rusher: straight up the middle, off an edge, delayed, or (elite) dropping into a middle zone. */
@@ -1906,6 +1911,8 @@ els.field.addEventListener("pointermove",(e)=>{
   if(rep && rep.scr && rep.scr.active && e.pointerId===rep.scr.pointerId){ const q=ptField(e); rep.scr.tx=q.x; rep.scr.ty=q.y; return; }
   if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e);
+  // QB eyes: where you're aiming drags nearby zone defenders toward it
+  if(rep && !rep.ball){ const tq=(performance.now()-tSnap)/1000, L=aimLanding(passerPos(rep,tq),aimType()); rep.eyesRaw = L.valid ? {x:L.x,y:L.y} : null; }
 });
 function endScramble(e){
   const rep=state.rep;
@@ -1917,7 +1924,7 @@ window.addEventListener("keydown",(e)=>{ if(e.code==="Space" && aim.active){ e.p
 function endAim(e,cancel){
   if(!aim.active || e.pointerId!==aim.pointerId) return;
   aim.cur=ptField(e); aim.active=false;
-  const rep=state.rep;
+  const rep=state.rep; if(rep) rep.eyesRaw=null;
   if(state.phase!=="decision"||rep.ball) return;
   const t=(performance.now()-tSnap)/1000;
   if(!holderAt(rep,t)){ els.aimHint.firstElementChild.textContent="Wait until the ball is in your hands"; els.aimHint.classList.remove("hidden"); return; }

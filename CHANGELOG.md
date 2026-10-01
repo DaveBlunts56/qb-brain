@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.2 — Safeties play deep, no more fake blitzes
+
+- **Safeties line up deeper:** the Cover 1 and Cover 3 middle safety is at about 12½ yds, the Cover 2 halves safeties at 12, and the Cover 3 deep corners at 10 (they were at 9–10).
+- **Only the rusher rushes.** Underneath zone defenders used to attack the throwing lane toward short routes and backfield players, which looked like a blitz. Now they hold their zone depth: flat defenders stay at least 2½ yds off the line and hook defenders at least 4. Man defenders following jet and swing motion stop at the line instead of drifting into the backfield.
+- **QB eyes work again:** where you aim pulls nearby zone defenders toward it, so looking off a defender matters.
+
 ## v1.3.1 — Elite speed rusher, 3-step drop
 
 - **Elite rusher gets home in about 1–1.5 seconds:** about 1.2 s straight up the middle, 1.4 s off the edge, and 1.4 s on a delay. Rookie (about 2.9 s) and Varsity (about 2.3 s) are unchanged.
