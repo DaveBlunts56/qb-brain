@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.3.1 — Elite speed rusher, 3-step drop
+
+- **Elite rusher gets home in about 1–1.5 seconds:** about 1.2 s straight up the middle, 1.4 s off the edge, and 1.4 s on a delay. Rookie (about 2.9 s) and Varsity (about 2.3 s) are unchanged.
+- **The QB takes a 3-step drop:** he takes a quick snap about 2 yds behind the center, then three drop steps (not yards) back before he sets. His legs show each step. Plays where the QB has his own movement (rollout, bootleg, slide, pitch) keep it.
+- After the catch, the rusher chases at normal pursuit speed, so the faster rush doesn't carry over into run-after-catch.
+
 ## v1.3.0 — Gameplay overhaul: live defense, scrambling, flag pulls
 
 - **Defense that plays like real defenders.** Defenders move with momentum: they accelerate, backpedal, plant and break, so they don't snap onto routes anymore.

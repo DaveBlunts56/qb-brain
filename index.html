@@ -313,7 +313,7 @@ select.play-select{
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.3.0</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.3.1</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -458,10 +458,11 @@ window.QB_PWA=true;
 ============================================================ */
 // Rush: rusher lines up 7 yds off the ball (standard flag rule) and chases whoever holds the ball.
 const DIFFICULTY = {
-  // rusher leaves on the snap; from 7 yds off vs a QB ~4 yds deep about 2.8s / 2.3s / 1.9s to get home
-  rookie:  {label:"Rookie",  study:5.0, rushDelay:0.05, rushSpeed:3.8, reactionDelay:0.40, disguiseChance:0.00},
-  varsity: {label:"Varsity", study:3.5, rushDelay:0.05, rushSpeed:4.8, reactionDelay:0.25, disguiseChance:0.25},
-  elite:   {label:"Elite",   study:2.5, rushDelay:0.05, rushSpeed:5.8, reactionDelay:0.18, disguiseChance:0.50}
+  // rusher leaves on the snap from 7 yds off; time to get home on a straight rush vs a QB at the end of his 3-step drop:
+  // rookie ≈ 2.9s, varsity ≈ 2.3s, elite ≈ 1.2–1.5s (a real speed rusher)
+  rookie:  {label:"Rookie",  study:5.0, rushDelay:0.05, rushSpeed:3.8, rushAccel:18, delayPlan:0.75, reactionDelay:0.40, disguiseChance:0.00},
+  varsity: {label:"Varsity", study:3.5, rushDelay:0.05, rushSpeed:4.8, rushAccel:18, delayPlan:0.75, reactionDelay:0.25, disguiseChance:0.25},
+  elite:   {label:"Elite",   study:2.5, rushDelay:0.02, rushSpeed:10.0, rushAccel:26, delayPlan:0.15, reactionDelay:0.18, disguiseChance:0.50}
 };
 const MODES = {
   qb_brain:    {label:"QB Brain",    askCoverageChance:0.55, throws:true},
@@ -1024,7 +1025,20 @@ if(window.ResizeObserver){
 /* ============================================================
    BUILD A REP
 ============================================================ */
+// QB 3-step drop: three drop steps (~0.75 yd each) after the snap, then he sets.
+// A shotgun-depth QB moves up so he sets at the same depth he used to stand at.
+const DROP_STEP=0.75, DROP_STEPS=3, DROP_TIME=0.75;
+function dropRoute(p){
+  if(p.id!=="Q" || p.target || p.route.pts.length>1) return null;
+  const len=DROP_STEP*DROP_STEPS, y0 = p.y>-3 ? p.y : p.y+len, y1=y0-len;
+  return {y0, pts:[[p.x,y0],[p.x,y1]], speed:len/DROP_TIME};
+}
 function makePlayer(p){
+  const dr=dropRoute(p);
+  if(dr){
+    return {id:p.id, color:COLORS[p.id]||"#f2c14e", x0:clamp(TX(p.x),1,GEO.W-1), y0:dr.y0, name:"3-step drop",
+      path:mkPath(dr.pts,dr.speed,"stop",0.1), target:false, dashed:false, stride:DROP_STEP, drop:true};
+  }
   const passerLike = (p.id==="Q"||p.id==="T") && !p.target;
   const speed = p.speed || (passerLike||p.route.name==="rollout"||p.route.name==="bootleg"||p.route.name==="slide"||p.route.name==="slide left"||p.route.name==="drift right" ? QB_SPEED : RUN_SPEED);
   // the center has to snap first, so his release is a beat late
@@ -1062,7 +1076,7 @@ function buildRep(opts){
     shownCoverage, actualCoverage, disguised, defenders,
     rusher:{x:rx,y:7,vel:{x:0,y:0}}, rushStart:null, rushPlan, tune,
     askCoverage: opts.askCoverage!==undefined ? opts.askCoverage : Math.random() < MODES[state.mode].askCoverageChance,
-    tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed, reactionDelay: diff.reactionDelay,
+    tStudy: diff.study, rushDelay: diff.rushDelay, rushSpeed: diff.rushSpeed, rushAccel: diff.rushAccel, delayPlan: diff.delayPlan, reactionDelay: diff.reactionDelay,
     ball:null
   };
   initLive(out);
@@ -1355,12 +1369,12 @@ function updateRusher(rep, t, dt){
     rep.defenders.push(d);
     return;
   }
-  const start = rep.rushPlan==="delay" ? 0.75 : rep.rushDelay;
+  const start = rep.rushPlan==="delay" ? rep.delayPlan : rep.rushDelay;
   if(t<start){ if(rep.rushPlan==="delay") steer(r,r,r.x,8.5,3,8,dt); return; }
   const id=passerIdAt(rep,t), p=livePos(playerById(rep,id)), pv=playerById(rep,id).s;
   const tx=p.x+pv.vx*0.3, ty=p.y+pv.vy*0.3;
   if(!rep.rushStart) rep.rushStart=dist(r,p);
-  steer(r,r,tx,ty,rep.rushSpeed,18,dt,8);
+  steer(r,r,tx,ty,rep.rushSpeed,rep.rushAccel,dt,8);
 }
 function isSacked(rep,t){
   if(rep.rusher.dropped) return false;
@@ -1586,7 +1600,7 @@ function hexA(hex,a){ const n=parseInt(hex.slice(1),16); return "rgba("+(n>>16)+
 function drawRoutes(fade){
   const rep=state.rep;
   rep.players.forEach(p=>{
-    const pts=p.path.pts; if(pts.length<2) return;
+    const pts=p.path.pts; if(pts.length<2 || p.drop) return;
     ctx.strokeStyle=hexA(p.color, fade?0.2:0.9); ctx.lineWidth=2.2;
     ctx.setLineDash(p.dashed?[4,4]:[]);
     ctx.beginPath();
@@ -1783,7 +1797,7 @@ function runStep(p){
   // alternate legs every ~0.9 yd of travel
   const h=p.hist; if(!h||h.length<2) return 0;
   let d=0; for(let i=1;i<h.length;i++) d+=Math.hypot(h[i].x-h[i-1].x,h[i].y-h[i-1].y);
-  return Math.floor(d/0.9)%2;
+  return Math.floor(d/(p.stride||0.9))%2;
 }
 function trackStep(o){
   // defenders: accumulate distance on the object itself
@@ -2225,7 +2239,7 @@ function yacStep(rep,t,dt){
     const step=Math.min(e,spd*dt); pos.x+=ex/e*step; pos.y+=ey/e*step;
   };
   if(react){ rep.defenders.forEach(d=>pursue(d.pos,7.4)); }
-  if(!rep.rusher.dropped) pursue(rep.rusher, Math.max(rep.rushSpeed,6.2));
+  if(!rep.rusher.dropped) pursue(rep.rusher, clamp(rep.rushSpeed,6.2,7.4));
   // camera follows a long run
   const visible=ch/VIEW.ppy;
   VIEW.yHi=Math.max(VIEW.yHi, s.y+visible*0.35);
