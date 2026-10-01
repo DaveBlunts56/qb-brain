@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.3.0 — Gameplay overhaul: live defense, scrambling, flag pulls
+
+- **Defense that plays like real defenders.** Defenders move with momentum: they accelerate, backpedal, plant and break, so they don't snap onto routes anymore.
+  - **Man** defenders play press or off and keep leverage.
+  - **Zone** defenders carry, sink and pass off receivers through their areas, and they drift with the QB's eyes.
+  - Defenders break on the ball once it's thrown, and deep help shows up a beat later.
+  - Higher difficulty brings more press, quicker eyes, tighter throwing lanes and a smarter rusher (edge rush, delay, or dropping into coverage).
+- **QB scramble.** Touch the QB and drag him to move around the backfield and buy time. Like in flag, the QB can never cross the line of scrimmage, so there are no QB runs. With a second thumb, pull back anywhere to **throw on the run**.
+- **Pixel players** with flag belts and a running animation, replacing the circles and triangles.
+- **Flag pull animation:** the flag rips off the ball carrier's belt and into the defender's hand, on sacks and at the end of every run after the catch.
+- **Catch, swat and incompletion animations:** a catch burst, a "SWAT!" on broken-up passes, "PICKED!" on interceptions, and incompletions that bounce along the turf. The banner waits for the play to finish, and you can tap to skip.
+- **Sound effects,** all synthesized with nothing to download: snap, throw whoosh, lob/bullet click, catch thump, flag rip, sack thud, whistle, and the crowd cheering or groaning. Turn them off with the new **Sound** switch in Settings.
+- No player ratings. It's still a trainer.
+
 ## v1.2.0 — Retro arcade UI overhaul
 
 - **New home screen** with big tiles: **Play Drive**, **Drills**, **Playbook** and **Settings** — each opens its own screen with a back button.
