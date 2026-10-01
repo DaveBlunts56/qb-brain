@@ -1,0 +1,303 @@
+<body>
+<div id="app">
+
+  <!-- ============ HOME ============ -->
+  <div id="homeScreen" class="screen home">
+    <div class="marquee">
+      <h1 class="logo"><span class="l1">QB</span><span class="l2">BRAIN</span></h1>
+      <p>FLAG FOOTBALL READ TRAINER</p>
+      <svg class="mini-play" viewBox="0 0 34 38" shape-rendering="crispEdges" aria-hidden="true">
+        <g fill="#ffc933"><rect x="6" y="30" width="6" height="6"/><rect x="8" y="14" width="2" height="16"/><rect x="10" y="12" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="14" y="8" width="2" height="2"/><rect x="16" y="6" width="2" height="2"/><rect x="18" y="4" width="4" height="2"/><rect x="20" y="2" width="2" height="6"/></g>
+        <g fill="#e8412c"><rect x="22" y="16" width="8" height="2"/><rect x="23" y="18" width="6" height="2"/><rect x="24" y="20" width="4" height="2"/><rect x="25" y="22" width="2" height="2"/></g>
+        <g fill="#f4f0e2"><rect x="14" y="31" width="4" height="4"/></g>
+      </svg>
+    </div>
+
+    <div class="install-hint hidden" id="installHint">
+      <div><b>Put QB Brain on your home screen.</b> Tap <b>Share</b> <span aria-hidden="true">⬆︎</span>, then <b>Add to Home Screen</b>. It opens full-screen like an app and works offline.</div>
+      <button id="installClose" aria-label="Dismiss">✕</button>
+    </div>
+
+    <button class="newbie hidden" id="newbieCard" type="button"><b>NEW HERE?</b><span>Take the tutorial — 8 quick lessons with your coach.</span><i id="newbieX" aria-label="Dismiss">✕</i></button>
+    <div class="tiles">
+      <button class="tile hero" data-go="driveScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#6b3d12"><rect x="3" y="2" width="6" height="8"/><rect x="2" y="3" width="8" height="6"/><rect x="1" y="4" width="10" height="4"/></g><g fill="#f4f0e2"><rect x="5" y="4" width="2" height="1"/><rect x="5" y="6" width="2" height="1"/><rect x="4" y="5" width="4" height="1"/></g><g fill="#000"><rect x="3" y="1" width="6" height="1"/><rect x="3" y="10" width="6" height="1"/></g></svg>
+        <div><b>PLAY DRIVE</b><br><small>Own 5 to the end zone. Downs, yards, touchdowns.</small></div>
+      </button>
+      <button class="tile" data-go="drillsScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#ff7a1a"><rect x="5" y="1" width="2" height="2"/><rect x="4" y="3" width="4" height="2"/><rect x="3" y="5" width="6" height="2"/><rect x="2" y="7" width="8" height="2"/></g><g fill="#f4f0e2"><rect x="4" y="5" width="4" height="1"/></g><rect x="1" y="9" width="10" height="2" fill="#f4f0e2"/></svg>
+        <b>DRILLS</b><small>QB Brain · Coverage ID · Quick Read</small>
+      </button>
+      <button class="tile" data-go="playbookScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="1" width="8" height="10" fill="#c8a36a"/><rect x="3" y="3" width="6" height="7" fill="#f4f0e2"/><rect x="4" y="0" width="4" height="2" fill="#8a8f98"/><g fill="#e8412c"><rect x="4" y="4" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/></g><g fill="#2a6fd6"><rect x="6" y="7" width="2" height="2"/></g></svg>
+        <b>PLAYBOOK</b><small>Your plays · Create a play</small>
+      </button>
+      <button class="tile" data-go="profileScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="7" width="2" height="4" fill="#5ab8ff"/><rect x="5" y="4" width="2" height="7" fill="#ffc933"/><rect x="9" y="1" width="2" height="10" fill="#5fe08a"/><rect x="0" y="11" width="12" height="1" fill="#f4f0e2"/></svg>
+        <b>QB PROFILE</b><small id="profileSummary">Your tendencies</small>
+      </button>
+      <button class="tile learn" data-go="learnScreen">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="2" width="10" height="8" fill="#f4f0e2"/><rect x="5" y="2" width="2" height="8" fill="#c8a36a"/><g fill="#2a6fd6"><rect x="2" y="4" width="2" height="1"/><rect x="2" y="6" width="2" height="1"/></g><g fill="#e8412c"><rect x="8" y="4" width="2" height="1"/><rect x="8" y="6" width="2" height="1"/></g></svg>
+        <b>LEARN</b><small id="learnSummary">Tutorial · Coach's Manual</small>
+      </button>
+      <button class="tile" data-go="settingsScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#a9b2a1"><rect x="5" y="0" width="2" height="12"/><rect x="0" y="5" width="12" height="2"/><rect x="2" y="2" width="8" height="8"/></g><rect x="4" y="4" width="4" height="4" fill="#161c26"/></svg>
+        <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
+      </button>
+    </div>
+    <div class="home-foot"><span id="appVersion">v__VERSION__</span><span>Big Dawz edition</span></div>
+  </div>
+
+  <!-- ============ DRILLS ============ -->
+  <div id="drillsScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>DRILLS</h2></div>
+    <div class="group">
+      <div class="section-label">MODE</div>
+      <div class="choice-row" id="modeRow" style="grid-template-columns:1fr;"></div>
+    </div>
+    <div id="drillsBookSlot"></div>
+    <button class="btn" id="startBtn">START DRILL</button>
+  </div>
+
+  <!-- ============ DRIVE SETUP ============ -->
+  <div id="driveScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>PLAY DRIVE</h2></div>
+    <div class="group" id="driveGroup">
+      <div class="section-label">FIELD</div>
+      <div class="range-row">
+        <div class="range-label"><span>Length</span><b><span id="lenVal">50</span> YDS</b></div>
+        <input type="range" id="lenRange" min="50" max="100" step="5" value="50" aria-label="Field length in yards">
+        <small>Goal line to goal line, plus a 10-yd end zone at each end. You start at your own 5.</small>
+      </div>
+      <div class="range-row">
+        <div class="range-label"><span>Width</span><b><span id="widVal">30</span> YDS</b></div>
+        <input type="range" id="widRange" min="20" max="53" step="1" value="30" aria-label="Field width in yards">
+      </div>
+      <div class="section-label" style="margin-top:6px;">FIRST DOWNS</div>
+      <div class="choice-row" id="fdRow"></div>
+    </div>
+    <div id="driveBookSlot"></div>
+    <button class="btn" id="driveStartBtn">KICK OFF</button>
+  </div>
+
+  <!-- shared playbook picker (moved into whichever screen is open) -->
+  <div class="group" id="bookBlock">
+    <div class="section-label">PLAYBOOK</div>
+    <div class="choice-row" id="bookRow"></div>
+    <select class="play-select" id="playSelect" aria-label="Play"></select>
+  </div>
+
+  <!-- ============ PLAYBOOK BROWSER ============ -->
+  <div id="playbookScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>PLAYBOOK</h2></div>
+    <div class="choice-row" id="pbTabs"></div>
+    <div class="detail hidden" id="pbDetail">
+      <canvas id="pbDetailCanvas" width="600" height="600"></canvas>
+      <h3 id="pbDetailName"></h3>
+      <div class="prog" id="pbDetailProg"></div>
+      <p id="pbDetailNote"></p>
+      <div class="aud-line" id="pbAudLine"></div>
+      <button class="btn" id="pbRunBtn">RUN THIS PLAY</button>
+      <button class="btn alt" id="pbEditBtn">EDIT PLAY</button>
+      <button class="btn alt" id="pbAudBtn">SET AUDIBLES</button>
+      <button class="btn alt" id="pbShareBtn">SHARE CODE</button>
+      <button class="btn alt" id="pbCloseBtn">BACK TO ALL PLAYS</button>
+    </div>
+    <div class="play-grid" id="pbGrid"></div>
+  </div>
+
+  <!-- ============ QB PROFILE ============ -->
+  <div id="profileScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB PROFILE</h2></div>
+    <div class="help" id="pfSub"></div>
+    <div class="pf-tiles" id="pfTiles"></div>
+    <div class="group"><div class="section-label">COACH'S DIAGNOSIS</div><div class="pf-diag" id="pfDiag"></div></div>
+    <div class="group"><div class="section-label">BY COVERAGE</div><div class="help">Successful reps against each coverage (and rotated shells).</div><div id="pfCov"></div></div>
+    <div class="group"><div class="section-label">BY CONCEPT</div><div class="help">Best and worst concepts you've run.</div><div id="pfCon"></div></div>
+    <div class="help" id="pfTrend"></div>
+    <div class="coach-note hidden" id="pfAdaptive"><p></p></div>
+    <div class="help">These are training metrics from your own reps — not ratings. They're stored only on this device.</div>
+    <button class="btn alt sm" id="pfReset" type="button">RESET PROFILE</button>
+  </div>
+
+  <!-- ============ LEARN ============ -->
+  <div id="learnScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>LEARN</h2></div>
+    <button class="learn-hero" id="manualOpenBtn" type="button"><b>COACH'S MANUAL</b><span>Coverages, routes, reading the defense, progressions and concepts — with diagrams.</span></button>
+    <div class="group"><div class="section-label">TUTORIAL <span id="tutProgress" class="tut-prog"></span></div>
+      <div class="lesson-list" id="lessonList"></div>
+      <button class="btn alt sm" id="tutResetBtn" type="button">RESET TUTORIAL PROGRESS</button></div>
+  </div>
+
+  <!-- ============ PLAY EDITOR ============ -->
+  <div id="editorScreen" class="screen hidden">
+    <div class="topbar"><button class="back" id="edBack" aria-label="Back">◀</button><h2 id="edTitle">CREATE A PLAY</h2></div>
+    <div class="group">
+      <input id="edName" class="text-in" maxlength="28" placeholder="Name your play" aria-label="Play name" autocomplete="off">
+      <div class="chip-row" id="edSquadRow"></div>
+    </div>
+    <div class="ed-field">
+      <canvas id="edCanvas" aria-label="Play diagram editor"></canvas>
+      <div class="ed-hint" id="edHint">Tap a player to edit him · drag to move him</div>
+    </div>
+    <div class="ed-tools" id="edTools"></div>
+    <div class="group"><div class="section-label">FORMATION</div><div class="chip-row" id="edFormRow"></div></div>
+    <div class="group"><div class="section-label">READ ORDER</div><div class="chip-row" id="edProgRow"></div>
+      <button class="btn alt sm" id="edProgBtn">SET READ ORDER</button></div>
+    <div class="group"><div class="section-label">PITCH · TRICK PLAY</div>
+      <div class="chip-row" id="edPitchRow"></div><div class="chip-row" id="edPitchTime"></div>
+      <div class="help">The QB pitches to this player, who becomes the passer. Give him a route behind the line so he can catch it.</div></div>
+    <div class="group"><div class="section-label">AUDIBLES</div><div class="chip-row" id="edAudRow"></div>
+      <button class="btn alt sm" id="edAudBtn">CHOOSE AUDIBLES</button>
+      <div class="help">Plays you can switch to at the line (up to 4).</div></div>
+    <div class="group"><div class="section-label">COACHING NOTE</div>
+      <textarea id="edNote" class="text-in" rows="3" maxlength="300" placeholder="What does it beat? What's the read?"></textarea></div>
+    <button class="btn" id="edSave">SAVE PLAY</button>
+    <button class="btn alt" id="edTest">SAVE &amp; TEST IT</button>
+    <button class="btn alt danger hidden" id="edDelete">DELETE PLAY</button>
+  </div>
+
+  <!-- ============ SETTINGS ============ -->
+  <div id="settingsScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>SETTINGS</h2></div>
+    <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div>
+      <div class="help" id="formatHelp"></div>
+      <div class="section-label sm7">7v7 PASS RUSH</div><div class="choice-row" id="rush7Row"></div></div>
+    <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div>
+      <div class="toggle-row">
+        <div class="t-label"><b>ADAPTIVE TRAINING</b><span>Uses your QB Profile: more reps where you're weak, more disguises where you're strong, eyes and pressure tuned to your habits</span></div>
+        <div class="switch" id="adaptiveSwitch" role="switch" tabindex="0" aria-label="Adaptive training"><i></i></div>
+      </div></div>
+    <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
+      <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.<br>Tap receiver: a quick tap throws a bullet; press and hold him for a lob.</div></div>
+    <div class="group"><div class="section-label">COACH TALK</div><div class="choice-row" id="coachRow"></div>
+      <div class="help">How much the coach says after each play. Auto keeps it simple on Rookie and gives the full breakdown on Varsity and Elite.</div></div>
+    <div class="group"><div class="section-label">SCRAMBLE STICK</div><div class="choice-row" id="stickRow"></div>
+      <div class="help">Move the QB with the stick and throw with your other thumb. He can't cross the line of scrimmage. On a computer, use WASD or the arrow keys.</div></div>
+    <div class="group">
+      <div class="toggle-row" id="progToggleRow">
+        <div class="t-label"><b>SHOW PROGRESSION</b><span>Flash 1-2-3 over the read before the snap</span></div>
+        <div class="switch" id="progSwitch" role="switch" tabindex="0" aria-label="Show progression"><i></i></div>
+      </div>
+      <div class="toggle-row" id="soundToggleRow">
+        <div class="t-label"><b>SOUND</b><span>Whistle, catches, flag pulls and the crowd</span></div>
+        <div class="switch" id="soundSwitch" role="switch" tabindex="0" aria-label="Sound"><i></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GAME ============ -->
+  <div id="gameScreen" class="hidden">
+    <div id="hud">
+      <div class="sb-cell sb-main"><b id="hudMode">QB BRAIN</b><span id="hudSub">5v5 · Rookie</span></div>
+      <div class="sb-cell sb-num"><span id="hudRepLbl">REP</span><b id="hudRep">1</b></div>
+      <div class="sb-cell sb-num"><span>SCORE</span><b id="hudScore">0</b></div>
+      <button class="quit" id="quitBtn" aria-label="End session">✕</button>
+    </div>
+
+    <div id="fieldWrap">
+      <canvas id="field"></canvas>
+      <div id="timerBarWrap" class="hidden"><div id="timerBar"></div></div>
+      <div id="studyBanner" class="hidden"><div class="pill">STUDY THE DEFENSE <b id="studyCount">3</b></div></div>
+      <div id="rushCue" class="hidden"><div class="pill">RUSH <span id="rushCount">3</span></div></div>
+      <div id="aimHint" class="hidden"><div class="pill">Pull back to throw</div></div>
+      <div id="playTag" class="hidden"></div>
+      <div id="joy" class="hidden" aria-label="Scramble joystick"><div id="joyBase"><div id="joyKnob"></div></div><span>SCRAMBLE</span></div>
+      <div id="coachBubble" class="hidden"><span class="coach-badge">COACH</span><div class="cb-text" id="cbText"></div><button class="btn sm hidden" id="cbBtn" type="button">NEXT</button></div>
+      <div id="callSheet" class="hidden">
+        <div class="call-head"><div><b>PLAY CALL</b><span id="callHead">1st &amp; 10 · OWN 5</span></div><button class="btn sm" id="callRandom">SURPRISE ME</button></div>
+        <div class="chip-row" id="callTabs"></div>
+        <div class="call-grid" id="callGrid"></div>
+      </div>
+      <div id="bigBanner" class="hidden"><div id="bigBannerText">TOUCHDOWN!</div></div>
+    </div>
+
+    <div class="sheet hidden" id="coverageSheet">
+      <h2>WHAT COVERAGE IS THIS?</h2>
+      <div class="sub">Pick before the snap — the look can still change after it.</div>
+      <div class="mcq" id="mcqOptions"></div>
+    </div>
+
+    <div class="sheet hidden" id="filmSheet">
+      <div class="film-q" id="filmQ"></div>
+      <div class="sub" id="filmSub"></div>
+      <div class="film-opts" id="filmOpts"></div>
+      <div class="film-fb" id="filmFb"></div>
+      <button class="btn sm hidden" id="filmGo" type="button">NEXT ▶</button>
+    </div>
+
+    <div class="sheet hidden" id="audibleSheet">
+      <div class="aud-head"><h2>AUDIBLE</h2><button class="btn sm" id="audClose">DONE</button></div>
+      <div class="sub" id="audSub">Tap a receiver on the field to hot-route him, or check to a new play.</div>
+      <div id="audHot" class="hidden"><div class="mini-label" id="audHotLabel"></div><div class="chip-row" id="audHotRow"></div></div>
+      <div class="mini-label" id="audListLabel">CHECK TO</div>
+      <div class="aud-list" id="audList"></div>
+    </div>
+
+    <div class="result-sheet hidden" id="resultSheet">
+      <div class="result-tag" id="resultTag"><span class="dot"></span><span id="resultText">GOOD READ</span></div>
+      <div class="result-sub" id="resultSub"></div>
+      <div class="drive-line hidden" id="driveLine"></div>
+      <div class="film-box hidden" id="filmBox"></div>
+      <div class="coach-card hidden" id="coachCard">
+        <div class="coach-head"><span class="coach-badge">COACH</span><b id="coachVerdict"></b></div>
+        <div class="coach-key hidden" id="coachKey"></div>
+        <div class="coach-lines" id="coachLines"></div>
+        <div class="chip-row"><button class="chip" id="coachViewBtn" type="button">COACH VIEW</button><button class="chip" id="coachLearnBtn" type="button">LEARN</button></div>
+      </div>
+      <div class="explain" id="resultExplain"></div>
+      <div class="note-line hidden" id="playNote"></div>
+      <div class="score-row" id="scoreRow"></div>
+      <button class="btn next-btn" id="nextRepBtn">NEXT REP</button>
+    </div>
+
+    <div id="controls">
+      <div class="ctl-row"><button class="btn alt hidden" id="audibleBtn">AUDIBLE</button><button class="btn" id="primaryBtn">SNAP</button></div>
+      <div class="seg hidden" id="throwType">
+        <button data-k="bullet" class="on">BULLET</button>
+        <button data-k="lob">LOB</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUMMARY ============ -->
+  <div id="summaryScreen" class="screen hidden">
+    <h2 id="summaryTitle">SESSION</h2>
+    <div class="sub" id="summarySub">0 reps</div>
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="strength-row" id="strengthRow"></div>
+    <div class="group hidden" id="coachNotes"></div>
+    <div class="group">
+      <div class="section-label" id="logTitle">REP LOG</div>
+      <div class="rep-log" id="repLog"></div>
+    </div>
+    <button class="btn" id="againBtn">PLAY AGAIN</button>
+    <button class="btn alt" id="restartBtn">MAIN MENU</button>
+  </div>
+
+  <div id="manual" class="hidden" role="dialog" aria-modal="true" aria-label="Coach's Manual">
+    <div class="man-inner">
+      <div class="topbar"><button class="back" id="manBack" aria-label="Back">◀</button><h2 id="manTitle">COACH'S MANUAL</h2><button class="quit man-x" id="manClose" aria-label="Close manual">✕</button></div>
+      <div id="manBody"></div>
+    </div>
+  </div>
+  <div id="codeSheet" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <h2 id="codeTitle">SHARE PLAY</h2>
+      <div class="help" id="codeSub">Send this code to a teammate. They paste it into Playbook → My Plays → Import.</div>
+      <textarea id="codeText" class="text-in code-text" rows="6" spellcheck="false" autocomplete="off"></textarea>
+      <div class="help warn-line" id="codeMsg"></div>
+      <button class="btn" id="codeMain">COPY CODE</button>
+      <button class="btn alt hidden" id="codeShare">SEND…</button>
+      <button class="btn alt" id="codeClose">CLOSE</button>
+    </div>
+  </div>
+  <div id="pickSheet" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <h2 id="pickTitle">AUDIBLES</h2>
+      <div class="help" id="pickSub">Pick up to 4 plays to check to at the line.</div>
+      <div class="pick-list" id="pickList"></div>
+      <button class="btn" id="pickDone">DONE</button>
+    </div>
+  </div>
+</div>

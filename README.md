@@ -52,3 +52,28 @@ When you publish an update, bump `VERSION` in `sw.js` so installed copies refres
 | `manifest.webmanifest` | App name, icon and full-screen settings for home-screen installs |
 | `sw.js` | Offline support |
 | `icons/` | Home-screen and browser icons |
+
+## For developers
+
+QB Brain is plain JavaScript (ES modules) with no framework and no runtime dependencies. The only build step is bundling.
+
+```
+npm install          # esbuild + Playwright (dev only)
+npx playwright install chromium
+npm run build        # src/ → index.html + sw.js (the installable app) and dist/qb_brain.html (single file)
+npm test             # engine tests in Node + browser tests in Chromium
+```
+
+`index.html` and `sw.js` at the repo root are **build output**, committed so GitHub Pages can serve them. Edit `src/`, then run `npm run build`. CI fails if you forget. The app version comes from `package.json`. It sets both the label on the home screen and the offline cache name, so installed copies update.
+
+| Folder | What's in it |
+|---|---|
+| `src/js/` | The app as ES modules. `main.js` calls each module's `init()` in order. Modules only declare things when they load, so their order doesn't matter. |
+| `src/js/` engine | `rep.js` (building a rep, movement), `defense.js` (coverages, rush, eyes), `paths.js` (routes), `input.js` (throwing, joystick, tap), `loop.js` (game loop), `evaluate.js` (grading a throw), `drive.js` (Full Drive) |
+| `src/js/` training | `train.js` (training plans, disguises, Adaptive), `keyread.js` (key defender reads), `coach.js` (post-play coaching, Coach View), `film.js` (Film Room), `profile.js` (QB Profile, drills) |
+| `src/js/` content | `plays.js` (built-in playbooks), `myplays.js` and `playbook.js` (Create a Play, audibles, play calling, share codes), `learn.js` (Coach's Manual and Tutorial) |
+| `src/html`, `src/styles`, `src/fonts` | Markup, CSS, and the two pixel fonts (subset and embedded at build; SIL Open Font License, see `src/fonts/OFL-*.txt`) |
+| `tests/unit` | The game engine running headless against a tiny fake DOM |
+| `tests/e2e` | Real touch input in Chromium on an iPhone-sized screen, including offline install |
+
+Features talk to each other through small hooks (`on("screen", …)`, `on("setup", …)` in `config.js`) instead of overriding each other's functions.

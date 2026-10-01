@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.9.0 — Foundation rebuild
+
+No gameplay changes. This release makes QB Brain easier to keep improving without breaking things.
+
+- **The real pixel fonts now always load.** They used to come from Google's servers, so offline, or wherever Google was blocked, the app quietly fell back to a plain font. The two fonts are now trimmed to the characters the app uses (about 22 KB together, down from 157 KB) and built into the app.
+- **Source code is now in the repo** as 26 ES modules, built with esbuild. Before, the app was built outside the repo and only the finished page was committed.
+- **Automated tests on every push.** 17 tests (7 engine tests, 10 real-browser touch tests covering throwing, the joystick, the play editor, the tutorial, Film Room, 7v7, Adaptive and offline install) run in GitHub Actions. A broken build can't slip into a release.
+- **Cleaner insides:**
+  - Features hook into each other through named events instead of replacing each other's functions.
+  - Test-only code is no longer shipped in the app.
+  - Old unused code is removed.
+  - The version number comes from one place.
+- The untitled Big Dawz play "Play 3" is now called **Post Between Corners**. Rename it any time with Copy & Edit.
+- Fixed a weak automated test that aimed at where a receiver *was* instead of where he'd be.
+
 ## v1.8.0 — Adaptive training, real 5v5 vs 7v7, Robber & Bracket
 
 ### 5v5 and 7v7 are different jobs now
