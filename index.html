@@ -351,6 +351,79 @@ select.play-select{
 .call-head>div{flex:1;min-width:0;}
 #pbTabs .choice b,#bookRow .choice b{font-size:20px;overflow-wrap:anywhere;}
 #pbTabs .choice,#bookRow .choice{padding-left:10px;padding-right:8px;}
+
+.code-text{font:12px ui-monospace,Menlo,monospace;word-break:break-all;}
+.warn-line{color:var(--gold);min-height:1em;}
+.play-card.import{border-style:dashed;border-color:var(--sky);justify-content:center;align-items:center;text-align:center;min-height:120px;}
+.play-card.import b{color:var(--sky);}
+
+/* ---------- coach ---------- */
+.coach-badge{display:inline-block;background:var(--gold);color:#1b1300;font-family:var(--display);font-size:16px;line-height:1;padding:4px 6px 3px;border:2px solid #000;flex:none;}
+.coach-card{background:var(--ink-2);border:2px solid var(--gold);padding:10px 12px;display:flex;flex-direction:column;gap:8px;margin:8px 0;}
+.coach-head{display:flex;gap:10px;align-items:flex-start;}
+.coach-head b{font-size:15px;line-height:1.35;font-weight:600;}
+.coach-lines p{margin:0 0 6px;font-size:13.5px;line-height:1.45;color:var(--chalk);}
+.coach-lines p:last-child{margin-bottom:0;color:var(--gold);}
+.coach-note{background:var(--ink-2);border-left:4px solid var(--gold);padding:10px 12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
+.coach-note p{margin:0;font-size:14px;line-height:1.45;}
+#coachNotes.hidden{display:none;}
+/* home + learn */
+.newbie{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;background:#2a2410;border:var(--px) solid var(--gold);box-shadow:0 5px 0 #000;padding:12px 40px 12px 14px;color:var(--chalk);}
+.newbie b{font-family:var(--display);font-size:26px;font-weight:400;color:var(--gold);line-height:1;}
+.newbie span{font-size:14px;}
+.newbie i{position:absolute;top:8px;right:10px;font-style:normal;color:var(--chalk-dim);font-size:18px;padding:4px;}
+.newbie.hidden{display:none;}
+.learn-hero{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--ink-2);border:var(--px) solid var(--sky);box-shadow:0 5px 0 #000;padding:14px;color:var(--chalk);}
+.learn-hero b{font-family:var(--display);font-size:32px;font-weight:400;color:var(--sky);line-height:1;}
+.learn-hero span{font-size:14px;color:var(--chalk-dim);line-height:1.4;}
+.tut-prog{color:var(--chalk-dim);font-size:16px;}
+.lesson-list{display:flex;flex-direction:column;gap:8px;}
+.lesson{display:flex;align-items:center;gap:12px;text-align:left;background:var(--ink-2);border:2px solid var(--ink-3);box-shadow:0 4px 0 #000;padding:10px 12px;color:var(--chalk);}
+.lesson:active{transform:translateY(3px);box-shadow:0 1px 0 #000;}
+.lesson .n{width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;border:2px solid var(--chalk-dim);}
+.lesson.done .n{background:var(--good,#5fe08a);border-color:#000;color:#0d1117;}
+.lesson.next{border-color:var(--gold);}
+.lesson div{flex:1;min-width:0;}
+.lesson b{display:block;font-family:var(--display);font-size:22px;font-weight:400;line-height:1;}
+.lesson small{color:var(--chalk-dim);font-size:12.5px;line-height:1.3;}
+/* tutorial bubble */
+#coachBubble{position:absolute;left:8px;right:8px;top:12px;z-index:6;background:rgba(13,17,23,0.94);border:var(--px) solid var(--gold);box-shadow:0 5px 0 #000;padding:10px 12px;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+#coachBubble.hidden{display:none;}
+#coachBubble .cb-text{font-size:15px;line-height:1.45;color:var(--chalk);}
+#coachBubble .cb-text b{color:var(--gold);}
+#coachBubble .btn{pointer-events:auto;align-self:flex-end;width:auto;padding-left:18px;padding-right:18px;}
+#coachBubble .btn.hidden{display:none;}
+#coachBubble.low{top:auto;bottom:12px;}
+/* manual */
+#manual{position:fixed;inset:0;z-index:40;background:var(--ink);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#manual.hidden{display:none;}
+.man-inner{max-width:620px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;}
+.man-inner .topbar h2{flex:1;font-size:30px;}
+.man-x{position:static !important;}
+.man-group{display:flex;flex-direction:column;gap:8px;}
+.ch-btn{display:flex;align-items:center;gap:10px;text-align:left;background:var(--ink-2);border:2px solid var(--ink-3);box-shadow:0 3px 0 #000;padding:10px 12px;color:var(--chalk);}
+.ch-btn b{font-family:var(--display);font-size:21px;font-weight:400;line-height:1.05;flex:1;}
+.lvl{font-family:var(--display);font-size:13px;padding:3px 5px 2px;border:2px solid currentColor;line-height:1;flex:none;}
+.lvl.rookie{color:#5fe08a;} .lvl.all{color:var(--sky);} .lvl.pro{color:#ff8c5a;}
+.man-ch{display:flex;flex-direction:column;gap:12px;}
+.man-ch h3{font-family:var(--display);font-size:26px;font-weight:400;color:var(--gold);line-height:1;margin-top:6px;}
+.man-ch p{margin:0;font-size:15px;line-height:1.55;}
+.man-ch ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;line-height:1.5;}
+.man-ch figure{margin:0;display:flex;flex-direction:column;gap:6px;}
+.man-ch figure canvas{width:100%;display:block;border:var(--px) solid #000;background:var(--turf);}
+.man-ch figcaption{font-size:12.5px;color:var(--chalk-dim);line-height:1.4;}
+.man-tip{background:#2a2410;border-left:4px solid var(--gold);padding:10px 12px;font-size:14px;line-height:1.5;}
+.man-pro{background:#2a1810;border-left:4px solid #ff8c5a;padding:10px 12px;font-size:14px;line-height:1.5;}
+.man-note{background:var(--ink-2);border-left:4px solid var(--sky);padding:10px 12px;font-size:13.5px;line-height:1.5;color:var(--chalk-dim);}
+.man-src{font-size:12px;color:var(--chalk-dim);line-height:1.5;}
+.man-src a{color:var(--sky);word-break:break-all;}
+.man-nav{display:flex;gap:10px;}
+.man-nav .btn{flex:1;font-size:20px;}
+.man-table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.man-table td,.man-table th{border-bottom:1px solid var(--ink-3);padding:6px 4px;text-align:left;vertical-align:top;line-height:1.4;}
+.man-table th{font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold);}
+.man-x{width:44px;height:44px;flex:none;background:var(--ink-2) !important;border:var(--px) solid var(--chalk) !important;color:var(--chalk) !important;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #000;}
+#coachBubble .coach-badge{align-self:flex-start;}
 </style>
 </head>
 <body>
@@ -373,6 +446,7 @@ select.play-select{
       <button id="installClose" aria-label="Dismiss">✕</button>
     </div>
 
+    <button class="newbie hidden" id="newbieCard" type="button"><b>NEW HERE?</b><span>Take the tutorial — 8 quick lessons with your coach.</span><i id="newbieX" aria-label="Dismiss">✕</i></button>
     <div class="tiles">
       <button class="tile hero" data-go="driveScreen">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#6b3d12"><rect x="3" y="2" width="6" height="8"/><rect x="2" y="3" width="8" height="6"/><rect x="1" y="4" width="10" height="4"/></g><g fill="#f4f0e2"><rect x="5" y="4" width="2" height="1"/><rect x="5" y="6" width="2" height="1"/><rect x="4" y="5" width="4" height="1"/></g><g fill="#000"><rect x="3" y="1" width="6" height="1"/><rect x="3" y="10" width="6" height="1"/></g></svg>
@@ -386,12 +460,16 @@ select.play-select{
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="1" width="8" height="10" fill="#c8a36a"/><rect x="3" y="3" width="6" height="7" fill="#f4f0e2"/><rect x="4" y="0" width="4" height="2" fill="#8a8f98"/><g fill="#e8412c"><rect x="4" y="4" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/></g><g fill="#2a6fd6"><rect x="6" y="7" width="2" height="2"/></g></svg>
         <b>PLAYBOOK</b><small>Your plays · Create a play</small>
       </button>
+      <button class="tile learn" data-go="learnScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
+        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="2" width="10" height="8" fill="#f4f0e2"/><rect x="5" y="2" width="2" height="8" fill="#c8a36a"/><g fill="#2a6fd6"><rect x="2" y="4" width="2" height="1"/><rect x="2" y="6" width="2" height="1"/></g><g fill="#e8412c"><rect x="8" y="4" width="2" height="1"/><rect x="8" y="6" width="2" height="1"/></g></svg>
+        <div><b>LEARN</b><br><small id="learnSummary">Tutorial · Coach's Manual</small></div>
+      </button>
       <button class="tile" data-go="settingsScreen" style="grid-column:1 / -1;min-height:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><g fill="#a9b2a1"><rect x="5" y="0" width="2" height="12"/><rect x="0" y="5" width="12" height="2"/><rect x="2" y="2" width="8" height="8"/></g><rect x="4" y="4" width="4" height="4" fill="#161c26"/></svg>
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v1.5.0</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v1.6.0</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -446,9 +524,19 @@ select.play-select{
       <button class="btn" id="pbRunBtn">RUN THIS PLAY</button>
       <button class="btn alt" id="pbEditBtn">EDIT PLAY</button>
       <button class="btn alt" id="pbAudBtn">SET AUDIBLES</button>
+      <button class="btn alt" id="pbShareBtn">SHARE CODE</button>
       <button class="btn alt" id="pbCloseBtn">BACK TO ALL PLAYS</button>
     </div>
     <div class="play-grid" id="pbGrid"></div>
+  </div>
+
+  <!-- ============ LEARN ============ -->
+  <div id="learnScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>LEARN</h2></div>
+    <button class="learn-hero" id="manualOpenBtn" type="button"><b>COACH'S MANUAL</b><span>Coverages, routes, reading the defense, progressions and concepts — with diagrams.</span></button>
+    <div class="group"><div class="section-label">TUTORIAL <span id="tutProgress" class="tut-prog"></span></div>
+      <div class="lesson-list" id="lessonList"></div>
+      <button class="btn alt sm" id="tutResetBtn" type="button">RESET TUTORIAL PROGRESS</button></div>
   </div>
 
   <!-- ============ PLAY EDITOR ============ -->
@@ -486,6 +574,8 @@ select.play-select{
     <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div></div>
     <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
       <div class="help">Pullback meter: pull back to aim a lob. While pulling, tap anywhere with a second finger to switch to a bullet.<br>Tap receiver: a quick tap throws a bullet; press and hold him for a lob.</div></div>
+    <div class="group"><div class="section-label">COACH TALK</div><div class="choice-row" id="coachRow"></div>
+      <div class="help">How much the coach says after each play. Auto keeps it simple on Rookie and gives the full breakdown on Varsity and Elite.</div></div>
     <div class="group"><div class="section-label">SCRAMBLE STICK</div><div class="choice-row" id="stickRow"></div>
       <div class="help">Move the QB with the stick and throw with your other thumb. He can't cross the line of scrimmage. On a computer, use WASD or the arrow keys.</div></div>
     <div class="group">
@@ -517,6 +607,7 @@ select.play-select{
       <div id="aimHint" class="hidden"><div class="pill">Pull back to throw</div></div>
       <div id="playTag" class="hidden"></div>
       <div id="joy" class="hidden" aria-label="Scramble joystick"><div id="joyBase"><div id="joyKnob"></div></div><span>SCRAMBLE</span></div>
+      <div id="coachBubble" class="hidden"><span class="coach-badge">COACH</span><div class="cb-text" id="cbText"></div><button class="btn sm hidden" id="cbBtn" type="button">NEXT</button></div>
       <div id="callSheet" class="hidden">
         <div class="call-head"><div><b>PLAY CALL</b><span id="callHead">1st &amp; 10 · OWN 5</span></div><button class="btn sm" id="callRandom">SURPRISE ME</button></div>
         <div class="chip-row" id="callTabs"></div>
@@ -543,6 +634,11 @@ select.play-select{
       <div class="result-tag" id="resultTag"><span class="dot"></span><span id="resultText">GOOD READ</span></div>
       <div class="result-sub" id="resultSub"></div>
       <div class="drive-line hidden" id="driveLine"></div>
+      <div class="coach-card hidden" id="coachCard">
+        <div class="coach-head"><span class="coach-badge">COACH</span><b id="coachVerdict"></b></div>
+        <div class="coach-lines" id="coachLines"></div>
+        <div class="chip-row"><button class="chip" id="coachViewBtn" type="button">COACH VIEW</button><button class="chip" id="coachLearnBtn" type="button">LEARN</button></div>
+      </div>
       <div class="explain" id="resultExplain"></div>
       <div class="note-line hidden" id="playNote"></div>
       <div class="score-row" id="scoreRow"></div>
@@ -564,6 +660,7 @@ select.play-select{
     <div class="sub" id="summarySub">0 reps</div>
     <div class="stat-grid" id="statGrid"></div>
     <div class="strength-row" id="strengthRow"></div>
+    <div class="group hidden" id="coachNotes"></div>
     <div class="group">
       <div class="section-label" id="logTitle">REP LOG</div>
       <div class="rep-log" id="repLog"></div>
@@ -572,6 +669,23 @@ select.play-select{
     <button class="btn alt" id="restartBtn">MAIN MENU</button>
   </div>
 
+  <div id="manual" class="hidden" role="dialog" aria-modal="true" aria-label="Coach's Manual">
+    <div class="man-inner">
+      <div class="topbar"><button class="back" id="manBack" aria-label="Back">◀</button><h2 id="manTitle">COACH'S MANUAL</h2><button class="quit man-x" id="manClose" aria-label="Close manual">✕</button></div>
+      <div id="manBody"></div>
+    </div>
+  </div>
+  <div id="codeSheet" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <h2 id="codeTitle">SHARE PLAY</h2>
+      <div class="help" id="codeSub">Send this code to a teammate. They paste it into Playbook → My Plays → Import.</div>
+      <textarea id="codeText" class="text-in code-text" rows="6" spellcheck="false" autocomplete="off"></textarea>
+      <div class="help warn-line" id="codeMsg"></div>
+      <button class="btn" id="codeMain">COPY CODE</button>
+      <button class="btn alt hidden" id="codeShare">SEND…</button>
+      <button class="btn alt" id="codeClose">CLOSE</button>
+    </div>
+  </div>
   <div id="pickSheet" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-box">
       <h2 id="pickTitle">AUDIBLES</h2>
@@ -905,7 +1019,8 @@ function myToPlay(sp){
   const targets=players.filter(q=>q.target).map(q=>q.id);
   const prog=(sp.prog||[]).filter(id=>targets.includes(id));
   targets.forEach(id=>{ if(!prog.includes(id)) prog.push(id); });
-  const play={name:sp.name, form:sp.form||"Custom", kind: pitchTo?"trick":"pass", prog, note:sp.note||"", players, custom:true, uid:sp.uid, squad:sp.squad};
+  const strip=v=>String(v==null?"":v).replace(/[<>&"`]/g,"");
+  const play={name:strip(sp.name).slice(0,28)||"My play", form:strip(sp.form||"Custom").slice(0,20), kind: pitchTo?"trick":"pass", prog, note:strip(sp.note).slice(0,300), players, custom:true, uid:sp.uid, squad:sp.squad};
   if(pitchTo) play.passer=[{id:"Q",until:sp.pitch.at||0.9},{id:pitchTo}];
   return play;
 }
@@ -995,7 +1110,7 @@ function posAt(p,t){
    STATE
 ============================================================ */
 const state = {
-  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, stickSide:"left", throwMode:"pull",
+  squad:5, difficulty:"rookie", mode:"qb_brain", showProgression:false, sound:true, stickSide:"left", coachTalk:"auto", throwMode:"pull",
   book:"standard", playPick:"random", throwType:"bullet", drillMode:"qb_brain",
   driveCfg:{len:50, width:30, widthTouched:false, fd:"mid"}, drive:null,
   session:{reps:0, score:0, log:[]},
@@ -1015,7 +1130,7 @@ const SAVE_KEY="qbbrain.settings.v1";
 function loadSettings(){
   try{
     const o=JSON.parse(localStorage.getItem(SAVE_KEY)||"null"); if(!o) return;
-    ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
+    ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","throwMode","book","playPick"].forEach(k=>{ if(o[k]!==undefined) state[k]=o[k]; });
     if(!MODES[state.drillMode] || state.drillMode==="drive") state.drillMode="qb_brain";
     if(o.driveCfg) Object.assign(state.driveCfg,o.driveCfg);
     if(!MODES[state.mode]) state.mode="qb_brain";
@@ -1024,7 +1139,7 @@ function loadSettings(){
 }
 function saveSettings(){
   try{
-    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
+    const o={}; ["squad","difficulty","mode","drillMode","showProgression","sound","stickSide","coachTalk","throwMode","book","playPick"].forEach(k=>o[k]=state[k]);
     o.driveCfg=state.driveCfg; localStorage.setItem(SAVE_KEY,JSON.stringify(o));
   }catch(_){}
 }
@@ -1219,8 +1334,9 @@ function showScreen(id){
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showScreen(b.dataset.go)));
 els.drillsBookSlot.appendChild(els.bookBlock);
 
-function startSession(mode){
+function startSession(mode,extra){
   state.mode=mode;
+  state.forceCoverage = extra && extra.coverage || null;
   saveSettings();
   state.session={reps:0, score:0, log:[]};
   state.drive = mode==="drive" ? newDrive() : null;
@@ -1232,7 +1348,7 @@ function startSession(mode){
 els.startBtn.addEventListener("click",()=>startSession(state.drillMode));
 els.driveStartBtn.addEventListener("click",()=>startSession("drive"));
 els.restartBtn.addEventListener("click",()=>showScreen("homeScreen"));
-els.againBtn.addEventListener("click",()=>startSession(state.mode));
+els.againBtn.addEventListener("click",()=>startSession(state.mode,{coverage:state.forceCoverage}));
 els.quitBtn.addEventListener("click", endSession);
 
 function updateHud(){
@@ -1311,6 +1427,8 @@ function makePlayer(p){
 }
 function buildRep(opts){
   opts=opts||{};
+  if(state.tut && !opts.keep){ const c=tutRepCfg(); opts=Object.assign({},opts,{play:c.play, coverage:c.coverage, askCoverage:c.ask}); }
+  else if(state.forceCoverage && !opts.coverage && !opts.keep) opts=Object.assign({},opts,{coverage:state.forceCoverage});
   const squad = opts.squad||state.squad;
   const diff = DIFFICULTY[opts.difficulty||state.difficulty];
   const plays = opts.plays || currentPlays();
@@ -1682,7 +1800,7 @@ let rafId=null, tSnap=0, done=false, lastFrameT=null;
    Desktop: Space bar or right-click toggles. */
 const aim = {active:false,start:null,cur:null,lob:true,pointerId:null,flash:0};
 function aimType(){ return aim.lob ? "lob" : "bullet"; }
-function toggleThrowType(){ if(!aim.active) return; aim.lob=!aim.lob; aim.flash=performance.now(); lobBeep=aim.lob; SFX.toggle(); }
+function toggleThrowType(){ if(!aim.active) return; aim.lob=!aim.lob; aim.flash=performance.now(); lobBeep=aim.lob; SFX.toggle(); if(!aim.lob) tutEvent("toggle"); }
 
 function startRep(opts){
   opts=opts||{};
@@ -1693,12 +1811,14 @@ function startRep(opts){
   updateView();
   if(isDrive() && !opts.play){ updateHud(); showCallSheet(); return; }   // call your play first
   state.rep = buildRep(opts.play ? {play:opts.play} : undefined);
+  if(state.tut) tutAdjustRep(state.rep);
   state.phase = "study";
   aim.active=false;
   updateHud();
   drawStatic();
   showPlayTag();
   if(state.rep.askCoverage) showCoverageQuestion(); else beginStudyCountdown();
+  tutEvent("ready");
 }
 function label(p){ return p.id+"'s "+p.name; }
 function progText(rep){
@@ -1728,6 +1848,7 @@ function showCoverageQuestion(){
       els.coverageSheet.classList.add("hidden");
       els.controls.classList.remove("hidden");
       beginStudyCountdown();
+      tutEvent("coverage");
     });
     els.mcqOptions.appendChild(b);
   });
@@ -1772,6 +1893,7 @@ function doSnap(){
   fxList=[];
   SFX.snap();
   runLoop();
+  tutEvent("snap");
 }
 function runLoop(){
   cancelAnimationFrame(rafId);
@@ -1795,6 +1917,7 @@ function runLoop(){
     stepPlayers(rep, t, dt);
     updateDefenders(rep, t, dt);
     updateRusher(rep, t, dt);
+    recordDefHist(rep, t);
     lastFrameT=t;
     drawFrame(t);
 
@@ -2165,6 +2288,7 @@ els.field.addEventListener("pointerdown",(e)=>{
     }
   } else {
     aim.active=true; aim.start=pt; aim.cur=pt; aim.lob=true; aim.pointerId=e.pointerId; aim.flash=0;
+    tutEvent("aim");
     els.aimHint.classList.add("hidden");
     try{ els.field.setPointerCapture(e.pointerId); }catch(_){}
   }
@@ -2188,7 +2312,7 @@ function joySet(jx,jy){
   if(!rep.scr) rep.scr={active:false,id:null,jx:0,jy:0};
   rep.scr.jx=jx; rep.scr.jy=jy; rep.scr.active = Math.hypot(jx,jy)>0;
   els.joyKnob.style.transform="translate("+(jx*joy.R)+"px,"+(-jy*joy.R)+"px)";
-  if(rep.scr.active) els.aimHint.classList.add("hidden");
+  if(rep.scr.active){ els.aimHint.classList.add("hidden"); tutEvent("scramble"); }
 }
 function joyRelease(){ joy.pointerId=null; els.joy.classList.remove("on"); const rep=state.rep; if(rep && rep.scr){ rep.scr.jx=0; rep.scr.jy=0; rep.scr.active=false; } els.joyKnob.style.transform=""; }
 function joyMove(e){
@@ -2327,10 +2451,12 @@ function drawThrowOverlay(t){
     }
     // how-to strip at the bottom of the field
     const hint = lob ? "LOB  ·  tap with another finger for BULLET" : "BULLET  ·  tap again for LOB";
+    if(!state.tut){
     ctx.font="600 12px 'Pixelify Sans', sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
     const hw=ctx.measureText(hint).width+24, hy= els.joy.classList.contains("hidden") ? ch-22 : 26;
     ctx.fillStyle="rgba(21,33,25,0.85)"; ctx.fillRect(cw/2-hw/2,hy-13,hw,26);
     ctx.fillStyle=lob?"#ffffff":"#ffd166"; ctx.fillText(hint,cw/2,hy+1);
+    }
   }
   if(rep.ball && !rep.carrier && !rep.ballGone){
     const b=rep.ball, a=toPx(b.from.x,b.from.y), e=toPx(b.to.x,b.to.y), c=arcCtrl(a,e,b.type);
@@ -2390,11 +2516,13 @@ function finishRep(rep,resultType,subtitle,explain,chips,points,coverageCorrect,
   state.session.log.push({play:rep.play.name,coverage:rep.actualCoverage,disguised:rep.disguised,coverageAsked:rep.askCoverage,coverageCorrect,result:resultType,points,time});
   renderResult(resultType,subtitle,explain,chips,points,rep,driveInfo);
   updateHud();
+  tutEvent("result",{result:resultType, type:rep.ball&&rep.ball.type});
 }
 
 function finalizeSack(t){
   if(done) return; done=true;
   const rep=state.rep, cc=coverageBits(rep);
+  rep.sackT=t;
   let points=cc?100:0;
   const o=openness(rep,t).sort((a,b)=>b.sep-a.sep)[0];
   let explain="The rusher got home before the ball came out.";
@@ -2670,8 +2798,10 @@ function finalizeCoverageOnly(){
     d.innerHTML=c[0]+": <b>"+c[1]+"</b>"; els.scoreRow.appendChild(d);
   });
   els.nextRepBtn.textContent="NEXT REP"; els.driveLine.classList.add("hidden");
+  rep.endT=2.8; renderCoach(rep,"COVERAGE");
   showBanner(correct?"CORRECT!":"WRONG LOOK", correct?"good":"bad", ()=>els.resultSheet.classList.remove("hidden"));
   updateHud();
+  tutEvent("result",{correct});
 }
 
 const RESULT_COLORS={"GOOD READ":"var(--good)","RISKY":"var(--risky)","COVERED":"var(--bad)","SACKED":"var(--bad)","OFF TARGET":"var(--risky)","BROKEN UP":"var(--bad)","INTERCEPTED":"var(--bad)"};
@@ -2728,6 +2858,7 @@ function renderResult(resultType, subtitle, explain, chips, points, rep, driveIn
     d.innerHTML=c[0]+": <b>"+c[1]+"</b>";
     els.scoreRow.appendChild(d);
   });
+  renderCoach(rep,resultType);
   const bn=bannerFor(resultType,driveInfo);
   els.resultSheet.classList.add("hidden");
   SFX.whistle();
@@ -2739,11 +2870,12 @@ function renderResult(resultType, subtitle, explain, chips, points, rep, driveIn
 
 els.nextRepBtn.addEventListener("click",()=>{
   els.resultSheet.classList.add("hidden");
+  if(state.tut){ tutAfterResult(); return; }
   if(isDrive() && state.drive && state.drive.over) endSession(); else startRep();
 });
 
 function clearOverlays(){
-  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy","callSheet","audibleSheet","audibleBtn"].forEach(k=>els[k].classList.add("hidden"));
+  ["aimHint","playTag","coverageSheet","resultSheet","timerBarWrap","rushCue","studyBanner","throwType","bigBanner","joy","callSheet","audibleSheet","audibleBtn","coachCard","coachBubble"].forEach(k=>els[k].classList.add("hidden"));
   clearTimeout(bannerTimer); clearTimeout(afterTimer);
   if(typeof AUD!=="undefined"){ AUD.open=false; AUD.sel=null; }
   if(afterSkip){ els.fieldWrap.removeEventListener("pointerdown",afterSkip); afterSkip=null; }
@@ -2756,6 +2888,7 @@ function clearOverlays(){
    SUMMARY
 ============================================================ */
 function endSession(){
+  if(state.tut){ tutExit(false); return; }
   cancelAnimationFrame(rafId);
   clearInterval(studyTimer);
   clearOverlays();
@@ -2789,6 +2922,7 @@ function renderDriveSummary(){
   });
 }
 function renderSummary(){
+  renderCoachNotes();
   if(isDrive() && state.drive){ renderDriveSummary(); return; }
   els.summaryTitle.textContent=MODES[state.mode].label.toUpperCase(); els.logTitle.textContent="REP LOG"; els.againBtn.textContent="GO AGAIN";
   const log=state.session.log, reps=log.length;
@@ -2811,7 +2945,7 @@ function renderSummary(){
   Object.keys(by).forEach(k=>{ const r=by[k].good/by[k].total; if(!strongest||r>strongest.rate) strongest={cov:k,rate:r}; if(!weakest||r<weakest.rate) weakest={cov:k,rate:r}; });
   els.strengthRow.innerHTML="";
   if(strongest){ const c=document.createElement("div"); c.className="strength-card good"; c.innerHTML="<b>Strongest</b><span>"+strongest.cov+"</span>"; els.strengthRow.appendChild(c); }
-  if(weakest){ const c=document.createElement("div"); c.className="strength-card work"; c.innerHTML="<b>Needs work</b><span>"+weakest.cov+"</span>"; els.strengthRow.appendChild(c); }
+  if(weakest && (!strongest || weakest.cov!==strongest.cov || weakest.rate<0.5)){ if(strongest && weakest.cov===strongest.cov) els.strengthRow.innerHTML=""; const c=document.createElement("div"); c.className="strength-card work"; c.innerHTML="<b>Needs work</b><span>"+weakest.cov+"</span>"; els.strengthRow.appendChild(c); }
   els.repLog.innerHTML="";
   log.forEach((l,i)=>{
     const row=document.createElement("div"); row.className="rep-row";
@@ -3299,7 +3433,7 @@ function closeAudible(){
   if(!AUD.open) return;
   AUD.open=false; AUD.sel=null;
   els.audibleSheet.classList.add("hidden");
-  if(state.phase==="study"){ els.controls.classList.remove("hidden"); drawStatic(); }
+  if(state.phase==="study"){ els.controls.classList.remove("hidden"); drawStatic(); if(state.tut) tutRender(); }
 }
 els.audibleBtn.addEventListener("click",openAudible);
 els.audClose.addEventListener("click",closeAudible);
@@ -3354,6 +3488,7 @@ function hotRoute(id,type){
   live.path=np.path; live.name=np.name+(type?" (hot)":"");
   rep.hot=rep.hot||{}; if(type) rep.hot[id]=type; else delete rep.hot[id];
   showPlayTag(); renderAudible(); audDraw(); SFX.click();
+  if(type) tutEvent("hot");
 }
 function doAudible(play){
   const old=state.rep;
@@ -3361,7 +3496,9 @@ function doAudible(play){
   const rep=buildRep({play, keep});
   rep.coverageGuess=old.coverageGuess; rep.audibledFrom=old.audibledFrom||old.play.name;
   state.rep=rep; AUD.sel=null;
+  if(state.tut) tutAdjustRep(rep);
   showPlayTag(); renderAudible(); audDraw(); SFX.click();
+  tutEvent("audible");
 }
 // play tag shows audibles / hot routes
 const _showPlayTag=showPlayTag;
@@ -3409,6 +3546,1148 @@ function pickCall(play){
 els.callRandom.addEventListener("click",()=>pickCall(null));
 window.__qbPickCall=pickCall;
 window.__qbMy={myToPlay,newStoredPlay,playToStored,LIB_ORDER,QB_ACTIONS,SQUAD_IDS};
+
+/* ============================================================
+   SHARE CODES — a play as text you can send to a teammate
+============================================================ */
+els.codeSheet=document.getElementById("codeSheet");
+["codeTitle","codeSub","codeText","codeMsg","codeMain","codeShare","codeClose","pbShareBtn"].forEach(id=>{ els[id]=document.getElementById(id); });
+const CODE_PREFIX="QBB1-";
+const cleanText=(s,n)=>String(s==null?"":s).replace(/[<>&"`]/g,"").slice(0,n);
+const num=(v,lo,hi)=>{ v=+v; return isFinite(v)?Math.round(clamp(v,lo,hi)*100)/100:lo; };
+function b64enc(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64dec(str){ str=str.replace(/-/g,"+").replace(/_/g,"/"); while(str.length%4) str+="="; return decodeURIComponent(escape(atob(str))); }
+function encodePlay(sp){
+  const o={n:sp.name,s:sp.squad,f:sp.form,t:sp.note||"",g:sp.prog||[],h:sp.pitch||0,
+    p:sp.players.map(p=>{ const r=p.route||{}; const q=[p.id,num(p.x,0,30),num(p.y,-9,1)];
+      q.push(r.mode==="lib" ? ["l",r.type,r.depth==null?null:r.depth,r.flip?1:0] : r.mode==="qb" ? ["q",r.action] : ["d",(r.rel||[]).map(z=>[num(z[0],-30,30),num(z[1],-30,40)]),r.name||""]);
+      q.push(p.after||0, p.delay==null?null:p.delay, p.motion?1:0); return q; })};
+  return CODE_PREFIX+b64enc(JSON.stringify(o));
+}
+const OK_IDS=["Q","C","X","Y","Z","H","F","T","S"];
+function decodePlay(code){
+  code=String(code||"").replace(/\s+/g,"");
+  const i=code.indexOf(CODE_PREFIX); if(i<0) throw new Error("That doesn't look like a QB Brain play code.");
+  let o; try{ o=JSON.parse(b64dec(code.slice(i+CODE_PREFIX.length))); }catch(_){ throw new Error("The code is incomplete — copy the whole thing."); }
+  const squad=o.s===7?7:5;
+  if(!Array.isArray(o.p) || o.p.length<2 || o.p.length>8) throw new Error("This code has the wrong number of players.");
+  const seen={};
+  const players=o.p.map(q=>{
+    const id=String(q[0]); if(!OK_IDS.includes(id) || seen[id]) throw new Error("This code has a player I don't recognize."); seen[id]=1;
+    const p={id, x:num(q[1],0.5,29.5), y:num(q[2],-8,0)};
+    const r=q[3]||[];
+    if(r[0]==="l" && LIB[r[1]]) p.route={mode:"lib",type:r[1],depth:r[2]==null?null:num(r[2],1,20),flip:!!r[3]};
+    else if(r[0]==="q" && QB_ACTIONS[r[1]]) p.route={mode:"qb",action:r[1]};
+    else if(r[0]==="d" && Array.isArray(r[1])) p.route={mode:"draw",rel:r[1].slice(0,24).map(z=>[num(z[0],-30,30),num(z[1],-30,40)]),name:cleanText(r[2],24)||"custom route"};
+    else p.route = id==="Q" ? {mode:"qb",action:"drop3"} : {mode:"lib",type:"stay"};
+    if(["run","sit","stop"].includes(q[4])) p.after=q[4];
+    if(q[5]!=null) p.delay=num(q[5],0,3);
+    if(q[6]) p.motion=true;
+    return p;
+  });
+  if(!seen.Q) throw new Error("This code is missing the QB.");
+  const sp={uid:newUid(), name:cleanText(o.n,28)||"Imported play", squad, form:cleanText(o.f,20)||"Custom", note:cleanText(o.t,300), players,
+    prog:(Array.isArray(o.g)?o.g:[]).map(String).filter(id=>seen[id]), pitch:null};
+  if(o.h && seen[o.h.to] && o.h.to!=="Q") sp.pitch={to:String(o.h.to), at:num(o.h.at,0.3,2)};
+  return sp;
+}
+let CODE_MODE="share";
+function openShare(sp){
+  CODE_MODE="share";
+  els.codeTitle.textContent="SHARE · "+sp.name;
+  els.codeSub.textContent="Send this code to a teammate. They paste it into Playbook → My Plays → Import a play.";
+  els.codeText.value=encodePlay(sp); els.codeText.readOnly=true;
+  els.codeMain.textContent="COPY CODE"; els.codeMsg.textContent="";
+  els.codeShare.classList.toggle("hidden", !(navigator.share));
+  els.codeSheet.classList.remove("hidden");
+}
+function openImport(){
+  CODE_MODE="import";
+  els.codeTitle.textContent="IMPORT A PLAY";
+  els.codeSub.textContent="Paste a play code from a teammate (it starts with QBB1-).";
+  els.codeText.value=""; els.codeText.readOnly=false;
+  els.codeMain.textContent="IMPORT"; els.codeMsg.textContent=""; els.codeShare.classList.add("hidden");
+  els.codeSheet.classList.remove("hidden");
+}
+els.codeMain.addEventListener("click",()=>{
+  if(CODE_MODE==="share"){
+    const done=()=>{ els.codeMsg.textContent="Copied ✓"; };
+    try{ if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(els.codeText.value).then(done,()=>{ els.codeText.select(); document.execCommand("copy"); done(); });
+         else { els.codeText.select(); document.execCommand("copy"); done(); } }catch(_){ els.codeMsg.textContent="Select the code and copy it."; }
+    return;
+  }
+  try{
+    const sp=decodePlay(els.codeText.value);
+    let name=sp.name, base=name, k=2; while(MY_PLAYS.some(q=>q.name===name && q.squad===sp.squad)) name=base+" "+(k++);
+    sp.name=name; MY_PLAYS.push(sp); saveMyPlays();
+    els.codeSheet.classList.add("hidden");
+    state.book="custom"; showScreen("playbookScreen");
+    const p=BOOKS.custom.plays[sp.squad].find(q=>q.uid===sp.uid); if(p) openPlay(p);
+  }catch(err){ els.codeMsg.textContent=err.message; }
+});
+els.codeShare.addEventListener("click",()=>{ try{ navigator.share({title:"QB Brain play", text:els.codeText.value}).catch(()=>{}); }catch(_){} });
+els.codeClose.addEventListener("click",()=>els.codeSheet.classList.add("hidden"));
+els.pbShareBtn.addEventListener("click",()=>{
+  if(!pbOpen) return;
+  const sp = pbOpen.custom ? MY_PLAYS.find(q=>q.uid===pbOpen.uid) : playToStored(pbOpen);
+  if(!pbOpen.custom) sp.name=pbOpen.name;
+  if(sp) openShare(sp);
+});
+// import card on the My Plays tab
+const _renderPB2=renderPlaybook;
+renderPlaybook=function(){
+  _renderPB2();
+  if(state.book!=="custom") return;
+  const c=document.createElement("button"); c.className="play-card import"; c.type="button";
+  c.innerHTML='<b>⇩ IMPORT A PLAY</b><small>Paste a teammate\'s code</small>';
+  c.addEventListener("click",openImport);
+  els.pbGrid.insertBefore(c, els.pbGrid.children[1]||null);
+};
+window.__qbCode={encodePlay,decodePlay};
+
+/* ============================================================
+   THE COACH — post-play breakdown, Coach View replay, session notes.
+   Content follows NFL FLAG, USA Football and PlaybookTech teaching (see the manual's Sources).
+============================================================ */
+const COV_COACH = {
+  "Man": {
+    simple:"Man coverage: every defender was guarding one receiver.",
+    tell:"Defenders lined up tight on receivers with their eyes on their man, and they followed them after the snap.",
+    beat:"Beat man with quick throws, crossers and rubs (Mesh, slants). Throw the moment your guy wins.",
+    chapter:"cov-man"},
+  "Cover 1": {
+    simple:"Cover 1: man underneath with one safety deep in the middle.",
+    tell:"One deep safety in the middle (the middle of the field is closed), everyone else tight on a receiver.",
+    beat:"Attack the sides and underneath. The safety reads your shoulders, so look him off before throwing deep.",
+    chapter:"cov-1"},
+  "Cover 2": {
+    simple:"Cover 2: two safeties split the deep field in half.",
+    tell:"Two deep defenders and the middle of the field open. Corners sit short.",
+    beat:"Hit the hole between the corner and safety (Smash corner), the deep middle, or short throws toward the center.",
+    chapter:"cov-2"},
+  "Cover 3": {
+    simple:"Cover 3: three defenders deep, one underneath.",
+    tell:"Three deep players keep everything in front of them. Only one or two defenders cover the short area.",
+    beat:"Take what's underneath: flats, hitches, outs and ins in front of the deep defenders.",
+    chapter:"cov-3"},
+  "Underneath Zone": {
+    simple:"Underneath zone: everyone sat in short zones with no deep help.",
+    tell:"Defenders at short depth looking at the QB, nobody really deep.",
+    beat:"Get it over their heads: seams, posts and corners behind the short defenders. Throw to grass, not to a defender.",
+    chapter:"cov-under"}
+};
+// Concept reads — key defender and if/then rule (sources: USA Football, PlaybookTech, Coach Kou, WRWR)
+const CONCEPT_COACH = [
+  {k:/slant.?flat|dragon/i, name:"Slant-Flat", beats:"Cover 3 and Cover 1", key:"the flat defender",
+   read:"If he widens to the flat, throw the slant behind him. If he squeezes the slant, throw the flat.", chapter:"con-slantflat"},
+  {k:/curl.?flat|hank/i, name:"Curl-Flat", beats:"Cover 3", key:"the flat defender",
+   read:"Read flat to curl: if he jumps the flat, the curl sits open behind him.", chapter:"con-slantflat"},
+  {k:/smash/i, name:"Smash", beats:"Cover 2", key:"the corner",
+   read:"If the corner steps up on the hitch, throw the corner route over him. If he sinks, hit the hitch.", chapter:"con-smash"},
+  {k:/stick/i, name:"Stick", beats:"zone and man", key:"the flat defender",
+   read:"If he widens with the flat, throw the stick. If he sits on the stick, throw the flat.", chapter:"con-stick"},
+  {k:/snag|triangle/i, name:"Snag", beats:"man and Cover 3", key:"the flat/curl defender",
+   read:"Flat → snag → corner. Stay on that side; whichever one the defender doesn't take is open.", chapter:"con-snag"},
+  {k:/flood|sail/i, name:"Flood", beats:"Cover 3", key:"the flat defender",
+   read:"Three levels on one side. If the flat defender widens, throw the out (middle level); if he sinks, throw the flat.", chapter:"con-flood"},
+  {k:/level/i, name:"Levels", beats:"zone (and man in flag)", key:"the hook defender",
+   read:"Two in-breaking routes stacked: if the hook defender drops under the deep one, hit the short one, and the reverse.", chapter:"con-levels"},
+  {k:/mesh/i, name:"Mesh", beats:"man", key:"the man defenders on the crossers",
+   read:"The crossers rub each other's defenders. Throw to the one who comes out clean; vs zone, sit in the hole.", chapter:"con-mesh"},
+  {k:/drive/i, name:"Drive", beats:"man and Cover 4", key:"the middle defender",
+   read:"Shallow and dig go the same way: if the middle defender sits shallow, throw the dig; if he drops, throw the shallow.", chapter:"con-drive"},
+  {k:/vert|seam/i, name:"Four Verticals", beats:"one-high and two-high looks", key:"the safety",
+   read:"Read the deep safety: throw the seam away from him. Check it down if everyone is covered.", chapter:"con-verts"},
+  {k:/spacing/i, name:"Spacing", beats:"zone", key:"the defender closest to the middle",
+   read:"Receivers settle across the field at the same depth. Find the window between zone defenders.", chapter:"con-spacing"}
+];
+function conceptFor(play){ const n=(play.name||"")+" "+(play.note||""); return CONCEPT_COACH.find(c=>c.k.test(play.name||"")) || null; }
+
+/* ---------- history helpers ---------- */
+function recordDefHist(rep,t){
+  rep.defenders.forEach(d=>{ (d.h=d.h||[]).push({t,x:d.pos.x,y:d.pos.y}); if(d.h.length>600) d.h.shift(); });
+  const r=rep.rusher; (r.h=r.h||[]).push({t,x:r.x,y:r.y}); if(r.h.length>600) r.h.shift();
+}
+function hAt(h,t,fb){
+  if(!h||!h.length) return {x:fb.x,y:fb.y};
+  if(t<=h[0].t) return {x:h[0].x,y:h[0].y};
+  for(let i=h.length-1;i>0;i--){ if(h[i-1].t<=t){ const a=h[i-1], b=h[i], f=(b.t-a.t)>1e-6?(t-a.t)/(b.t-a.t):1; return {x:lerp(a.x,b.x,clamp(f,0,1)),y:lerp(a.y,b.y,clamp(f,0,1))}; } }
+  return {x:h[0].x,y:h[0].y};
+}
+function defAt(d,t){ return hAt(d.h,t,d.pos); }
+// how open each target was at time t (distance to the nearest defender)
+function opennessAt(rep,t){
+  const defs=rep.defenders.filter(d=>!(d.h && d.h.length && d.h[0].t>t+0.01));   // a rusher who dropped later wasn't there yet
+  return rep.targets.map(p=>{
+    const q=histPos(p,t); let best=null, bd=1e9;
+    defs.forEach(d=>{ const dp=defAt(d,t), dd=dist(dp,q); if(dd<bd){ bd=dd; best=d; } });
+    return {p, pos:q, sep:bd, def:best};
+  });
+}
+// for sacks: the earliest moment the ball should have come out
+function bestMoment(rep,tEnd){
+  const t0=Math.max(rep.snapDone||0.2,0.4); let best={t:t0,sep:-1,id:null};
+  for(let t=t0;t<=tEnd-0.15;t+=0.1){
+    const o=opennessAt(rep,t).sort((a,b)=>b.sep-a.sep)[0]; if(!o) break;
+    if(o.sep>=4.5) return {t, sep:o.sep, id:o.p.id};
+    if(o.sep>best.sep) best={t,sep:o.sep,id:o.p.id};
+  }
+  return best;
+}
+function rushArrival(rep){
+  // straight-line estimate of when the rusher gets home on this difficulty
+  if(rep.rushPlan==="drop") return null;
+  const d=rep.rushStart || 11, v=rep.rushSpeed||5;
+  return (rep.rushPlan==="delay"?rep.delayPlan||0.75:rep.rushDelay||0) + d/v + 0.25;
+}
+function coachTalk(){ const m=state.coachTalk||"auto"; return m==="auto" ? (state.difficulty==="rookie"?"simple":"full") : m; }
+const ord=n=>["1st","2nd","3rd","4th","5th","6th"][n]||((n+1)+"th");
+
+/* ---------- the analysis ---------- */
+function coachAnalyze(rep,resultType){
+  const C=COV_COACH[rep.actualCoverage]||COV_COACH.Man, con=conceptFor(rep.play);
+  const b=rep.ball, prog=rep.play.prog||[];
+  const out={chapter:C.chapter, chapterLabel:rep.actualCoverage, lines:[], simple:[]};
+  const name=id=>{ const p=playerById(rep,id); return p ? id+"'s "+p.name.replace(" (hot)","") : id; };
+  // the look
+  let look=C.simple;
+  if(rep.disguised) look+=" They showed "+rep.shownCoverage+" and rotated after the snap — check the safeties again once the ball is snapped.";
+  out.look=look;
+  // coverage-only drill
+  if(!MODES[state.mode].throws){
+    out.tDec=Math.min(2.2, rep.hist ? 2.2 : 2.2);
+    out.verdict = rep.coverageGuess===rep.actualCoverage ? "You read it right." : "Not quite — look again.";
+    out.lines=[look, "The tell: "+C.tell, "How to beat it: "+C.beat];
+    out.simple=[look, "Look for: "+C.tell];
+    return out;
+  }
+  const arrive=rushArrival(rep);
+  let tDec, mineId=null, mine=null, snap, best;
+  if(b){
+    tDec=b.tRel;
+    snap=opennessAt(rep,tDec);
+    // who was the throw for? the receiver closest to where the ball landed
+    const L=b.to; let md=1e9; snap.forEach(o=>{ const q=posAt(o.p,b.tLand), d=dist(q,L); if(d<md){ md=d; mineId=o.p.id; } });
+    if(b.chaser) mineId=b.chaser.id;
+    mine=snap.find(o=>o.p.id===mineId);
+  } else {
+    const tEnd=rep.sackT||rep.endT||3;
+    const bm=bestMoment(rep,tEnd); tDec=bm.t; snap=opennessAt(rep,tDec);
+  }
+  best=snap.slice().sort((a,c)=>c.sep-a.sep)[0];
+  out.tDec=tDec; out.bestId=best?best.p.id:null; out.mineId=mineId;
+  out.keyDef = mine ? mine.def : best ? best.def : null;
+  const firstId=prog.find(id=>rep.targets.some(p=>p.id===id));
+  const first=snap.find(o=>o.p.id===firstId);
+  const readNo=mineId ? prog.indexOf(mineId) : -1;
+  const roleOf=d=>roleName(rep,d);
+  // verdict
+  let v="", tip="";
+  const sepTxt=s=>s.toFixed(1)+" yds";
+  switch(resultType){
+    case "GOOD READ": v="Great read. "+name(mineId)+(mine?" had "+sepTxt(mine.sep)+" of room when you let it go.":" was open."); break;
+    case "RISKY":
+      if(best && mine && best.p.id!==mineId && best.sep-mine.sep>1.5) v="Completed, but it was the harder throw. "+name(best.p.id)+" had "+sepTxt(best.sep)+" vs "+sepTxt(mine.sep)+".";
+      else v="Completed into a tight window ("+sepTxt(mine?mine.sep:0)+"). It worked — but a defender was close.";
+      break;
+    case "COVERED": v=name(mineId)+" was covered."+(best && best.p.id!==mineId && best.sep>3.5 ? " "+name(best.p.id)+" was open by "+sepTxt(best.sep)+"." : ""); break;
+    case "BROKEN UP": v="Broken up by "+roleOf(out.keyDef)+"."+(best && best.p.id!==mineId && best.sep>3.5 ? " "+name(best.p.id)+" was the safer throw ("+sepTxt(best.sep)+")." : ""); break;
+    case "INTERCEPTED": v="Picked. "+(mine ? roleOf(mine.def)+" was "+sepTxt(mine.sep)+" from "+mineId+" when you threw." : "")+(best && best.p.id!==mineId && best.sep>3.5 ? " "+name(best.p.id)+" was open." : ""); break;
+    case "OFF TARGET": v="Right idea, but the ball missed "+(mineId||"him")+". "+(mine&&mine.sep>3?"He was open — lead him to where he's going.":"Aim for the spot he's running to, not where he is."); break;
+    case "SACKED": v = best && best.sep>=3.5 ? "Sacked. At "+tDec.toFixed(1)+"s "+name(best.p.id)+" was open by "+sepTxt(best.sep)+" — that was your throw." : "Sacked. Nobody was clean — throw it away or check it down sooner."; break;
+    default: v=resultType;
+  }
+  out.verdict=v;
+  // the read
+  let readLine="";
+  if(con) readLine=con.name+" beats "+con.beats+". Key: "+con.key+". "+con.read;
+  else if(firstId) readLine="Your progression: "+prog.slice(0,3).map((id,i)=>(i+1)+" "+name(id)).join(" → ")+".";
+  if(first && b){
+    if(readNo===0) readLine+=" You threw your 1st read.";
+    else if(readNo>0) readLine+=" You went to your "+ord(readNo)+" read"+(first.sep>=4?" — but your 1st read ("+firstId+") was already open ("+sepTxt(first.sep)+").":" after "+firstId+" was covered. Good progression.");
+  }
+  out.read=readLine;
+  // timing
+  let timing="";
+  if(b){
+    timing="Ball out at "+tDec.toFixed(1)+"s"+(arrive?" — the rusher gets home in about "+arrive.toFixed(1)+"s on "+DIFFICULTY[state.difficulty].label+".":".");
+    if(b.type==="lob" && b.flight>1.4 && (resultType==="INTERCEPTED"||resultType==="BROKEN UP")) timing+=" The lob hung "+b.flight.toFixed(1)+"s, giving defenders time to close.";
+  } else if(resultType==="SACKED"){
+    timing="You held it "+(rep.sackT||0).toFixed(1)+"s"+(arrive?"; on "+DIFFICULTY[state.difficulty].label+" the rusher arrives around "+arrive.toFixed(1)+"s.":".");
+  }
+  out.timing=timing;
+  // one coaching tip (most important first)
+  const zone = rep.actualCoverage!=="Man" && rep.actualCoverage!=="Cover 1";
+  if(resultType==="SACKED") tip = arrive && arrive<1.8 ? "On Elite you have about one read. Know where the ball is going before the snap and throw on time, or scramble away from the rusher with the stick." : "Decide by your 2nd read. If nothing's there, scramble away from the rusher and throw to your checkdown.";
+  else if(resultType==="INTERCEPTED" && b && b.type==="bullet") tip="Bullets travel low — an underneath defender in the lane can pick them. Lob it over him, or throw away from his side.";
+  else if(resultType==="INTERCEPTED" && b && b.type==="lob") tip="Lobs hang in the air. Against tight coverage drive it in with a bullet, or save the lob for when the defender is trailing.";
+  else if((resultType==="COVERED"||resultType==="BROKEN UP") && zone) tip="Against zone, throw to grass — the open space between defenders — not to a receiver standing next to one.";
+  else if((resultType==="COVERED"||resultType==="BROKEN UP")) tip="Against man, throw when your receiver wins (as he breaks away), not after the defender recovers.";
+  else if(resultType==="OFF TARGET") tip="Aim where he'll be when the ball gets there. Lead crossing routes; put deep balls out in front.";
+  else if(resultType==="RISKY") tip = con ? "Trust the key: watch "+con.key+" and throw away from him." : "Throw away from the nearest defender's leverage — if he's inside, throw outside.";
+  else if(resultType==="GOOD READ") tip = b && b.tRel>2.3 ? "Pro tip: same read, a beat earlier. Throw as he breaks, before he looks open." : "That's the habit: read it, trust it, ball out on time.";
+  out.tip=tip;
+  out.lines=[v, out.look, readLine, timing, "Coach's tip: "+tip].filter(Boolean);
+  out.simple=[v, "Coach's tip: "+tip];
+  return out;
+}
+
+/* ---------- rendering in the result sheet ---------- */
+["coachCard","coachVerdict","coachLines","coachViewBtn","coachLearnBtn","coachNotes"].forEach(id=>{ els[id]=document.getElementById(id); });
+let COACH_VIEW=false;
+function renderCoach(rep,resultType){
+  const info=coachAnalyze(rep,resultType); rep.coach=info;
+  const full=coachTalk()==="full";
+  els.coachVerdict.textContent=info.verdict;
+  els.coachLines.innerHTML="";
+  (full?info.lines.slice(1):info.simple.slice(1)).forEach(t=>{ const p=document.createElement("p"); p.textContent=t; els.coachLines.appendChild(p); });
+  els.coachLearnBtn.textContent="LEARN: "+info.chapterLabel.toUpperCase();
+  els.coachViewBtn.textContent="COACH VIEW";
+  els.coachViewBtn.classList.remove("on");
+  els.coachCard.classList.remove("hidden");
+  els.resultExplain.classList.toggle("hidden", !full);
+  COACH_VIEW=false;
+  // log for the session notes
+  const last=state.session.log[state.session.log.length-1];
+  if(last){ last.tDec=info.tDec; last.best=info.bestId; last.mine=info.mineId; }
+}
+els.coachViewBtn.addEventListener("click",()=>{
+  const rep=state.rep; if(!rep || !rep.coach) return;
+  COACH_VIEW=!COACH_VIEW;
+  els.coachViewBtn.classList.toggle("on",COACH_VIEW);
+  els.coachViewBtn.textContent=COACH_VIEW?"HIDE COACH VIEW":"COACH VIEW";
+  if(COACH_VIEW) drawCoachView(rep); else drawFrame(lastFrameT===null?0:lastFrameT);
+});
+els.coachLearnBtn.addEventListener("click",()=>{ const rep=state.rep; if(rep&&rep.coach) openManualFromGame(rep.coach.chapter); });
+
+/* ---------- Coach View: freeze the moment of decision and draw the coverage ---------- */
+function drawCoachView(rep){
+  const info=rep.coach, t=info.tDec;
+  drawField(); drawRoutes(true);
+  const tp=(x,y)=>toPx(x,y);
+  // coverage structure
+  rep.defenders.forEach(d=>{
+    if(d.h && d.h.length && d.h[0].t>t+0.01) return;
+    const dp=defAt(d,t), s=tp(dp.x,dp.y);
+    if(d.role==="man" && d.assign){
+      const r=histPos(d.assign,t), rs=tp(r.x,r.y);
+      ctx.strokeStyle="rgba(232,65,44,0.9)"; ctx.lineWidth=2; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(rs.x,rs.y); ctx.stroke(); ctx.setLineDash([]);
+    } else if(d.role==="zone"){
+      const y0 = d.type==="deep" ? Math.max(8,d.ly-4) : d.type==="flat" ? 0.5 : 2.5;
+      const y1 = d.type==="deep" ? d.ly+6 : d.type==="flat" ? 6 : 10;
+      const a=tp(d.x0,y1), c=tp(d.x1,y0);
+      ctx.fillStyle = d.type==="deep" ? "rgba(90,184,255,0.16)" : "rgba(255,201,51,0.16)";
+      ctx.strokeStyle = d.type==="deep" ? "rgba(90,184,255,0.7)" : "rgba(255,201,51,0.7)";
+      ctx.lineWidth=1.5; ctx.fillRect(a.x,a.y,c.x-a.x,c.y-a.y); ctx.strokeRect(a.x,a.y,c.x-a.x,c.y-a.y);
+    }
+  });
+  // players and defenders at that moment
+  rep.players.forEach(p=>{
+    const q=histPos(p,t), s=tp(q.x,q.y);
+    drawSprite(s.x,s.y,{jersey:p.color,shorts:"#f4f0e2",skin:SKIN[(p.id.charCodeAt(0)*7)%SKIN.length],hair:"#1b1b1b",label:p.id,labelColor:"#0d1117",flags:{},flagColor:"#ffc933",step:0});
+  });
+  rep.defenders.forEach((d,i)=>{
+    if(d.h && d.h.length && d.h[0].t>t+0.01) return;
+    const q=defAt(d,t), s=tp(q.x,q.y);
+    drawSprite(s.x,s.y,{jersey:"#e8412c",shorts:"#0d1117",skin:SKIN[(i*3+1)%SKIN.length],hair:"#2b1a10",flags:{},flagColor:"#5ab8ff",step:0,label:""});
+  });
+  if(!(rep.rusher.dropped && rep.rusher.h && rep.rusher.h.length && rep.rusher.h[rep.rusher.h.length-1].t<t)){
+    const rq=hAt(rep.rusher.h,t,rep.rusher), rs=tp(rq.x,rq.y);
+    drawSprite(rs.x,rs.y,{jersey:"#9e1b12",shorts:"#0d1117",skin:SKIN[2],hair:"#ffc933",label:"R",labelColor:"#ffc933",flags:{},flagColor:"#5ab8ff",step:0});
+  }
+  const ring=(id,col,label)=>{
+    const p=playerById(rep,id); if(!p) return; const q=histPos(p,t), s=tp(q.x,q.y);
+    ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*2,0,Math.PI*2); ctx.strokeStyle=col; ctx.lineWidth=3.5; ctx.stroke();
+    ctx.font="14px 'Jersey 10', sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    const tw=ctx.measureText(label).width+10; ctx.fillStyle="rgba(13,17,23,0.88)"; ctx.fillRect(s.x-tw/2,s.y-VIEW.PR*2-20,tw,16);
+    ctx.fillStyle=col; ctx.fillText(label,s.x,s.y-VIEW.PR*2-12);
+  };
+  const snap=opennessAt(rep,t);
+  // key defender
+  if(info.keyDef && info.keyDef.h){ const q=defAt(info.keyDef,t), s=tp(q.x,q.y); ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*1.8,0,Math.PI*2); ctx.strokeStyle="#ff6b5a"; ctx.lineWidth=3; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.font="13px 'Jersey 10', sans-serif"; ctx.fillStyle="#ff6b5a"; ctx.textAlign="center"; ctx.fillText("KEY", s.x, s.y+VIEW.PR*2.6); }
+  if(info.bestId){ const o=snap.find(z=>z.p.id===info.bestId); ring(info.bestId,"#5fe08a","OPEN "+(o?o.sep.toFixed(1):"")+" YD"); }
+  const b=rep.ball;
+  if(b){
+    const a=tp(b.from.x,b.from.y), e=tp(b.to.x,b.to.y);
+    ctx.strokeStyle="#ffc933"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(e.x,e.y); ctx.stroke();
+    drawArrowHead(ctx,[a.x,a.y],[e.x,e.y],"#ffc933",10);
+    ctx.strokeStyle="#ffc933"; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(e.x-6,e.y-6); ctx.lineTo(e.x+6,e.y+6); ctx.moveTo(e.x+6,e.y-6); ctx.lineTo(e.x-6,e.y+6); ctx.stroke();
+    if(info.mineId && info.mineId!==info.bestId){ const o=snap.find(z=>z.p.id===info.mineId); ring(info.mineId,"#ffc933","YOUR THROW "+(o?o.sep.toFixed(1):"")+" YD"); }
+  }
+  // caption
+  const cap="COACH VIEW · "+t.toFixed(1)+"s · "+rep.actualCoverage;
+  ctx.font="16px 'Jersey 10', sans-serif"; ctx.textAlign="left"; ctx.textBaseline="middle";
+  const tw=ctx.measureText(cap).width+16; ctx.fillStyle="rgba(13,17,23,0.9)"; ctx.fillRect(8,10,tw,24);
+  ctx.fillStyle="#ffc933"; ctx.fillText(cap,16,23);
+  ctx.font="12px 'Pixelify Sans', sans-serif";
+  const leg="green = most open · yellow = your throw · red KEY = defender who decided it · boxes = zones · dashed = man";
+  const lw=Math.min(cw-16, ctx.measureText(leg).width+16); ctx.fillStyle="rgba(13,17,23,0.82)"; ctx.fillRect(8,38,lw,20);
+  ctx.fillStyle="#f4f0e2"; ctx.fillText(leg,16,48,lw-14);
+}
+
+/* ---------- session notes on the summary screen ---------- */
+function renderCoachNotes(){
+  const box=els.coachNotes; if(!box) return; box.innerHTML="";
+  const log=state.session.log.filter(l=>l.coverage);
+  if(!log.length){ box.classList.add("hidden"); return; }
+  box.classList.remove("hidden");
+  const h=document.createElement("div"); h.className="section-label"; h.textContent="COACH'S NOTES"; box.appendChild(h);
+  const notes=[];
+  const by={}; log.forEach(l=>{ const g=(by[l.coverage]=by[l.coverage]||{n:0,good:0,bad:0}); g.n++; if(l.result==="GOOD READ"||(l.result===null&&l.coverageCorrect)) g.good++; if(["INTERCEPTED","SACKED","COVERED","BROKEN UP"].includes(l.result)) g.bad++; });
+  const worst=Object.keys(by).filter(k=>by[k].n>=2).sort((a,b)=>by[a].good/by[a].n-by[b].good/by[b].n)[0];
+  if(worst && by[worst].good/by[worst].n<0.6){ const C=COV_COACH[worst]; notes.push({t:"Work on "+worst+": "+by[worst].good+" of "+by[worst].n+" good. "+C.beat, ch:C.chapter, lab:worst}); }
+  const best=Object.keys(by).filter(k=>by[k].n>=2).sort((a,b)=>by[b].good/by[b].n-by[a].good/by[a].n)[0];
+  if(best && best!==worst && by[best].good/by[best].n>=0.6) notes.push({t:"You're reading "+best+" well ("+by[best].good+" of "+by[best].n+"). Keep trusting it."});
+  const sacks=log.filter(l=>l.result==="SACKED").length, ints=log.filter(l=>l.result==="INTERCEPTED").length;
+  if(sacks>=2) notes.push({t:sacks+" sacks. Decide by your 2nd read, then scramble away from the rusher or check it down.", ch:"read-clock", lab:"Beating the rush"});
+  if(ints>=2) notes.push({t:ints+" interceptions. Throw away from the nearest defender's leverage, and don't lob into tight coverage.", ch:"throw-types", lab:"Lob vs bullet"});
+  const thrown=log.filter(l=>l.result && l.result!=="SACKED" && l.time);
+  if(thrown.length>=3){ const avg=thrown.reduce((s,l)=>s+l.time,0)/thrown.length; if(avg>2.6) notes.push({t:"Average time to throw "+avg.toFixed(1)+"s — that's slow against a rush. Pick your 1st read before the snap.", ch:"read-progression", lab:"Progressions"}); }
+  if(!notes.length){
+    const n=log.length, good=log.filter(l=>l.result==="GOOD READ"||(l.result===null&&l.coverageCorrect)).length;
+    if(n<3) notes.push({t:"Get a few more reps in — after 3 or more I can spot patterns and tell you what to work on."});
+    else if(good/n>=0.6) notes.push({t:"Solid session ("+good+" of "+n+" good). Try the next difficulty — Varsity and Elite add disguises and a faster rush."});
+    else notes.push({t:"Keep at it ("+good+" of "+n+" good). Before every snap: count the safeties and decide your 1st read.", ch:"read-presnap", lab:"Count the safeties"});
+  }
+  notes.forEach(n=>{
+    const d=document.createElement("div"); d.className="coach-note";
+    const p=document.createElement("p"); p.textContent=n.t; d.appendChild(p);
+    if(n.ch){ const b=document.createElement("button"); b.className="chip"; b.type="button"; b.textContent="READ: "+n.lab.toUpperCase(); b.addEventListener("click",()=>openManual(n.ch)); d.appendChild(b); }
+    box.appendChild(d);
+  });
+}
+
+/* ============================================================
+   LEARN — Coach's Manual (chapters + diagrams) and the interactive Tutorial
+============================================================ */
+SCREENS.push("learnScreen");
+["learnScreen","manual","manBack","manTitle","manClose","manBody","manualOpenBtn","lessonList","tutProgress","tutResetBtn",
+ "coachBubble","cbText","cbBtn","newbieCard","newbieX","learnSummary","coachRow"].forEach(id=>{ els[id]=document.getElementById(id); });
+
+/* ---------------- figure drawing (template yards: x 0..30, LOS y=0) ---------------- */
+function figCtx(cv,y0,y1){
+  const W=cv.clientWidth||340, d=Math.min(window.devicePixelRatio||1,2.5), H=Math.round(W*(y1-y0)/30);
+  cv.width=Math.round(W*d); cv.height=Math.round(H*d); cv.style.aspectRatio=W+"/"+H;
+  const g=cv.getContext && cv.getContext("2d"); if(!g || !g.setTransform) return null;
+  g.setTransform(d,0,0,d,0,0);
+  const s=W/30, P=(x,y)=>[x*s,(y1-y)*s];
+  g.fillStyle="#4f9c45"; g.fillRect(0,0,W,H);
+  for(let y=Math.ceil(y0/5)*5;y<=y1;y+=5){ const py=P(0,y)[1]; g.fillStyle="rgba(244,240,226,0.28)"; g.fillRect(0,py-1,W,2);
+    if(y>0){ g.fillStyle="rgba(244,240,226,0.5)"; g.font="11px 'Jersey 10', sans-serif"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(String(y),3,py-7); } }
+  const los=P(0,0)[1]; if(los>=0 && los<=H){ g.fillStyle="rgba(0,0,0,0.10)"; g.fillRect(0,los,W,H-los); g.fillStyle="#5ab8ff"; g.fillRect(0,los-1.5,W,3); }
+  return {g,P,s,W,H};
+}
+function figDot(F,x,y,id,col){ const [a,b]=F.P(x,y), R=Math.max(8,F.s*0.55); const g=F.g;
+  g.beginPath(); g.arc(a,b,R,0,Math.PI*2); g.fillStyle=col||COLORS[id]||"#ffc933"; g.fill(); g.lineWidth=2; g.strokeStyle="#0d1117"; g.stroke();
+  if(id){ g.fillStyle="#0d1117"; g.font=Math.round(R*1.4)+"px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(id,a,b+1); } }
+function figDef(F,x,y,label,col){ const [a,b]=F.P(x,y), R=Math.max(8,F.s*0.55), g=F.g;
+  g.beginPath(); g.moveTo(a,b+R); g.lineTo(a-0.95*R,b-0.75*R); g.lineTo(a+0.95*R,b-0.75*R); g.closePath(); g.fillStyle=col||"#e8412c"; g.fill(); g.lineWidth=2; g.strokeStyle="#0d1117"; g.stroke();
+  if(label){ g.font="11px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="top"; g.fillStyle="#fff"; g.strokeStyle="rgba(0,0,0,.75)"; g.lineWidth=3; g.strokeText(label,a,b+R+1); g.fillText(label,a,b+R+1); } }
+function figLine(F,pts,col,w,dash,arrow){ const g=F.g; g.strokeStyle=col; g.lineWidth=w||2.5; g.lineJoin="round"; g.setLineDash(dash||[]);
+  g.beginPath(); pts.forEach((q,i)=>{ const [a,b]=F.P(q[0],q[1]); i?g.lineTo(a,b):g.moveTo(a,b); }); g.stroke(); g.setLineDash([]);
+  if(arrow && pts.length>1){ const A=F.P(...pts[pts.length-2]), B=F.P(...pts[pts.length-1]); drawArrowHead(g,A,B,col,8); } }
+function figText(F,x,y,t,col,size,align){ const [a,b]=F.P(x,y), g=F.g; g.font=(size||13)+"px 'Jersey 10', sans-serif"; g.textAlign=align||"center"; g.textBaseline="middle";
+  g.strokeStyle="rgba(0,0,0,.8)"; g.lineWidth=3; g.strokeText(t,a,b); g.fillStyle=col||"#fff"; g.fillText(t,a,b); }
+function figZone(F,x0,x1,y0,y1,deep){ const g=F.g, A=F.P(x0,y1), B=F.P(x1,y0);
+  g.fillStyle=deep?"rgba(90,184,255,0.18)":"rgba(255,201,51,0.18)"; g.strokeStyle=deep?"rgba(90,184,255,0.8)":"rgba(255,201,51,0.8)"; g.lineWidth=1.5;
+  g.fillRect(A[0],A[1],B[0]-A[0],B[1]-A[1]); g.strokeRect(A[0],A[1],B[0]-A[0],B[1]-A[1]); }
+const FIG_OFF5=[["Q",15,-2.8],["C",15,0],["X",3,0],["Y",9,0],["Z",27,0]];
+// coverage diagram using the game's own defense builder
+function figCoverage(cv,cov){
+  const F=figCtx(cv,-6,18); if(!F) return;
+  const save={W:GEO.W,yMin:GEO.yMin,yMax:GEO.yMax}; setGeometry(30,-14,45);
+  let defs=[], rusher=true;
+  const targets=FIG_OFF5.filter(o=>o[0]!=="Q").map(o=>({id:o[0],x0:o[1],y0:o[2]}));
+  if(cov==="Cover 4"){ [[0,7.5],[7.5,15],[15,22.5],[22.5,30]].forEach(([a,b])=>defs.push({role:"zone",type:"deep",x0:a,x1:b,lx:(a+b)/2,ly:12,pos:{x:(a+b)/2,y:10}})); }
+  else if(cov==="2-2 Box"){ defs=[{role:"zone",type:"flat",x0:0,x1:14,lx:8,ly:5,pos:{x:8,y:5}},{role:"zone",type:"flat",x0:16,x1:30,lx:22,ly:5,pos:{x:22,y:5}},
+     {role:"zone",type:"deep",x0:0,x1:15,lx:8,ly:13,pos:{x:8,y:11}},{role:"zone",type:"deep",x0:15,x1:30,lx:22,ly:13,pos:{x:22,y:11}}]; }
+  else if(cov==="3-1"){ defs=[{role:"zone",type:"flat",x0:0,x1:10,lx:4,ly:4,pos:{x:4,y:4}},{role:"zone",type:"hook",x0:10,x1:20,lx:15,ly:6,pos:{x:15,y:6}},
+     {role:"zone",type:"flat",x0:20,x1:30,lx:26,ly:4,pos:{x:26,y:4}},{role:"zone",type:"deep",x0:0,x1:30,lx:15,ly:14,pos:{x:15,y:12}}]; }
+  else if(cov==="Cover 3 (no rush)"){ defs=[{role:"zone",type:"deep",x0:0,x1:10,lx:5,ly:12,pos:{x:5,y:10}},{role:"zone",type:"deep",x0:10,x1:20,lx:15,ly:13,pos:{x:15,y:11}},{role:"zone",type:"deep",x0:20,x1:30,lx:25,ly:12,pos:{x:25,y:10}},
+     {role:"zone",type:"flat",x0:0,x1:15,lx:8,ly:5,pos:{x:8,y:5}},{role:"zone",type:"flat",x0:15,x1:30,lx:22,ly:5,pos:{x:22,y:5}}]; rusher=false; }
+  else { try{ defs=buildDefense(cov,targets,4,DEF_TUNE.varsity); defs.forEach(d=>{ if(d.role==="man"){ d.press=false; d.pos={x:clamp(d.assign.x0+(d.assign.x0<15?1:-1),1,29),y:5}; } }); }catch(_){ defs=[]; } }
+  setGeometry(save.W,save.yMin,save.yMax);
+  defs.forEach(d=>{ if(d.role==="zone"){ const deep=d.type==="deep";
+      const y0=deep?Math.max(8,d.ly-4):d.type==="flat"?0.5:2.5, y1=deep?Math.min(18,d.ly+6):d.type==="flat"?6.5:10; figZone(F,d.x0,d.x1,y0,y1,deep); } });
+  FIG_OFF5.forEach(o=>figDot(F,o[1],o[2],o[0]));
+  defs.forEach(d=>{
+    if(d.role==="man"){ const r=targets.find(q=>q.id===d.assign.id); if(r) figLine(F,[[d.pos.x,d.pos.y],[r.x0,r.y0+0.6]],"rgba(232,65,44,0.95)",2,[5,4]); }
+    figDef(F,d.pos.x,d.pos.y, d.role==="man"?"man":d.type);
+  });
+  if(rusher){ figDef(F,15,7,"rusher","#9e1b12"); figLine(F,[[15,6.2],[15,-1.5]],"rgba(255,201,51,0.9)",2,[3,4],true); }
+}
+function figPlay(cv,play,opt){
+  const F=figCtx(cv,-6,18); if(!F) return; opt=opt||{};
+  const cols=["#5fe08a","#5ab8ff","#ff6b5a","#c8a8ff"];
+  play.players.forEach(p=>{ const pts=p.route.pts; if(pts.length>1) figLine(F,pts,COLORS[p.id]||"#ffc933",3,p.dashed?[6,5]:[],p.route.after==="run");
+    else if(p.id!=="Q"){} });
+  play.players.forEach(p=>figDot(F,p.x,p.y,p.id));
+  if(opt.prog){ (play.prog||[]).slice(0,4).forEach((id,i)=>{ const p=play.players.find(q=>q.id===id); if(!p) return; const end=p.route.pts[p.route.pts.length-1];
+    const [a,b]=F.P(end[0],end[1]); const g=F.g; g.beginPath(); g.arc(a,b-12,10,0,Math.PI*2); g.fillStyle=cols[i]; g.fill(); g.strokeStyle="#0d1117"; g.lineWidth=2; g.stroke();
+    g.fillStyle="#0d1117"; g.font="14px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),a,b-11); }); }
+  if(opt.key){ figDef(F,opt.key[0],opt.key[1],"KEY","#ff6b5a"); }
+}
+function figRoutes(cv){
+  const F=figCtx(cv,-3,20); if(!F) return;
+  const x=7, list=[["go","GO"],["post","POST"],["corner","CORNER"],["dig","DIG/IN"],["out","OUT"],["curl","CURL"],["hitch","HITCH"],["slant","SLANT"],["flat","FLAT"],["wheel","WHEEL"]];
+  const pal=["#ffc933","#5ab8ff","#ff8c2a","#c8a8ff","#5fe08a","#ff6b5a","#f4f0e2","#22b3a6","#ffd6e0","#b8bec6"];
+  const nudge={corner:-1.9, wheel:0.4, curl:0.2, hitch:-0.2};
+  list.forEach(([k,l],i)=>{ const pts=libPts(k,x,0,null,false); figLine(F,pts,pal[i],2.6,[],LIB[k].after==="run"); const e=pts[pts.length-1];
+    const left=e[0]<x-0.5; figText(F,left?0.6:Math.min(e[0]+0.6,24),e[1]+0.9+(nudge[k]||0),l,pal[i],12,"left"); });
+  figDot(F,x,0,"X"); figText(F,22,-1.5,"ball / middle of the field ▶","#f4f0e2",12);
+}
+function figHighLow(cv){
+  const F=figCtx(cv,-4,14); if(!F) return;
+  figLine(F,[[25,0],[25,9],[23.8,8.4]],"#ff8c2a",3,[],false); figLine(F,[[19,0],[20.5,1.4],[27.5,2]],"#b35ce8",3,[],true);
+  figDot(F,25,0,"X"); figDot(F,19,0,"Y"); figDot(F,15,-2.8,"Q");
+  figDef(F,24,4.8,"flat defender");
+  figText(F,25,11,"HIGH (curl)","#ff8c2a",14); figText(F,27,3.5,"LOW (flat)","#b35ce8",14,"right");
+  figText(F,9,7,"He can't cover both.","#ffc933",15); figText(F,9,5.2,"Sinks → throw LOW.  Jumps → throw HIGH.","#ffffff",13);
+}
+function figHorizontal(cv){
+  const F=figCtx(cv,-4,12); if(!F) return;
+  figLine(F,[[9,0],[9,5.5]],"#b35ce8",3); figLine(F,[[21,0],[21,5.5]],"#22b3a6",3);
+  figDot(F,9,0,"Y"); figDot(F,21,0,"Z"); figDot(F,15,-2.8,"Q"); figDot(F,15,0,"C");
+  figDef(F,15,6,"hook");
+  figLine(F,[[13.5,6.5],[10.5,6.5]],"#ffc933",2,[3,3],true); figLine(F,[[16.5,6.5],[19.5,6.5]],"#ffc933",2,[3,3],true);
+  figText(F,15,9.5,"Throw away from the way he moves","#ffffff",13);
+}
+function figLeverage(cv){
+  const F=figCtx(cv,-3,11); if(!F) return;
+  figText(F,7.5,9.8,"Defender INSIDE","#ffc933",14); figText(F,22.5,9.8,"Defender OUTSIDE","#ffc933",14);
+  figDot(F,5,0,"X"); figDef(F,6.6,4,"inside"); figLine(F,[[5,0],[5,5],[1.2,5]],"#5fe08a",3,[],true); figLine(F,[[5,5],[9,8]],"rgba(255,107,90,0.8)",2,[4,4]);
+  figText(F,3,7,"OUT ✓","#5fe08a",13); figText(F,10.5,8.6,"slant ✗","#ff6b5a",12);
+  figDot(F,22,0,"Z"); figDef(F,20.4,4,"outside"); figLine(F,[[22,0],[22,1.5],[26.5,6.5]],"rgba(255,107,90,0.8)",2,[4,4]); figLine(F,[[22,0],[22,1.5],[17.5,6.5]],"#5fe08a",3,[],true);
+  figText(F,16,7.6,"SLANT ✓","#5fe08a",13); figText(F,27.5,7.6,"✗","#ff6b5a",13);
+}
+function figLobBullet(cv){
+  const F=figCtx(cv,-4,16); if(!F) return;
+  figDot(F,15,-2.8,"Q"); figDot(F,15,13,"Y"); figDef(F,15,6,"underneath");
+  figLine(F,[[15.3,-1.6],[15.3,12]],"#ffc933",3,[],true); figText(F,18.6,4.2,"BULLET: low and fast","#ffc933",12,"left");
+  const g=F.g; g.strokeStyle="#ffffff"; g.lineWidth=2.5; g.setLineDash([2,6]); g.beginPath(); const a=F.P(14.6,-1.6), c=F.P(5,6), e=F.P(14.6,12); g.moveTo(a[0],a[1]); g.quadraticCurveTo(c[0],c[1],e[0],e[1]); g.stroke(); g.setLineDash([]);
+  figText(F,3.5,9,"LOB: over","#ffffff",12,"left"); figText(F,3.5,7.8,"the defender","#ffffff",12,"left");
+  figText(F,15,3.6,"tipped?","#ff6b5a",12);
+}
+function figRush(cv){
+  const F=figCtx(cv,-6,9); if(!F) return;
+  figDot(F,15,-4.3,"Q"); figDef(F,15,7,"rusher","#9e1b12"); figLine(F,[[15,6.2],[15,-3]],"#ffc933",2,[4,4],true);
+  figText(F,17.5,6.9,"7 yds off the line","#ffffff",12,"left");
+  figText(F,19,2.6,"Rookie ≈ 2.9 s","#5fe08a",14,"left"); figText(F,19,1.2,"Varsity ≈ 2.3 s","#5ab8ff",14,"left"); figText(F,19,-0.2,"Elite ≈ 1.2–1.5 s","#ff8c5a",14,"left");
+  figText(F,8,-2.2,"QB can't cross","#5ab8ff",12); figText(F,8,-3.4,"the blue line","#5ab8ff",12);
+}
+function figField(cv){
+  const W=cv.clientWidth||340, d=Math.min(window.devicePixelRatio||1,2.5), H=Math.round(W*0.62);
+  cv.width=Math.round(W*d); cv.height=Math.round(H*d); cv.style.aspectRatio=W+"/"+H;
+  const g=cv.getContext && cv.getContext("2d"); if(!g||!g.setTransform) return; g.setTransform(d,0,0,d,0,0);
+  // sideways field: 70 yds + two 10-yd end zones across, 25 wide down
+  const L=90, sx=W/L, X=v=>v*sx, top=H*0.12, fh=H*0.66;
+  g.fillStyle="#0d1117"; g.fillRect(0,0,W,H);
+  g.fillStyle="#4f9c45"; g.fillRect(0,top,W,fh);
+  g.fillStyle="rgba(90,184,255,0.35)"; g.fillRect(0,top,X(10),fh); g.fillRect(X(80),top,X(10),fh);
+  g.fillStyle="rgba(255,107,90,0.25)"; g.fillRect(X(40),top,X(5),fh); g.fillRect(X(75),top,X(5),fh);
+  g.fillStyle="#f4f0e2"; [10,45,80].forEach(v=>g.fillRect(X(v)-1,top,2,fh));
+  g.fillStyle="#5ab8ff"; g.fillRect(X(25)-1.5,top,3,fh); g.fillStyle="#ffc933"; g.fillRect(X(32)-1,top,2,fh);
+  g.font="12px 'Jersey 10', sans-serif"; g.textAlign="center"; g.textBaseline="middle"; g.fillStyle="#f4f0e2";
+  [5,85].forEach(v=>{ g.save(); g.translate(X(v),top+fh/2); g.rotate(-Math.PI/2); g.fillText("END ZONE",0,0); g.restore(); }); g.fillText("MIDFIELD",X(45),top-8);
+  g.fillStyle="#5ab8ff"; g.fillText("LOS",X(25),top+fh+10); g.fillStyle="#ffc933"; g.fillText("rush line (7 yds)",X(32)+28,top+fh+22);
+  g.fillStyle="#ff9a8a"; g.fillText("no-run zones (NFL FLAG)",X(60),top+fh+10);
+  g.fillStyle="#a9b2a1"; g.fillText("NFL FLAG: 25–30 yds wide × 70 long + 10-yd end zones",W/2,H-6);
+}
+const FIGS={coverage:figCoverage, play:figPlay, routes:figRoutes, highlow:figHighLow, horizontal:figHorizontal, leverage:figLeverage, lobbullet:figLobBullet, rush:figRush, field:figField};
+function stdPlay(name){ return STANDARD5.find(p=>p.name===name); }
+
+/* ---------------- manual content ----------------
+   Blocks: ["p",html] ["h",text] ["ul",[html...]] ["fig",type,arg,caption] ["tip",html] ["pro",html] ["note",html] ["table",[rows]] ["practice",{label,coverage,play}] ["src",[[label,url]...]]
+   Text is our own static HTML (no user content). */
+const SRC={
+  rules:["NFL FLAG Official Playing Rules (rev. 2025)","https://cdn.mediavalet.com/usca/rcx/DgBtnnoMFUCXWCBQE3YN2w/XMiAtpBTH0er4fUrKeYJAQ/Original/NFL_Flag_Rulebook_21423.pdf"],
+  howto:["NFL FLAG — How to play","https://nflflag.com/flag-football-rules/how-to-play-flag-football"],
+  def5:["NFL FLAG — 5 on 5 defense guide","https://nflflag.com/flag-football-plays/5-on-5-flag-football-defense"],
+  plays:["NFL FLAG — Plays & formations","https://nflflag.com/flag-football-plays"],
+  usafRoutes:["USA Flag — Route tree","https://dev.usaflag.org/?p=4267"],
+  slantflat:["USA Football — Slant-flat and how the QB should read it","https://blogs.usafootball.com/blog/7512/detailing-slant-flat-and-how-the-quarterback-should-read-it"],
+  reads:["USA Football — Basic knowledge about reads","https://blogs.usafootball.com/blog/7291/basic-knowledge-about-reads"],
+  verts:["USA Football — AJ Smith on 4 Verticals","https://blogs.usafootball.com/blog/7368/podcast-review-aj-smith-talks-all-things-about-4-verticals"],
+  boxone:["USA Football — Box-and-one pass rush drill","https://blogs.usafootball.com/blog/1306/box-and-one-drill-develops-a-good-pass-rush-in-flag-football"],
+  prog:["PlaybookTech First Down — Progression read","https://firstdown.playbooktech.com/coaches-community/flag-football-progression-read"],
+  qbreads:["PlaybookTech First Down — QB reads","https://firstdown.playbooktech.com/coaches-community/flag-football-quarterback-reads"],
+  curlflat:["PlaybookTech First Down — Curl-flat read","https://firstdown.playbooktech.com/coaches-community/flag-football-curl-flat-read"],
+  mesh:["PlaybookTech First Down — Coaching mesh","https://firstdown.playbooktech.com/coaches-community/coaching-the-mesh-concept-correctly"],
+  youngqb:["PlaybookTech First Down — Teaching young QBs coverage","https://firstdown.playbooktech.com/coaches-community/teaching-young-quarterbacks-coverage"],
+  manzone:["PlaybookTech First Down — Man vs zone recognition","https://firstdown.playbooktech.com/coaches-community/teach-receivers-to-recognize-man-vs-zone-coverage"],
+  beaters:["Youth Football Online — 7v7 coverage beaters","https://youthfootballonline.com/7v7-flag-football-coverage-beaters/"],
+  readcov:["Youth Football Online — Teaching QBs to read coverages","https://youthfootballonline.com/teaching-quarterbacks-to-read-defensive-coverages"],
+  iflagdef:["iFlag — 5 on 5 defense strategy guide","https://iflag.org/the-best-5-on-5-flag-football-defense-strategy-guide/"],
+  iflagqb:["iFlag — Mastering the flag QB position","https://iflag.org/the-complete-guide-to-mastering-the-flag-football-quarterback-position/"],
+  smash:["WRWR — Smash concept","https://wrwr.substack.com/p/its-time-to-smash-the-competition"],
+  flood:["Coach Kou — Sail/Flood","https://coachkoufootball.substack.com/p/nfl-pass-concepts-4-sailflood-route"],
+  dagger:["Coach Kou — Dagger","https://coachkoufootball.substack.com/p/dagger"],
+  stick:["FootballPlayCard — Stick concept","https://footballplaycard.com/blog/mastering-the-stick-concept-football"],
+  leverage:["Matt Waldman RSP — Leverage","https://mattwaldmanrsp.com/2022/12/13/matt-waldmans-rsp-nfl-scouting-glossary-accounting-for-leverage-with-qb-tanner-mckee-stanford/"],
+  mojo:["MOJO — What is zone defense","https://www.mojo.sport/coachs-corner/what-is-zone-defense/"]
+};
+function covChapter(id,title,cov,level,body,srcs,figArg){
+  return {id,title,level,group:"COVERAGES",blocks:[["fig","coverage",figArg||cov,"How "+(figArg||cov)+" lines up in 5v5. Yellow boxes = short zones, blue = deep zones, dashed red = man assignments."]].concat(body,
+    COV_COACH[cov] ? [["practice",{label:"PRACTICE VS "+cov.toUpperCase(),coverage:cov}]] : [], [["src",srcs]])};
+}
+function conChapter(id,name,stretch,beats,readHtml,body,srcs,key){
+  const p=stdPlay(name);
+  return {id,title:name,level:"all",group:"CONCEPTS",blocks:[
+    p?["fig","play",{play:p,prog:true,key},"The "+name+" concept. Numbers = read order (green 1st, blue 2nd, red 3rd)."]:["p",""],
+    ["table",[["Stretches",stretch],["Beats",beats],["Read",readHtml]]]
+  ].concat(body,[["practice",{label:"RUN "+name.toUpperCase(),play:name}],["src",srcs]])};
+}
+const MANUAL=[
+  {id:"start",title:"Start here",level:"rookie",group:"START HERE",blocks:[
+    ["p","Welcome to QB Brain. This manual teaches you how a flag football quarterback thinks: how to recognize the defense, where the ball should go, and why. Chapters are tagged <b>ROOKIE</b> (start here), <b>ALL</b> (everyone) and <b>PRO</b> (advanced)."],
+    ["tip","<b>The whole job in one sentence:</b> know where the ball is going before the snap, check the defense, and get it out on time to the receiver the defense can't cover."],
+    ["ul",["New to flag? Read <b>How flag works</b>, <b>Your team and the defense</b>, then play the <b>Tutorial</b>.","Know the basics? Jump to <b>Man vs zone</b> and <b>Progressions</b>.","Already a QB? The <b>Concepts</b> chapters list the key defender and the if/then read for each play."]]
+  ]},
+  {id:"basics",title:"How flag football works",level:"rookie",group:"START HERE",blocks:[
+    ["fig","field",null,"An NFL FLAG field. QB Brain lets you set the length (50–100 yds) and width (20–53)."],
+    ["p","Flag football is non-contact: instead of tackling, the defense pulls a flag off the ball carrier's belt. There's no blocking. The offense gets downs to cross midfield and then downs to score."],
+    ["h","Rules that matter to a QB"],
+    ["ul",[
+      "<b>Rushers start 7 yards back.</b> In NFL FLAG, up to two players may rush and must line up 7 yards off the line of scrimmage. In QB Brain there is always one rusher.",
+      "<b>The QB can't run the ball past the line.</b> NFL FLAG: the QB \"cannot directly run with the ball across the line of scrimmage.\" He can only become a runner after a handoff, pitch or lateral.",
+      "<b>Everyone is eligible</b>, including the center who snaps the ball.",
+      "<b>Pass clock:</b> NFL FLAG gives the QB 7 seconds to throw. The rusher usually gets there much sooner.",
+      "<b>Pitches and handoffs</b> are only legal behind the line in NFL FLAG.",
+      "<b>Sack:</b> the QB's flag pulled behind the line. A safety (QB sacked in his own end zone) is 2 points for the defense."
+    ]],
+    ["note","Leagues differ. Some allow no rush at all with a 4–5 second clock (common in 7v7), some ban laterals entirely, some make the center ineligible. QB Brain uses: one rusher from 7 yards, QB never crosses the line, center eligible."],
+    ["src",[SRC.rules,SRC.howto]]
+  ]},
+  {id:"team",title:"Your team and the defense",level:"rookie",group:"START HERE",blocks:[
+    ["fig","coverage","Cover 2","Your offense (circles) vs a defense (triangles)."],
+    ["ul",[
+      "<b>Q — quarterback.</b> Takes the snap, reads the defense, throws.",
+      "<b>C — center.</b> Snaps the ball, then runs a route. Often your safest checkdown in the middle.",
+      "<b>X, Y, Z (and H, F in 7v7) — receivers.</b> X and Z usually line up outside, Y/H inside (the slot).",
+      "<b>Rusher (R).</b> Starts 7 yards off the ball and attacks the QB at the snap. The bar at the top of the screen shows how close he is.",
+      "<b>Defenders.</b> Either guard one receiver each (<b>man</b>) or guard an area (<b>zone</b>). Deep defenders are often called safeties."
+    ]],
+    ["tip","Before every snap ask two questions: <b>Who is rushing?</b> and <b>How many defenders are deep?</b>"]
+  ]},
+  {id:"controls",title:"How to play QB Brain",level:"rookie",group:"START HERE",blocks:[
+    ["ul",[
+      "<b>Snap:</b> tap SNAP. Before that, study the defense — the countdown is just a guide.",
+      "<b>Throw (pullback meter):</b> pull back anywhere on the field like a slingshot; the dotted arc shows where it lands. It starts as a <b>lob</b>. Tap a second finger while pulling for a <b>bullet</b> (Space or right-click on a computer).",
+      "<b>Throw (tap mode):</b> tap a receiver for a bullet, hold him for a lob. Pick the mode in Settings.",
+      "<b>Scramble:</b> use the stick in the corner (WASD/arrows on a computer). You can't cross the blue line.",
+      "<b>Audible:</b> before the snap tap AUDIBLE to check to another play or hot-route one receiver.",
+      "<b>Full Drive:</b> call your play before every down, move the chains, score.",
+      "<b>After each play</b> your coach explains what happened. Tap <b>COACH VIEW</b> to freeze the moment you threw and see who was open."
+    ]],
+    ["h","Modes"],
+    ["ul",["<b>QB Brain:</b> sometimes asks you to call the coverage, then you make the throw.","<b>Coverage ID:</b> name the coverage only — great for learning tells.","<b>Quick Read:</b> no questions, just find the throw fast.","<b>Full Drive:</b> real downs and distance."]]
+  ]},
+  {id:"throw-types",title:"Lob vs bullet",level:"rookie",group:"THROWING",blocks:[
+    ["fig","lobbullet",null,"A bullet stays low, so a defender in the lane can tip it. A lob goes over him but hangs in the air longer."],
+    ["ul",[
+      "<b>Bullet (line drive):</b> short and crossing routes — slants, drags, hitches, outs. Gets there before the defense can react.",
+      "<b>Lob (touch):</b> when you need to get it <i>over</i> an underneath defender and in front of a deep one — corners, wheels, go routes, seams against a trailing defender.",
+      "<b>Lead the receiver</b> to where he's going, on the side away from the nearest defender."
+    ]],
+    ["tip","Rule of thumb: <b>over the short defender = lob; in front of the deep defender = bullet.</b>"],
+    ["note","Coaching sources agree on ball placement (\"put the ball where the receiver can make the catch, away from the defender\"). The exact lob-vs-bullet rule above is our coaching rule of thumb, not an official rule."],
+    ["src",[["Scouting Academy — Ball placement","https://scoutingacademy.com/glossary-entry-ball-placement/"]]]
+  ]},
+  {id:"read-clock",title:"Beating the rush",level:"all",group:"THROWING",blocks:[
+    ["fig","rush",null,"How long the QB Brain rusher takes to get home on each difficulty (straight rush)."],
+    ["p","The pass clock may say 7 seconds, but a rusher coming from 7 yards gets to you much faster. USA Football's pass-rush drill counts from 7 and suggests cutting it to 3–4 seconds to raise the urgency."],
+    ["ul",[
+      "<b>Know your answer before the snap</b> — which side, which receiver is 1st.",
+      "<b>Throw on time:</b> the ball should come out as your receiver makes his break, not after he looks wide open.",
+      "<b>Scramble away from the rusher</b>, not into him. Rushers aim at the QB's throwing shoulder.",
+      "<b>No intentional grounding in NFL FLAG</b> — throwing it away beats taking a sack."
+    ]],
+    ["pro","Elite rushers get home in about 1.2–1.5 seconds. That's one read. Pick the matchup pre-snap and throw it as the receiver breaks."],
+    ["src",[SRC.boxone,SRC.rules,["PlaybookTech — Your QB needs help","https://firstdown.playbooktech.com/coaches-community/your-flag-football-quarterback-needs-help"]]]
+  ]},
+  {id:"routes",title:"The route tree",level:"rookie",group:"ROUTES",blocks:[
+    ["fig","routes",null,"The basic routes from one receiver (X on the left). \"Inside\" means toward the ball."],
+    ["table",[
+      ["<b>Route</b>","<b>Flag depth · coaching point</b>"],
+      ["Flat","0–2 yds to the sideline. Quick outlet; stretches the flat defender."],
+      ["Slant","Break at 3–5 yds, about 45° inside. Best vs man; needs room to cross the defender's face."],
+      ["Hitch","5–7 yds, stop and turn back to the QB. Throw as he turns."],
+      ["Curl","5–12 yds, turn back inside. Sit in a zone hole; keep moving vs man."],
+      ["Out","About 5 yds, 90° cut to the sideline. Line up inside so there's room."],
+      ["In / Dig","3–10 yds, 90° cut to the middle."],
+      ["Drag","2–4 yds across the field. Keep running vs man, settle vs zone."],
+      ["Corner","5–10 yd stem, then 45° to the sideline. Usually a lob."],
+      ["Post","5–10 yd stem, then 45° to the middle. Beats man deep."],
+      ["Go","Straight downfield, 2–3 yds of room from the sideline."],
+      ["Seam","Vertical up the middle. Vs two deep safeties, bend it into the open middle."],
+      ["Wheel","Starts like a flat, turns upfield. Great vs man, especially off a rub."],
+      ["Stick / Snag","Short option routes (~5 yds): sit vs zone, break away vs man."]
+    ]],
+    ["tip","In the Create a Play editor every route depth is adjustable. Shorten routes to your QB's arm and your clock."],
+    ["src",[SRC.usafRoutes,SRC.plays,["National Football Post — Route tree","https://www.nationalfootballpost.com/inside-the-playbook-the-nfl-route-tree"]]]
+  ]},
+  {id:"cov-overview",title:"Man vs zone",level:"rookie",group:"COVERAGES",blocks:[
+    ["p","Every coverage is built from two ideas. In <b>man</b>, each defender guards one receiver wherever he goes. In <b>zone</b>, each defender guards an area and covers whoever comes into it."],
+    ["table",[["<b>Look for</b>","<b>Man</b>","<b>Zone</b>"],["Alignment","Tight on receivers","Spread out, some deep"],["Eyes","On their receiver","On the QB"],["After the snap","Turn and run with him (hips)","Drop to a spot, keep you in front"],["Beat it with","Quick throws, crossers, rubs","Throws to open grass between defenders"]]],
+    ["tip","Simple post-snap test: watch one defender over a slot receiver. If he runs with him, it's man. If he sinks to a spot, it's zone."],
+    ["pro","Count the deep defenders pre-snap: <b>one deep</b> = middle of the field closed (Cover 1 or Cover 3). <b>Two deep</b> = middle open (Cover 2). <b>None deep</b> = man or an underneath zone."],
+    ["src",[SRC.manzone,SRC.readcov,SRC.mojo]]
+  ]},
+  covChapter("cov-man","Man (Cover 0)","Man","rookie",[
+    ["p","Each defender pairs up with one receiver. In 5v5 that's four defenders in man plus the rusher, and nobody deep to help."],
+    ["ul",["<b>Tell:</b> defenders tight on receivers, eyes on their man; when a receiver moves, his defender goes with him.","<b>Weakness:</b> no help. Quick throws, crossers that rub defenders (Mesh), slants and double moves.","<b>Where to throw:</b> to the receiver who wins his route — the moment he breaks away."]],
+    ["tip","Man defenders turn their back to you. A ball thrown on time, away from the defender, is hard to stop."]],[SRC.def5,SRC.beaters,SRC.iflagdef]),
+  covChapter("cov-1","Cover 1","Cover 1","all",[
+    ["p","Man coverage underneath, plus one free safety deep in the middle about 10 yards off."],
+    ["ul",["<b>Tell:</b> one deep defender in the middle (middle of the field <b>closed</b>), the rest tight on receivers.","<b>Weakness:</b> the sides and quick throws. Off-man defenders have trouble driving on short routes.","<b>Watch out:</b> the safety reads your shoulders — look him off before throwing deep."]],
+    ["tip","Slant-flat and out routes beat Cover 1. Deep post? Only after you move the safety with your eyes."]],[SRC.def5,SRC.beaters,SRC.youngqb]),
+  covChapter("cov-2","Cover 2","Cover 2","all",[
+    ["p","Two safeties split the deep field in halves about 10 yards off; the corners play short."],
+    ["ul",["<b>Tell:</b> two deep defenders, middle of the field <b>open</b>.","<b>Weakness:</b> the hole between the corner and the safety on each side, the deep middle seam, and short throws toward the middle.","<b>Beat it with:</b> Smash (hitch + corner), post-corner, seams between the safeties."]],
+    ["tip","Read the corner on Smash: if he comes up on the hitch, throw the corner route over him."]],[SRC.def5,SRC.beaters,SRC.smash]),
+  covChapter("cov-3","Cover 3","Cover 3","all",[
+    ["p","Three defenders deep in thirds. In NFL FLAG's 5v5 guide, Cover 3 uses <b>no rusher</b>: three deep and two short. QB Brain's version keeps a rusher, so only one defender covers the short middle."],
+    ["fig","coverage","Cover 3 (no rush)","NFL FLAG's 5v5 Cover 3: three deep, two short, nobody rushing."],
+    ["ul",["<b>Tell:</b> three deep players who keep everything in front of them.","<b>Weakness:</b> underneath — flats, hitches, outs, ins in front of the deep defenders.","<b>Beat it with:</b> Flood, Curl-Flat, Slant-Flat, Stick."]],
+    ["tip","Against Cover 3, take the easy completion underneath and let your receiver run."]],[SRC.def5,SRC.beaters,SRC.flood]),
+  covChapter("cov-under","Underneath zone","Underneath Zone","all",[
+    ["p","Every defender sits in a short-to-medium zone with eyes on the QB and no real deep help."],
+    ["ul",["<b>Tell:</b> defenders at short depth, staring at the QB.","<b>Weakness:</b> deep. Seams, posts and corners behind the short defenders.","<b>Watch out:</b> short throws into a zone defender's eyes get picked. Throw to grass."]],
+    ["tip","Find the window between two zone defenders — or over the top."]],[SRC.mojo,SRC.iflagdef]),
+  {id:"cov-more",title:"Other flag defenses",level:"pro",group:"COVERAGES",blocks:[
+    ["p","These show up in real flag games. QB Brain's defense doesn't run them yet, but you should know them."],
+    ["fig","coverage","Cover 4","Cover 4 (quarters): four deep defenders and a rusher."],
+    ["p","<b>Cover 4 / four across:</b> four defenders about 10 yards deep plus a rusher. Coaches use it near the goal line. Weakness: lots of open space short — take the underneath throws, and use floods with several levels."],
+    ["fig","coverage","2-2 Box","The 2-2 box: two short, two deep."],
+    ["p","<b>2-2 box:</b> two short and two deep. Weak in the middle and against quick reads. Defenses often line up all five across and spin to it at the snap to disguise it."],
+    ["fig","coverage","3-1","The 3-1: three short, one deep."],
+    ["p","<b>3-1:</b> outside defenders 3–5 yards off check quick routes and drags, then bail deep; one safety rotates with the play. Good against bunch, weaker against spread formations."],
+    ["src",[SRC.def5,SRC.iflagdef,["PlaybookTech — 5v5 defense changeup","https://firstdown.playbooktech.com/coaches-community/5v5-flag-football-defense-changeup"]]]
+  ]},
+  {id:"read-presnap",title:"Pre-snap: count the safeties",level:"all",group:"READING THE DEFENSE",blocks:[
+    ["p","Before the snap, the most useful thing you can do is <b>count how many defenders are deep</b>. That tells you whether the middle of the field is open or closed."],
+    ["fig","coverage","Cover 2","Two deep = middle OPEN. Attack the seam between them and the sidelines underneath."],
+    ["fig","coverage","Cover 1","One deep = middle CLOSED. Attack the flats, the outside and quick routes."],
+    ["ul",["<b>Two high:</b> Cover 2 (or quarters). Throw the hole behind the corner, the deep middle, short middle.","<b>One high:</b> Cover 1 or Cover 3. Throw outside and underneath; look the safety off before going deep.","<b>None high:</b> man or an underneath zone. Quick throws vs man, over the top vs zone.","<b>Look at cushion and eyes:</b> tight and staring at receivers = man; deep cushion and eyes on you = zone.","<b>No rusher in 5v5?</b> Usually means an extra player in coverage (often Cover 3)."]],
+    ["pro","Disguises: on Varsity and Elite the defense can show one look and rotate at the snap. Make your pre-snap guess, then check the safeties again right after the snap."],
+    ["src",[SRC.readcov,SRC.youngqb,["Dummies — How a QB reads the defense","https://www.dummies.com/article/home-auto-hobbies/sports-recreation/fantasy-sports/fantasy-football/how-a-quarterback-reads-the-defense-in-a-football-game-186814/"]]]
+  ]},
+  {id:"read-key",title:"Read one defender",level:"all",group:"READING THE DEFENSE",blocks:[
+    ["p","You can't watch everyone. Good concepts put <b>one defender</b> in a bind — two receivers he can't both cover. Watch him and throw where he isn't."],
+    ["h","High-low (vertical stretch)"],
+    ["fig","highlow",null,"Curl-flat: the flat defender can't cover the curl (high) and the flat (low) at once."],
+    ["h","Horizontal stretch"],
+    ["fig","horizontal",null,"Two receivers at the same depth on either side of one zone defender."],
+    ["tip","Coaches put it simply: \"If you try to see it all, you're going to get lost.\" Key one defender."],
+    ["src",[SRC.curlflat,SRC.slantflat,SRC.qbreads]]
+  ]},
+  {id:"read-leverage",title:"Leverage: throw away from it",level:"all",group:"READING THE DEFENSE",blocks:[
+    ["fig","leverage",null,"If the defender is inside, the outside-breaking route is open, and the other way around."],
+    ["p","<b>Leverage</b> is which side of the receiver the defender lines up on. A defender shading inside is protecting the slant and the middle; he's giving up the out. A defender shading outside gives up the slant."],
+    ["tip","<b>Throw away from leverage.</b> Put the ball on the receiver's shoulder that's away from the defender."],
+    ["src",[SRC.leverage,SRC.manzone]]
+  ]},
+  {id:"read-progression",title:"Progressions: 1-2-3",level:"rookie",group:"READING THE DEFENSE",blocks:[
+    ["fig","play",{play:STANDARD5.find(p=>p.name==="Smash"),prog:true},"Smash: 1st read (green), 2nd (blue), 3rd (red)."],
+    ["p","A <b>progression</b> is the order you look at your receivers. If #1 is covered, move your eyes (and feet) to #2, then #3, then your checkdown. You set the read order for your own plays in the editor."],
+    ["ul",["<b>Beginners:</b> read half the field. Coaches often use colors — green = 1st, blue = 2nd, red = 3rd — and simple if/then rules.","<b>Full-field read:</b> after the front side is covered, swing to the backside. Takes more time than an Elite rusher gives you.","<b>Your checkdown</b> (often the center) shows up late — he's your answer when everything else is covered."]],
+    ["table",[["<b>Read</b>","<b>When (rule of thumb)</b>"],["1st","As the receiver breaks — about 1.5–2 s"],["2nd","About 2.5–3 s"],["Checkdown / throw away","Before the rusher arrives"]]],
+    ["note","The timing table is our coaching rule of thumb based on how fast QB Brain's rusher arrives; real games vary."],
+    ["pro","Read the <b>key defender</b>, not the receivers. On Smash you watch the corner: he decides between the hitch and the corner route for you."],
+    ["src",[SRC.prog,SRC.reads,SRC.qbreads]]
+  ]},
+  conChapter("con-slantflat","Slant-Flat","Horizontal + inside/outside","Cover 3 and Cover 1",
+    "Key the flat defender. He widens → throw the slant. He squeezes the slant → throw the flat.",
+    [["p","A classic quick-game concept. The slant and the flat go opposite ways around the same defender. USA Football teaches the same read against Cover 3 and Cover 1."]],[SRC.slantflat,SRC.curlflat],[7,4]),
+  conChapter("con-smash","Smash","High-low on the corner","Cover 2",
+    "Key the corner. He steps up on the hitch → throw the corner route over him. He sinks → hit the hitch.",
+    [["p","The outside receiver runs a hitch at about 5 yards; the inside receiver runs a corner behind it. The Cover 2 corner can't cover both."]],[SRC.smash,SRC.beaters],[5,4]),
+  conChapter("con-stick","Stick","Horizontal","Zone and man",
+    "Key the flat defender. He widens with the flat → throw the stick. He sits on the stick → throw the flat.",
+    [["p","Stick (5–6 yards, sit vs zone, break away vs man) plus a flat and a go to clear deep."]],[SRC.stick],[21,4]),
+  conChapter("con-snag","Snag","High-low + horizontal (triangle)","Man and Cover 3",
+    "Flat → snag → corner. Stay on that side; whichever one the defender doesn't take is open.",
+    [["p","Three routes on one side make a triangle around the defenders: something short, something at 5 yards, something deep."]],[SRC.plays,SRC.prog]),
+  conChapter("con-flood","Flood","Three levels on one side","Cover 3",
+    "Peek the deep route, then key the flat defender: he widens → throw the out; he sinks → throw the flat.",
+    [["p","A go/post up top, an out in the middle and a flat underneath — three levels against two defenders on that side."]],[SRC.flood,SRC.beaters],[22,4]),
+  conChapter("con-levels","Levels","High-low inside","Zone (and man in flag)",
+    "Two in-breaking routes stacked: if the hook defender drops under the deep one, hit the short one, and the reverse.",
+    [["p","Coaches stress that the deep in-route must get every inch of its depth so the levels stay separated."]],[["PlaybookTech — 7v7 NFL concepts","https://firstdown.playbooktech.com/coaches-community/?p=37186"]]),
+  conChapter("con-mesh","Mesh","Horizontal + rub","Man",
+    "The two crossers rub each other's defenders. Throw to the one who comes out clean. Vs zone, sit him in the hole.",
+    [["p","Two shallow crossers pass close to each other (legal in flag as long as nobody blocks). Man defenders have to fight through traffic."],["tip","Easy read for young QBs: whoever is open first coming across your face."]],[SRC.mesh]),
+  conChapter("con-drive","Drive","Horizontal (shallow + dig)","Man and Cover 4",
+    "Key the middle defender: he sits shallow → throw the dig; he drops → throw the shallow.",
+    [["p","A shallow cross and a deeper dig go the same direction, putting the middle defender in a high-low bind."]],[["PlaybookTech — 7v7 NFL concepts","https://firstdown.playbooktech.com/coaches-community/?p=37186"]]),
+  conChapter("con-verts","Four Verticals","Vertical","One-high and two-high looks",
+    "Key the deep safety: throw the seam away from him. Against two high, the inside receiver bends into the open middle.",
+    [["p","Four receivers go deep at once — more vertical threats than deep defenders."],["tip","Throw it with some air, leading him away from the safety. If everyone is covered, check it down."]],[SRC.verts]),
+  conChapter("con-spacing","Spacing","Horizontal","Zone",
+    "Receivers settle at the same depth across the field. Find the window between two zone defenders.",
+    [["note","Spacing is a common concept, but we didn't find a strong flag-specific source for it. This read is our coaching summary."]],[SRC.plays]),
+  {id:"pro-mistakes",title:"Common QB mistakes",level:"all",group:"PRO",blocks:[
+    ["ul",[
+      "<b>Trying to read everything.</b> Key one defender.",
+      "<b>Holding the ball.</b> The clock is 7 seconds; the rusher is 2 or less on Elite.",
+      "<b>Staring down your receiver.</b> Deep defenders read your shoulders — look them off.",
+      "<b>Throwing late over the middle vs zone.</b> The window closes as the hook defender drifts.",
+      "<b>Lobbing into tight coverage.</b> Lobs hang; drive it in or move on.",
+      "<b>Ignoring down and distance.</b> 3rd & 2 and 3rd & 15 are different throws.",
+      "<b>Running too many plays badly.</b> Master a few core concepts first."
+    ]],
+    ["h","Coaching cues"],
+    ["ul",["\"Key one defender.\"","\"Middle open or closed?\"","\"Throw away from leverage.\"","\"Know where the ball is going before the snap.\""]],
+    ["h","Drills you can do in QB Brain"],
+    ["ul",["<b>Coverage ID on Elite</b> — tells and disguises.","<b>Quick Read on Elite</b> — like USA Football's box-and-one drill with the count cut to 3–4 seconds.","<b>Run one concept 10 times</b> from the manual's PRACTICE buttons against the coverage it beats — then against one it doesn't."]],
+    ["src",[SRC.iflagqb,["iFlag — 5 tips for beginner QBs","https://iflag.org/5-flag-football-tips-for-beginner-quarterbacks/"],SRC.boxone]]
+  ]},
+  {id:"glossary",title:"Glossary",level:"rookie",group:"PRO",blocks:[
+    ["table",[
+      ["<b>LOS</b>","Line of scrimmage — where the ball is snapped (blue line)."],
+      ["<b>Rusher</b>","The defender who attacks the QB, starting 7 yds back."],
+      ["<b>Man</b>","Each defender guards one receiver."],
+      ["<b>Zone</b>","Each defender guards an area."],
+      ["<b>Safety</b>","A deep defender."],
+      ["<b>MOFO / MOFC</b>","Middle of the field open (two deep) / closed (one deep)."],
+      ["<b>Leverage</b>","Which side of the receiver the defender is on."],
+      ["<b>Progression</b>","The order you read your receivers."],
+      ["<b>Key defender</b>","The one defender you watch to decide where to throw."],
+      ["<b>High-low</b>","Two receivers at different depths on one defender."],
+      ["<b>Checkdown</b>","Your last, safest short option."],
+      ["<b>Hot route</b>","Changing one receiver's route at the line."],
+      ["<b>Audible</b>","Changing the whole play at the line."],
+      ["<b>Rub</b>","Receivers crossing close so defenders run into traffic (no blocking allowed)."],
+      ["<b>Disguise</b>","Showing one coverage and playing another after the snap."]
+    ]]
+  ]},
+  {id:"sources",title:"Sources",level:"pro",group:"PRO",blocks:[
+    ["p","This manual is built from official rules and established flag and football coaching sources. Where we filled a gap with our own coaching judgment, the chapter says so."],
+    ["src",Object.keys(SRC).map(k=>SRC[k])]
+  ]}
+];
+
+/* ---------------- manual rendering ---------------- */
+let MAN_CUR=null, MAN_RETURN=null;
+function openManual(id){
+  els.manual.classList.remove("hidden");
+  if(id) showChapter(id); else showChapterList();
+}
+function openManualFromGame(id){ openManual(id); }
+function closeManual(){ els.manual.classList.add("hidden"); }
+els.manClose.addEventListener("click",closeManual);
+els.manBack.addEventListener("click",()=>{ if(MAN_CUR) showChapterList(); else closeManual(); });
+els.manualOpenBtn.addEventListener("click",()=>openManual(null));
+function lvlTag(l){ const s=document.createElement("span"); s.className="lvl "+l; s.textContent=l.toUpperCase(); return s; }
+function showChapterList(){
+  MAN_CUR=null; els.manTitle.textContent="COACH'S MANUAL"; const body=els.manBody; body.innerHTML="";
+  const groups=[]; MANUAL.forEach(c=>{ let g=groups.find(x=>x.name===c.group); if(!g){ g={name:c.group,ch:[]}; groups.push(g); } g.ch.push(c); });
+  groups.forEach(g=>{
+    const box=document.createElement("div"); box.className="man-group";
+    const l=document.createElement("div"); l.className="section-label"; l.textContent=g.name; box.appendChild(l);
+    g.ch.forEach(c=>{ const b=document.createElement("button"); b.className="ch-btn"; b.type="button";
+      const t=document.createElement("b"); t.textContent=c.title; b.append(t,lvlTag(c.level)); b.addEventListener("click",()=>showChapter(c.id)); box.appendChild(b); });
+    body.appendChild(box);
+  });
+  els.manual.scrollTop=0;
+}
+function showChapter(id){
+  const i=MANUAL.findIndex(c=>c.id===id); if(i<0){ showChapterList(); return; }
+  const c=MANUAL[i]; MAN_CUR=id; els.manTitle.textContent=c.title.toUpperCase();
+  const body=els.manBody; body.innerHTML="";
+  const wrap=document.createElement("div"); wrap.className="man-ch";
+  const tag=document.createElement("div"); tag.appendChild(lvlTag(c.level)); wrap.appendChild(tag);
+  const figs=[];
+  c.blocks.forEach(bk=>{
+    const [k,a,b,cap]=bk; let el;
+    if(k==="p"){ el=document.createElement("p"); el.innerHTML=a; }
+    else if(k==="h"){ el=document.createElement("h3"); el.textContent=a; }
+    else if(k==="ul"){ el=document.createElement("ul"); a.forEach(t=>{ const li=document.createElement("li"); li.innerHTML=t; el.appendChild(li); }); }
+    else if(k==="tip"||k==="pro"||k==="note"){ el=document.createElement("div"); el.className="man-"+k; el.innerHTML=(k==="pro"?"<b>PRO:</b> ":"")+a; }
+    else if(k==="table"){ el=document.createElement("table"); el.className="man-table"; a.forEach(r=>{ const tr=document.createElement("tr"); r.forEach(cell=>{ const td=document.createElement("td"); td.innerHTML=cell; tr.appendChild(td); }); el.appendChild(tr); }); }
+    else if(k==="fig"){ el=document.createElement("figure"); const cv=document.createElement("canvas"); el.appendChild(cv); if(cap){ const fc=document.createElement("figcaption"); fc.textContent=cap; el.appendChild(fc); } figs.push([cv,a,b]); }
+    else if(k==="practice"){ el=document.createElement("button"); el.className="btn alt sm"; el.type="button"; el.textContent=a.label; el.addEventListener("click",()=>practiceFromManual(a)); }
+    else if(k==="src"){ el=document.createElement("div"); el.className="man-src"; el.innerHTML="<b>Sources</b><br>"; a.forEach(s=>{ const link=document.createElement("a"); link.href=s[1]; link.target="_blank"; link.rel="noopener"; link.textContent=s[0]; el.appendChild(link); el.appendChild(document.createElement("br")); }); }
+    if(el) wrap.appendChild(el);
+  });
+  const nav=document.createElement("div"); nav.className="man-nav";
+  if(i>0){ const p=document.createElement("button"); p.className="btn alt"; p.type="button"; p.textContent="◀ "+MANUAL[i-1].title; p.addEventListener("click",()=>showChapter(MANUAL[i-1].id)); nav.appendChild(p); }
+  if(i<MANUAL.length-1){ const n=document.createElement("button"); n.className="btn"; n.type="button"; n.textContent=MANUAL[i+1].title+" ▶"; n.addEventListener("click",()=>showChapter(MANUAL[i+1].id)); nav.appendChild(n); }
+  wrap.appendChild(nav);
+  body.appendChild(wrap);
+  els.manual.scrollTop=0;
+  requestAnimationFrame(()=>figs.forEach(([cv,type,arg])=>{ try{ (FIGS[type]||(()=>{}))(cv,type==="play"?arg.play:arg,type==="play"?arg:undefined); }catch(e){} }));
+}
+function practiceFromManual(o){
+  closeManual();
+  if(state.tut){ cancelAnimationFrame(rafId); clearInterval(studyTimer); tutRestore(); }
+  if(state.phase && state.phase!=="idle" && !els.gameScreen.classList.contains("hidden")){ cancelAnimationFrame(rafId); clearInterval(studyTimer); clearOverlays(); }
+  state.tut=null;
+  state.book="standard"; state.squad=5; state.playPick=o.play||"random"; state.drillMode="quick_read";
+  refreshSetupUI();
+  startSession("quick_read",{coverage:o.coverage||null});
+}
+
+/* ============================================================
+   TUTORIAL — guided lessons that run on the real game engine
+============================================================ */
+MODES.tutorial={label:"Tutorial", askCoverageChance:0, throws:true};
+MODES.tutorial_id={label:"Tutorial", askCoverageChance:1, throws:false};
+const TUT_KEY="qbbrain.tutorial.v1";
+let TUT_DONE={}; try{ TUT_DONE=JSON.parse(localStorage.getItem(TUT_KEY)||"{}")||{}; }catch(_){ TUT_DONE={}; }
+function tutSave(){ try{ localStorage.setItem(TUT_KEY,JSON.stringify(TUT_DONE)); }catch(_){} }
+const completed=r=>r==="GOOD READ"||r==="RISKY";
+const LESSONS=[
+  {id:"l1", title:"Your first throw", sub:"Meet your team, snap it, pull back and throw", reps:[
+    {play:"Slant-Flat", coverage:"Cover 3", rush:"none", steps:[
+      {say:"Welcome, QB! I'm your coach. Let's learn this together — one step at a time.", wait:"next"},
+      {say:"This is <b>you</b>: the quarterback, <b>Q</b>. The <b>center (C)</b> snaps you the ball — and he can catch passes too.", hl:["Q","C"], wait:"next"},
+      {say:"<b>X, Y and Z</b> are your receivers. The colored lines are the routes they'll run after the snap.", hl:["X","Y","Z"], wait:"next"},
+      {say:"The <b>red players</b> are the defense. The <b>blue line</b> is the line of scrimmage. As QB you can never run past it — you have to throw.", hl:"def", wait:"next"},
+      {say:"No rusher this time, so take your time. Tap <b>SNAP</b> to start the play.", wait:"snap"},
+      {say:"Now <b>pull back anywhere on the field</b> — like a slingshot. The dotted arc shows where the ball will land. Pull further to throw further.", wait:"aim"},
+      {say:"Aim the circle at an open receiver and <b>let go</b> to throw!", wait:"result"}
+    ], pass:r=>completed(r.result),
+    win:"That's it! Snap, find the open guy, throw. Everything else builds on this.",
+    fail:"Close! Aim the landing circle a little in front of the receiver — he's moving. Try again."}
+  ]},
+  {id:"l2", title:"Lob or bullet", sub:"Two kinds of throws and when to use each", reps:[
+    {play:"Slant-Flat", coverage:"Cover 2", rush:"none", steps:[
+      {say:"Every throw starts as a <b>LOB</b> — it goes up and over defenders, but it's slower.", wait:"next"},
+      {say:"A <b>BULLET</b> is low and fast. It beats defenders to the spot on short routes like this slant. Short and quick = bullet.", hl:["X","Z"], wait:"next"},
+      {say:"Snap it.", wait:"snap"},
+      {say:"Pull back to aim, and while you're still pulling <b>tap the screen with a second finger</b> — it switches to BULLET (gold dots). On a computer press <b>Space</b>.", wait:"toggle"},
+      {say:"Bullet! Now throw it to the slant.", wait:"result"}
+    ], pass:r=>completed(r.result) && r.type==="bullet",
+    win:"Perfect. Bullets for short and crossing routes, lobs to get over a defender.",
+    fail:"Let's do it again — make sure the dots turn gold (BULLET) before you let go."}
+  ]},
+  {id:"l3", title:"Beat the rusher", sub:"The rusher, the clock and the scramble stick", reps:[
+    {play:"Spacing", coverage:"Cover 3", rush:"slow", steps:[
+      {say:"Now the <b>rusher (R)</b> is coming. He starts 7 yards back and attacks you at the snap. The bar at the top shows how close he is.", hl:"rusher", wait:"next"},
+      {say:"The <b>stick</b> in the corner moves you. Slide away from the rusher to buy time — but you still can't cross the blue line.", wait:"next"},
+      {say:"Snap it, and use the stick to move.", wait:"snap"},
+      {say:"Move with the stick…", wait:"scramble"},
+      {say:"Good! Now get the ball out before he gets to you.", wait:"result"}
+    ], pass:r=>r.result!=="SACKED" && r.result!=="INTERCEPTED",
+    win:"You beat the rush. Remember: the pass clock might say 7 seconds, but the rusher gets there way sooner.",
+    fail:"He got you. Move away from him with the stick and throw a little sooner."}
+  ]},
+  {id:"l4", title:"Man or zone?", sub:"The first thing to read before every snap", mode:"tutorial_id", reps:[
+    {play:"Spacing", coverage:"Man", steps:[
+      {say:"Before every snap, look at the defense. In <b>MAN</b> coverage each defender lines up on one receiver and follows him everywhere.", hl:"def", wait:"next"},
+      {say:"See how each red defender is right across from a receiver? What coverage is this?", wait:"coverage"},
+      {say:"Now snap it and watch: in man, defenders turn and run <b>with</b> their receiver.", wait:"snap"},
+      {say:"Watch them follow…", wait:"result"}
+    ], pass:r=>r.correct,
+    win:"Man coverage: tight, eyes on their guy, they go where he goes.",
+    fail:"That was MAN — every defender was matched up on one receiver. Let's look again."},
+    {play:"Spacing", coverage:"Cover 3", steps:[
+      {say:"Different look. In <b>ZONE</b> coverage defenders guard <b>areas</b> and watch the QB. Count the deep defenders — three back there.", hl:"def", wait:"next"},
+      {say:"Three deep, one short. What is it?", wait:"coverage"},
+      {say:"Snap and watch them drop to spots instead of chasing receivers.", wait:"snap"},
+      {say:"See them sink into areas?", wait:"result"}
+    ], pass:r=>r.correct,
+    win:"Cover 3: three deep defenders split the field in thirds. The short areas are where you throw.",
+    fail:"That was Cover 3 — three deep, everyone watching the QB. Try again."}
+  ]},
+  {id:"l5", title:"Count the safeties", sub:"One deep or two deep tells you where to throw", mode:"tutorial_id", reps:[
+    {play:"Spacing", coverage:"Cover 2", steps:[
+      {say:"Count the deep defenders (safeties). <b>Two deep</b> means the middle of the field is <b>open</b> — that's Cover 2.", hl:"def", wait:"next"},
+      {say:"Two high. Name it.", wait:"coverage"},
+      {say:"Snap it.", wait:"snap"},
+      {say:"Each safety takes half the deep field.", wait:"result"}
+    ], pass:r=>r.correct, win:"Cover 2. The holes: between the corner and safety, and the deep middle.", fail:"Two deep = Cover 2. Again!"},
+    {play:"Spacing", coverage:"Cover 1", steps:[
+      {say:"Now <b>one deep</b> safety in the middle, everyone else tight on a receiver — man underneath with help on top.", hl:"def", wait:"next"},
+      {say:"One high plus man. Name it.", wait:"coverage"},
+      {say:"Snap it.", wait:"snap"},
+      {say:"The safety helps over the top; everyone else follows a receiver.", wait:"result"}
+    ], pass:r=>r.correct, win:"Cover 1. Attack the sides and short throws; look the safety off before going deep.", fail:"One deep + man underneath = Cover 1. Again!"}
+  ]},
+  {id:"l6", title:"Your first progression", sub:"Read one defender: Smash vs Cover 2", reps:[
+    {play:"Smash", coverage:"Cover 2", rush:"slow", prog:true, steps:[
+      {say:"This is <b>Smash</b>. The numbers show your <b>read order</b> — look at #1 first, then #2.", wait:"next"},
+      {say:"Against Cover 2, watch the <b>corner</b> on the outside. He can't cover the short hitch and the deep corner route at the same time.", hl:"def", wait:"next"},
+      {say:"If he steps up on the hitch, throw the corner route <b>over</b> him (lob). If he sinks, hit the hitch (bullet). Snap it!", wait:"snap"},
+      {say:"Watch the corner and throw where he isn't…", wait:"result"}
+    ], pass:r=>r.result==="GOOD READ"||r.result==="RISKY",
+    win:"That's a real QB read — you watched one defender and threw away from him.",
+    fail:"Watch the corner, not the receivers. Throw to whichever route he doesn't take."}
+  ]},
+  {id:"l7", title:"Beat man with Mesh", sub:"Crossers that rub defenders", reps:[
+    {play:"Mesh", coverage:"Man", rush:"normal", steps:[
+      {say:"Against <b>man</b>, use crossing routes. In <b>Mesh</b>, two receivers cross close together so their defenders run into traffic.", hl:["Y","Z"], wait:"next"},
+      {say:"Throw to whichever crosser comes out clean — quickly, with a bullet. Snap it!", wait:"snap"},
+      {say:"Watch the crossers…", wait:"result"}
+    ], pass:r=>completed(r.result),
+    win:"Man beater! Quick throws and crossers make man coverage pay.",
+    fail:"Get it out sooner — throw to the first crosser who's clear of his defender."}
+  ]},
+  {id:"l8", title:"Audibles & hot routes", sub:"Change the play at the line", reps:[
+    {play:"Four Verticals", coverage:"Cover 3", rush:"slow", steps:[
+      {say:"You called <b>Four Verticals</b>, but they're in <b>Cover 3</b> — three deep defenders waiting for deep balls. Not great.", hl:"def", wait:"next"},
+      {say:"Tap <b>AUDIBLE</b>. You can check to another play, or tap one receiver and give him a new route (a hot route). Try changing something.", wait:"audible"},
+      {say:"Nice change. Tap DONE, then SNAP and attack underneath.", wait:"snap"},
+      {say:"Take the easy completion…", wait:"result"}
+    ], pass:r=>completed(r.result),
+    win:"That's what audibles are for — see the coverage, put the play in the right spot.",
+    fail:"Against Cover 3 the short throws are open. Audible to a quick route and try again."}
+  ]}
+];
+
+const TUT={i:0, rep:0, step:0, save:null, last:null, lessonMode:null};
+function tutLesson(){ return LESSONS[TUT.i]; }
+function tutRep(){ return tutLesson().reps[TUT.rep]; }
+function tutStep(){ return tutRep().steps[TUT.step]; }
+function startLesson(i){
+  closeManual();
+  TUT.i=i; TUT.rep=0; TUT.step=0; TUT.last=null;
+  TUT.save={difficulty:state.difficulty, throwMode:state.throwMode, showProgression:state.showProgression, squad:state.squad, book:state.book, playPick:state.playPick};
+  state.difficulty="rookie"; state.throwMode="pull"; state.squad=5; state.book="standard";
+  state.tut=TUT;
+  startSession(tutLesson().mode||"tutorial");
+}
+function tutRestore(){
+  if(TUT.save){ Object.assign(state,TUT.save); TUT.save=null; }
+  state.tut=null; refreshSetupUI();
+}
+function tutRepCfg(){
+  const r=tutRep();
+  return {play:STANDARD5.find(p=>p.name===r.play)||STANDARD5[0], coverage:r.coverage, ask:(tutLesson().mode==="tutorial_id")};
+}
+// applied to every tutorial rep right after it's built
+function tutAdjustRep(rep){
+  const r=tutRep();
+  state.showProgression=!!r.prog;
+  if(r.rush==="none"){ rep.rushDelay=999; rep.delayPlan=999; rep.rushPlan="straight"; }
+  else if(r.rush==="slow"){ rep.rushPlan="straight"; rep.rushSpeed=3.4; rep.rushDelay=0.4; rep.rusher.x=GEO.CX; }
+  else { rep.rushPlan="straight"; rep.rusher.x=GEO.CX; }
+  rep.disguised=false; rep.shownCoverage=rep.actualCoverage;
+}
+function tutRender(){
+  if(!state.tut) return;
+  const st=tutStep(); if(!st) return;
+  els.coachBubble.classList.remove("hidden","low");
+  els.cbText.innerHTML=st.say;
+  els.cbBtn.classList.toggle("hidden", st.wait!=="next");
+  els.cbBtn.textContent="NEXT";
+  els.studyBanner.classList.add("hidden"); els.playTag.classList.add("hidden");
+  if(state.phase==="study"){
+    const showSnap = st.wait==="snap" || st.wait==="audible";
+    els.controls.classList.toggle("hidden", !(showSnap) || st.wait==="coverage" || AUD.open);
+    els.primaryBtn.classList.toggle("hidden", st.wait!=="snap");
+    audibleShow(st.wait==="audible" || (st.wait==="snap" && TUT.i===LESSONS.length-1));
+    els.coverageSheet.classList.toggle("hidden", st.wait!=="coverage");
+    tutDrawHighlight(st.hl);
+  }
+}
+function tutDrawHighlight(hl){
+  if(state.phase!=="study" || !state.rep) return;
+  drawStatic(); if(!hl) return;
+  const rep=state.rep, pulse=(s,col)=>{ ctx.beginPath(); ctx.arc(s.x,s.y,VIEW.PR*2,0,Math.PI*2); ctx.strokeStyle=col; ctx.lineWidth=3.5; ctx.stroke(); };
+  if(Array.isArray(hl)) hl.forEach(id=>{ const p=playerById(rep,id); if(p&&p._px) pulse(p._px,"#ffc933"); });
+  else if(hl==="def"){ rep.defenders.forEach(d=>pulse(toPx(d.pos.x,d.pos.y),"#ff6b5a")); const y=toPx(0,0).y; ctx.fillStyle="rgba(90,184,255,0.55)"; ctx.fillRect(0,y-4,cw,8); }
+  else if(hl==="rusher"){ pulse(toPx(rep.rusher.x,rep.rusher.y),"#ffc933"); }
+}
+function tutAdvance(){
+  TUT.step++;
+  const st=tutStep();
+  if(!st) return;
+  tutRender();
+}
+els.cbBtn.addEventListener("click",(e)=>{
+  e.stopPropagation();
+  if(!state.tut) return;
+  const st=tutStep();
+  if(st && st.wait==="next"){ tutAdvance(); return; }
+  tutAfterResult();
+});
+// events from the game engine
+function tutEvent(name,data){
+  if(!state.tut) return;
+  if(name==="ready"){
+    TUT.step=0;
+    if(TUT.retry){ const k=tutRep().steps.findIndex(x=>x.wait!=="next"); TUT.step=Math.max(0,k); TUT.retry=false; }
+    tutRender(); return; }
+  const st=tutStep(); if(!st) return;
+  if(name==="result"){ tutOnResult(data); return; }
+  if(st.wait===name){ tutAdvance(); }
+  else if(name==="snap" && st.wait!=="snap"){ // snapped early: jump to the first step after the snap
+    const k=tutRep().steps.findIndex(s=>s.wait==="snap"); if(k>=0 && k>=TUT.step){ TUT.step=k+1; tutRender(); }
+  }
+  else if(name==="coverage" && st.wait!=="coverage"){ const k=tutRep().steps.findIndex(s=>s.wait==="coverage"); if(k>=0){ TUT.step=k+1; tutRender(); } }
+  else if((name==="hot"||name==="audible") && st.wait==="audible"){ tutAdvance(); }
+}
+function tutOnResult(data){
+  const r=tutRep(), ok=r.pass(data);
+  TUT.last={ok};
+  els.coachBubble.classList.remove("hidden","low");
+  els.cbText.innerHTML=(ok?"<b>✓ </b>":"")+(ok?r.win:r.fail);
+  els.cbBtn.classList.remove("hidden");
+  const lastRep = TUT.rep>=tutLesson().reps.length-1;
+  els.cbBtn.textContent = ok ? (lastRep ? "LESSON COMPLETE ▶" : "NEXT ▶") : "TRY AGAIN";
+  els.nextRepBtn.textContent = els.cbBtn.textContent;
+}
+function tutAfterResult(){
+  if(!state.tut) return;
+  const ok=TUT.last && TUT.last.ok;
+  els.coachBubble.classList.add("hidden");
+  if(!ok){ TUT.retry=true; startRep(); return; }
+  if(TUT.rep < tutLesson().reps.length-1){ TUT.rep++; TUT.step=0; startRep(); return; }
+  // lesson complete
+  TUT_DONE[tutLesson().id]=true; tutSave();
+  tutExit(true);
+}
+function tutExit(finished){
+  cancelAnimationFrame(rafId); clearInterval(studyTimer); clearOverlays();
+  els.coachBubble.classList.add("hidden");
+  const wasLast = TUT.i>=LESSONS.length-1;
+  tutRestore();
+  showScreen("learnScreen");
+  if(finished && !wasLast) highlightNextLesson();
+}
+function highlightNextLesson(){ renderLessons(); }
+function renderLessons(){
+  const list=els.lessonList; list.innerHTML="";
+  const firstOpen=LESSONS.findIndex(l=>!TUT_DONE[l.id]);
+  LESSONS.forEach((l,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.className="lesson"+(TUT_DONE[l.id]?" done":"")+(i===firstOpen?" next":"");
+    const n=document.createElement("span"); n.className="n"; n.textContent=TUT_DONE[l.id]?"✓":String(i+1);
+    const d=document.createElement("div"); const t=document.createElement("b"); t.textContent=l.title; const s=document.createElement("small"); s.textContent=l.sub; d.append(t,s);
+    b.append(n,d); b.addEventListener("click",()=>startLesson(i)); list.appendChild(b);
+  });
+  const done=LESSONS.filter(l=>TUT_DONE[l.id]).length;
+  els.tutProgress.textContent=" · "+done+"/"+LESSONS.length;
+  els.learnSummary.textContent = done ? "Tutorial "+done+"/"+LESSONS.length+" · Coach's Manual" : "Tutorial · Coach's Manual";
+}
+els.tutResetBtn.addEventListener("click",()=>{ TUT_DONE={}; tutSave(); renderLessons(); });
+// first-launch nudge
+(function(){
+  let dismissed=false; try{ dismissed=localStorage.getItem("qbbrain.newbieDismissed")==="1"; }catch(_){}
+  if(!dismissed && !Object.keys(TUT_DONE).length) els.newbieCard.classList.remove("hidden");
+  els.newbieCard.addEventListener("click",(e)=>{
+    if(e.target===els.newbieX){ els.newbieCard.classList.add("hidden"); try{ localStorage.setItem("qbbrain.newbieDismissed","1"); }catch(_){} return; }
+    els.newbieCard.classList.add("hidden"); showScreen("learnScreen");
+  });
+})();
+const _showScreen=showScreen;
+showScreen=function(id){ _showScreen(id); if(id==="learnScreen") renderLessons(); };
+renderLessons();
+
+/* ---------------- coach talk setting ---------------- */
+function renderCoachRow(){
+  buildChoiceRow(els.coachRow,[
+    {key:"auto",title:"Auto",sub:"Simple on Rookie"},
+    {key:"simple",title:"Simple",sub:"Quick verdict + tip"},
+    {key:"full",title:"Full",sub:"The whole breakdown"}
+  ], state.coachTalk||"auto", k=>{ state.coachTalk=k; });
+}
+const _refreshSetupUI=refreshSetupUI;
+refreshSetupUI=function(){ renderCoachRow(); _refreshSetupUI(); };
+renderCoachRow();
+window.__qbLearn={MANUAL,LESSONS,openManual,startLesson,TUT};
 
 })();
 

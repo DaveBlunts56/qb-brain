@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.6.0 — Learn: Tutorial, Coach's Manual, a real coach after every play, share codes
+
+### Tutorial (Home → Learn)
+- **8 hands-on lessons** run on the real game, with your coach guiding each step:
+  1. Your first throw
+  2. Lob or bullet
+  3. Beat the rusher
+  4. Man or zone?
+  5. Count the safeties
+  6. Your first progression (Smash vs Cover 2)
+  7. Beat man with Mesh
+  8. Audibles & hot routes
+- The coach waits for you to actually do each thing: snap, aim, switch to a bullet, scramble, call the coverage, audible.
+- If a rep doesn't go right, you retry without sitting through the intro again. Your progress is saved.
+- First-time players get a "New here?" card on the home screen.
+
+### Coach's Manual (31 chapters with diagrams)
+- **Start here:** how flag football works (NFL FLAG rules and how leagues differ), your team and the defense, how to play QB Brain.
+- **Throwing:** lob vs bullet, beating the rush (how fast the rusher gets home on each difficulty).
+- **Routes:** the route tree with flag depths and a coaching point for each route.
+- **Coverages:** man vs zone, Man, Cover 1, Cover 2, Cover 3 (including NFL FLAG's no-rush version) and underneath zone, each drawn by the game's own defense with its tells, weaknesses and the concepts that beat it. Plus Cover 4 and the 2-2 and 3-1 shells you'll see in real games.
+- **Reading the defense:** counting the safeties, reading one key defender (high-low and horizontal stretches), leverage, and 1-2-3 progressions.
+- **Concepts:** Slant-Flat, Smash, Stick, Snag, Flood, Levels, Mesh, Drive, Four Verticals and Spacing, each with what it beats, the key defender and the if/then read.
+- **Pro:** common QB mistakes, coaching cues and drills, a glossary and sources.
+- **Practice / Run it** buttons drop you straight into a drill against that coverage or with that concept.
+- Every chapter is tagged ROOKIE, ALL or PRO and lists its sources: the NFL FLAG rulebook and guides, USA Football, PlaybookTech First Down, Youth Football Online, iFlag and others. Where a chapter uses our own coaching rule of thumb, it says so.
+
+### Your coach after every play
+- A **COACH** card explains:
+  - what the defense was and its tell
+  - the read for the play (the key defender and the if/then rule)
+  - who was open when you threw, and how open
+  - your timing vs the rusher
+  - one coaching tip
+- **Coach View** freezes the moment you threw and draws the coverage on the field (zones and man assignments) and marks:
+  - the most open receiver
+  - your throw
+  - the key defender who decided the play
+- **Learn** opens the manual chapter for that coverage.
+- **Coach talk** setting: Auto (simple on Rookie), Simple or Full breakdown.
+- **Coach's notes** on the session summary point out what to work on, with links to the right chapter.
+
+### Share codes
+- **Share code** on any play (yours or built-in) gives you a code to copy or send.
+- Teammates paste it into **Playbook → My Plays → Import a play**.
+
 ## v1.5.0 — Create a Play, audibles and play calling
 
 ### Create a Play (Playbook → My Plays → + Create a play)
