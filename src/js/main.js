@@ -55,6 +55,7 @@ init_coach();
 init_film();
 init_profile();
 init_learn();
-init_cloud();
-init_account();
+// Parent accounts + cloud sync are built but switched off for the beta (package.json → "features").
+// eslint-disable-next-line no-undef
+if(__QB_FEATURES__.accounts){ init_cloud(); init_account(); }
 installTestHooks();

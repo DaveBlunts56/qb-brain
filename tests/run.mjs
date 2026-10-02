@@ -34,8 +34,10 @@ const files = [];
 if (which !== "e2e") files.push(...list("unit"));
 let srv = null, mockCloud = null;
 if (which !== "unit") {
-  const b = spawnSync(process.execPath, ["scripts/build.mjs"], { cwd: root, stdio: "inherit" });
-  if (b.status !== 0) process.exit(1);
+  for (const args of [["scripts/build.mjs"], ["scripts/build.mjs", "--with=accounts"]]) {   // the app + a copy with accounts on
+    const b = spawnSync(process.execPath, args, { cwd: root, stdio: "inherit" });
+    if (b.status !== 0) process.exit(1);
+  }
   srv = await serve(8765);
   const { start } = createRequire(import.meta.url)(path.join(root, "tests/mock-cloud.cjs"));
   mockCloud = await start(8790);

@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.10.1 — Beta build
+
+This is the build for beta testers.
+
+- **Accounts and cloud sync are switched off.** There's no sign-in, no player switcher and no account settings. Everything saves on the device, just like before v1.10. The code isn't shipped in this build at all; it can come back later with one switch (`package.json` → `features`).
+- **Kept:** the QB Profile (on the device) and the QB speed fix. Rollouts, bootlegs and the scramble stick move at about 80% of a receiver's speed.
+- The home screen shows **v1.10.1 BETA**, so testers can tell which build they're on.
+- The account code is still tested on a separate copy with it switched on, so it won't break while it's parked.
+
 ## v1.10.0 — Parent accounts & cloud sync, QB speed
 
 ### Accounts & sync (switches on once the cloud project is connected)

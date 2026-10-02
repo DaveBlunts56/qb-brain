@@ -3,7 +3,8 @@
 // changes flow both ways, an expired login refreshes itself, and deleting the account wipes everything.
 const path=require('path'), fs=require('fs');
 const { chromium, devices } = require('playwright');
-const APP='file://'+path.resolve(__dirname,'../../dist/qb_brain.html');
+// accounts are switched off in the beta build, so this runs against a copy built with them on (npm test builds it)
+const APP='file://'+path.resolve(__dirname,'../../dist/qb_brain.accounts.html');
 const CLOUD=process.env.QB_MOCK_CLOUD||'http://localhost:8790';
 const OUT=path.join(__dirname,'../out/'); fs.mkdirSync(OUT,{recursive:true});
 const mock=async p=>(await fetch(CLOUD+p)).json();

@@ -53,9 +53,9 @@ When you publish an update, bump `VERSION` in `sw.js` so installed copies refres
 | `sw.js` | Offline support |
 | `icons/` | Home-screen and browser icons |
 
-## Accounts & sync
+## Accounts & sync (switched off in the beta)
 
-Parents can create an account and add a player for each kid, so progress syncs across phones, tablets and computers. It's off until a Supabase project is connected: see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md) (about 10 minutes). Privacy policy draft: [PRIVACY.md](PRIVACY.md).
+The beta build ships without accounts: everything is saved on the device. To switch them on later, set `"features": { "accounts": true }` in `package.json` and rebuild. Parents can then create an account and add a player for each kid, so progress syncs across phones, tablets and computers. It's off until a Supabase project is connected: see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md) (about 10 minutes). Privacy policy draft: [PRIVACY.md](PRIVACY.md).
 
 ## For developers
 
@@ -67,6 +67,8 @@ npx playwright install chromium
 npm run build        # src/ → index.html + sw.js (the installable app) and dist/qb_brain.html (single file)
 npm test             # engine tests in Node + browser tests in Chromium
 ```
+
+Feature switches live in `package.json` → `"features"`. A switched-off feature's code and screens are left out of the build entirely. `npm run build -- --with=accounts` makes a test copy with one switched on (`dist/qb_brain.accounts.html`).
 
 `index.html` and `sw.js` at the repo root are **build output**, committed so GitHub Pages can serve them. Edit `src/`, then run `npm run build`. CI fails if you forget. The app version comes from `package.json`. It sets both the label on the home screen and the offline cache name, so installed copies update.
 

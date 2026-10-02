@@ -18,6 +18,6 @@ global.window={devicePixelRatio:2,addEventListener(){},__QB_TEST__:true};
 global.setInterval=()=>1; global.clearInterval=()=>{}; global.setTimeout=(f)=>{f();return 1}; global.clearTimeout=()=>{};
 // bundle the app straight from src/ (no HTML) and run it against this fake DOM
 const esbuild=require('esbuild'), path=require('path');
-const code=esbuild.buildSync({entryPoints:[path.join(__dirname,'../../src/js/main.js')],bundle:true,format:'iife',write:false,logLevel:'error'}).outputFiles[0].text;
+const code=esbuild.buildSync({entryPoints:[path.join(__dirname,'../../src/js/main.js')],bundle:true,format:'iife',write:false,logLevel:'error',define:{__QB_FEATURES__:JSON.stringify({accounts:false}),__QB_CLOUD__:'null'}}).outputFiles[0].text;
 (0,eval)(code);
 module.exports={els,lob:lb,bullet:bb};

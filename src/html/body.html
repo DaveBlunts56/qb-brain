@@ -18,9 +18,11 @@
       <button id="installClose" aria-label="Dismiss">✕</button>
     </div>
 
+<!--feature:accounts-->
     <button class="player-bar" id="playerBar" type="button" aria-label="Switch player">
       <span class="pb-label">PLAYING AS</span><b id="playerName">GUEST</b><span class="pb-sync" id="playerSync"></span><span class="pb-caret" aria-hidden="true">▾</span>
     </button>
+<!--/feature:accounts-->
     <button class="newbie hidden" id="newbieCard" type="button"><b>NEW HERE?</b><span>Take the tutorial — 8 quick lessons with your coach.</span><i id="newbieX" aria-label="Dismiss">✕</i></button>
     <div class="tiles">
       <button class="tile hero" data-go="driveScreen">
@@ -48,7 +50,7 @@
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
-    <div class="home-foot"><span id="appVersion">v__VERSION__</span><span>Big Dawz edition</span></div>
+    <div class="home-foot"><span id="appVersion">v__VERSION____CHANNEL__</span><span>Big Dawz edition</span></div>
   </div>
 
   <!-- ============ DRILLS ============ -->
@@ -109,6 +111,7 @@
     <div class="play-grid" id="pbGrid"></div>
   </div>
 
+<!--feature:accounts-->
   <!-- ============ ACCOUNT ============ -->
   <div id="accountScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>ACCOUNT</h2></div>
@@ -150,6 +153,7 @@
     </div>
   </div>
 
+<!--/feature:accounts-->
   <!-- ============ QB PROFILE ============ -->
   <div id="profileScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB PROFILE</h2></div>
@@ -204,7 +208,9 @@
   <!-- ============ SETTINGS ============ -->
   <div id="settingsScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>SETTINGS</h2></div>
+<!--feature:accounts-->
     <button class="btn alt sm" id="acctOpenBtn" type="button">ACCOUNT &amp; PLAYERS (GROWN-UPS)</button>
+<!--/feature:accounts-->
     <div class="group"><div class="section-label">FORMAT</div><div class="choice-row" id="squadRow"></div>
       <div class="help" id="formatHelp"></div>
       <div class="section-label sm7">7v7 PASS RUSH</div><div class="choice-row" id="rush7Row"></div></div>
@@ -326,6 +332,7 @@
       <div id="manBody"></div>
     </div>
   </div>
+<!--feature:accounts-->
   <div id="gateSheet" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="modal-box">
       <h2 id="gateTitle">GROWN-UPS ONLY</h2>
@@ -358,6 +365,7 @@
       <button class="btn alt sm danger hidden" id="pfRemove" type="button">REMOVE PLAYER</button>
     </div>
   </div>
+<!--/feature:accounts-->
   <div id="codeSheet" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-box">
       <h2 id="codeTitle">SHARE PLAY</h2>

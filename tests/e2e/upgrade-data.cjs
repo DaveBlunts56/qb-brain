@@ -19,7 +19,9 @@ const APP='file://'+path.resolve(__dirname,'../../dist/qb_brain.html');
     tut:document.querySelector('#learnSummary').textContent, plays:JSON.parse(localStorage.getItem('qbbrain.p.local.plays')).data.plays.map(x=>x.name)}));
   await p.reload(); await p.waitForTimeout(300);
   const again=await p.evaluate(()=>({diff:window.__qbState.difficulty, recs:window.__qbProfile.recs.length}));
-  console.log(r, again, errs);
-  if(errs.length || r.diff!=='elite' || r.throwMode!=='tap' || r.recs!==2 || !/2\/8/.test(r.tut) || r.plays[0]!=='Old Play' || again.recs!==2 || again.diff!=='elite'){ console.error('FAIL: upgrade-data'); process.exitCode=1; }
+  // beta build: no account UI anywhere, QB Profile still there
+  const beta=await p.evaluate(()=>({acct:!!(document.getElementById('playerBar')||document.getElementById('accountScreen')||document.getElementById('acctOpenBtn')), profile:!!document.getElementById('profileScreen'), ver:document.getElementById('appVersion').textContent}));
+  console.log(r, again, beta, errs);
+  if(errs.length || r.diff!=='elite' || r.throwMode!=='tap' || r.recs!==2 || !/2\/8/.test(r.tut) || r.plays[0]!=='Old Play' || again.recs!==2 || again.diff!=='elite' || beta.acct || !beta.profile){ console.error('FAIL: upgrade-data'); process.exitCode=1; }
   await b.close();
 })();
