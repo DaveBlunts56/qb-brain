@@ -9,9 +9,10 @@ Everything stays on your device: settings, plays, tutorial progress and training
 
 ## With an account
 A **parent, guardian or coach** (or a player 13 or older) creates the account. We store:
-- the account **email address** and a securely hashed **password** (handled by our sign-in provider)
+- the account **email address**, an optional **display name**, and a securely hashed **password** (handled by our sign-in provider)
 - for each player: a **nickname** and an optional **age group** (like "12U"). We ask for nicknames, not real names, and never ask kids for email addresses, birthdays, photos or locations
-- each player's **training data**: rep results, coverage-recognition answers, plays they've built, tutorial progress and app settings
+- each player's **training data**: rep results, coverage-recognition answers, session summaries (score, rank, streak days, personal bests), plays they've built, tutorial progress and app settings
+- if you buy **QB Brain Pro**: your plan, its status and renewal date, and the payment provider's customer ID. Card details go straight to the payment provider (Stripe) — we never see or store them
 
 We use this only to sync progress between your devices and to show training stats inside the app.
 

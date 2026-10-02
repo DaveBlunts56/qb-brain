@@ -20,11 +20,14 @@ const { version } = pkg;
 const features = Object.assign({ accounts: false }, pkg.features || {});
 const forced = (process.argv.find(a => a.startsWith("--with=")) || "").slice(7).split(",").filter(Boolean);
 forced.forEach(f => { features[f] = true; });
-const variant = forced.length ? "." + forced.join("+") : "";
-const channel = pkg.channel && pkg.channel !== "stable" ? " " + pkg.channel.toUpperCase() : "";
+// `--channel=stable` builds a test copy as the public release would behave (Pro needs a real subscription)
+const chArg = (process.argv.find(a => a.startsWith("--channel=")) || "").slice(10);
+const channelName = chArg || pkg.channel || "stable";
+const variant = (forced.length ? "." + forced.join("+") : "") + (chArg ? "." + chArg : "");
+const channel = channelName !== "stable" ? " " + channelName.toUpperCase() : "";
 // Cloud sync settings (Supabase project URL + public anon key). Empty = accounts switched off; the app stays local-only.
 // The anon key is meant to be public: row-level security in supabase/schema.sql is what protects the data.
-let cloud = { url: "", anonKey: "" };
+let cloud = { url: "", anonKey: "", checkout: false };   // checkout: true once supabase/functions are deployed (see docs/PRO_SETUP.md)
 try { cloud = Object.assign(cloud, JSON.parse(rd("cloud.config.json"))); } catch (_) {}
 if (process.env.QB_CLOUD_URL) cloud = { url: process.env.QB_CLOUD_URL, anonKey: process.env.QB_CLOUD_KEY || "" };
 
@@ -40,7 +43,7 @@ const js = (await esbuild.build({
   plugins: [featureStub],
   entryPoints: [path.join(root, "src/js/main.js")], bundle: true, format: "iife", target: "es2019",
   minify: !dev, legalComments: "none", write: false, logLevel: "warning",
-  define: { __QB_FEATURES__: JSON.stringify(features), __QB_CLOUD__: JSON.stringify(cloud.url && cloud.anonKey ? { url: cloud.url, anonKey: cloud.anonKey } : null) }
+  define: { __QB_FEATURES__: JSON.stringify(features), __QB_CHANNEL__: JSON.stringify(channelName), __QB_CLOUD__: JSON.stringify(cloud.url && cloud.anonKey ? { url: cloud.url, anonKey: cloud.anonKey, checkout: !!cloud.checkout } : null) }
 })).outputFiles[0].text;
 
 // 2) CSS: self-hosted fonts (inlined, so they work offline and in the single-file build) + styles

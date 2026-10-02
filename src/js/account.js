@@ -1,5 +1,5 @@
 import { BANDS, account, addPlayer, changePassword, configured, deleteAccount, exportData, fetchPlayers, nicknameProblem, removePlayer, resetPassword, setDisplayName, signIn, signOut, signUp, signedIn, status, syncNow, updatePlayer } from "./cloud.js";
-import { on } from "./config.js";
+import { emit, on } from "./config.js";
 import { SCREENS, showScreen } from "./setup.js";
 import { els } from "./state.js";
 import { activePlayer, getDoc, players, setActive } from "./store.js";
@@ -232,6 +232,9 @@ export function init(){
   els.pwNew.addEventListener("keydown", e => { if(e.key === "Enter") els.pwGo.click(); });
   els.pwCancel.addEventListener("click", () => els.pwSheet.classList.add("hidden"));
   on("cloud:link", onLink);
+  // QB Brain Pro: buying is for grown-ups — the same check as account settings, then the server makes a checkout link
+  on("pro:checkout", p => openGate(() => emit("pro:start-checkout", p)));
+  on("account:open", openAccount);
   els.pfSave.addEventListener("click", savePlayerForm);
   els.pfCancel.addEventListener("click", () => els.playerForm.classList.add("hidden"));
   els.pfRemove.addEventListener("click", removeFromForm);

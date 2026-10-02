@@ -90,7 +90,7 @@ async function signIn(email, password){
   setSession(await http("/auth/v1/token?grant_type=password", { method: "POST", auth: false, body: { email, password } }));
   await afterSignIn();
 }
-async function afterSignIn(){ await fetchPlayers(); emit("cloud:changed"); }
+async function afterSignIn(){ await fetchPlayers(); emit("cloud:changed"); proState(); fetchEntitlement(); }
 async function resetPassword(email){ await http("/auth/v1/recover" + back(), { method: "POST", auth: false, body: { email } }); }
 /* ---- account settings ---- */
 async function updateUser(body){
@@ -128,12 +128,14 @@ async function signOut(){
   try{ if(signedIn()) await http("/auth/v1/logout", { method: "POST" }); }catch(_){}
   const wasCloud = activePlayer().cloud;
   players().forEach(p => forgetPlayer(p.id)); setActive("local"); clearSession();
+  emit("pro:entitlement", null); proState();
   emit("cloud:changed");
   return wasCloud;
 }
 async function deleteAccount(){
   await http("/rest/v1/rpc/delete_my_account", { method: "POST", body: {} });
   players().forEach(p => forgetPlayer(p.id)); setActive("local"); clearSession();
+  emit("pro:entitlement", null); proState();
   emit("cloud:changed");
 }
 
@@ -170,6 +172,38 @@ async function updatePlayer(id, nickname, band){
 async function removePlayer(id){
   await http("/rest/v1/players?id=eq." + encodeURIComponent(id), { method: "DELETE", prefer: "return=minimal" });
   forgetPlayer(id);
+}
+
+/* ---- QB Brain Pro: read the account's entitlement; ask the server for a checkout link ----
+   The entitlements row is written only by the payment webhook (server side). Nothing here can grant Pro. */
+function proState(){ emit("pro:checkout-state", { ready: !!(configured() && CFG.checkout), signedIn: signedIn() }); }
+async function fetchEntitlement(){
+  if(!configured() || !signedIn()) return null;
+  try{
+    const rows = await http("/rest/v1/entitlements?select=plan,status,current_period_end");
+    const row = rows && rows[0] || null;
+    emit("pro:entitlement", row);
+    return row;
+  }catch(_){ return null; }   // offline: keep the last known answer (pro.js applies a grace period)
+}
+async function startCheckout(plan){
+  try{
+    const back = returnUrl();
+    const r = await http("/functions/v1/create-checkout", { method: "POST", body: { plan, success_url: back + "#pro=success", cancel_url: back + "#pro=cancel" } });
+    if(!r || !r.url) throw new CloudError("Checkout didn't start. Try again in a moment.", 0);
+    location.assign(r.url);
+  }catch(e){ emit("pro:checkout-error", e.status === 404 ? "Checkout isn't connected yet. Nothing has been charged." : e.message); }
+}
+// back from checkout: the webhook may take a few seconds to record the payment, so look a few times
+function readCheckoutReturn(){
+  let h = ""; try{ h = location.hash || ""; }catch(_){}
+  const m = h.match(/^#pro=(success|cancel)$/); if(!m) return;
+  try{ history.replaceState(null, "", location.pathname + location.search); }catch(_){}
+  emit("pro:returned", m[1]);
+  if(m[1] !== "success") return;
+  let tries = 0;
+  const look = () => fetchEntitlement().then(row => { if(!(row && row.plan === "pro") && ++tries < 6) setTimeout(look, 2500); else emit("pro:refreshed"); });
+  look();
 }
 
 /* ---- sync ---- */
@@ -219,6 +253,10 @@ export function init(){
   CFG = readConfig();
   loadSession();
   if(!configured()) return;
+  proState();
+  on("pro:refresh", () => fetchEntitlement().then(() => emit("pro:refreshed")));
+  on("pro:start-checkout", p => startCheckout(p.plan));
+  readCheckoutReturn();
   readAuthLink().then(r => {
     if(!r) return;
     if(r.error){ emit("cloud:link", r); return; }
@@ -234,7 +272,7 @@ export function init(){
     const was = activePlayer().id;
     fetchPlayers().then(() => {
       if(was !== "local" && activePlayer().id === "local" && typeof location !== "undefined") location.reload();   // player was removed elsewhere
-      emit("cloud:changed"); return syncNow();
+      emit("cloud:changed"); fetchEntitlement(); return syncNow();
     }).catch(e => setStatus(e.status === 0 ? "offline" : "error", e.message));
   }
 }

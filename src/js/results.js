@@ -36,29 +36,31 @@ function badges(r){
   return out;
 }
 
-/* ---- on the summary screen ---- */
+/* ---- on the summary screen (built from elements, no innerHTML lookups) ---- */
+function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
 function renderResultCard(){
   const box = els.resultCard; if(!box) return;
   const r = lastResult();
   if(!r || !r.session){ box.classList.add("hidden"); return; }
-  box.classList.remove("hidden");
+  box.classList.remove("hidden"); box.innerHTML = "";
   const s = r.session, a = r.rankAfter;
   if(s.sc == null){
-    box.innerHTML = '<div class="rc-none"><b>QB BRAIN SCORE</b><span></span></div>';
-    box.querySelector("span").textContent = "Sessions need " + MIN_REPS + "+ reps for a score — this one had " + s.n + ". Keep going next time and it counts toward your rank and streak.";
-    return;
+    const none = el("div", "rc-none");
+    none.append(el("b", null, "QB BRAIN SCORE"), el("span", null, "Sessions need " + MIN_REPS + "+ reps for a score — this one had " + s.n + ". Keep going next time and it counts toward your rank and streak."));
+    box.appendChild(none); return;
   }
-  box.innerHTML = '<div class="rc-top"><div class="rc-score"><small>QB BRAIN SCORE</small><b></b></div><div class="rc-rank"><span class="rc-badge"></span><small>RANK</small><b></b></div></div>' +
-    '<div class="rc-stats"></div><div class="rc-chips"></div><button class="btn rc-share" id="shareBtn" type="button">SHARE RESULT</button>';
-  box.querySelector(".rc-score b").textContent = String(s.sc);
-  box.querySelector(".rc-badge").innerHTML = rankBadge(a.rank ? a.index : null, 4);
-  box.querySelector(".rc-rank b").textContent = a.rank ? a.rank.name : "UNRANKED";
-  if(!a.rank) box.querySelector(".rc-rank small").textContent = a.toGo + " MORE TO RANK";
-  const st = box.querySelector(".rc-stats");
-  statLines(s).forEach(([k, v]) => { const d = document.createElement("div"); d.innerHTML = "<span></span><b></b>"; d.firstChild.textContent = k; d.lastChild.textContent = v; st.appendChild(d); });
-  const ch = box.querySelector(".rc-chips");
-  badges(r).forEach(x => { const c = document.createElement("span"); c.className = "streak-chip" + (x.hot ? " on" : ""); c.textContent = x.t; ch.appendChild(c); });
-  box.querySelector("#shareBtn").addEventListener("click", () => openShareCard(r));
+  const top = el("div", "rc-top"), sc = el("div", "rc-score"), rk = el("div", "rc-rank"), badge = el("span", "rc-badge");
+  badge.innerHTML = rankBadge(a.rank ? a.index : null, 4);
+  sc.append(el("small", null, "QB BRAIN SCORE"), el("b", null, String(s.sc)));
+  rk.append(badge, el("small", null, a.rank ? "RANK" : a.toGo + " MORE TO RANK"), el("b", null, a.rank ? a.rank.name : "UNRANKED"));
+  top.append(sc, rk);
+  const st = el("div", "rc-stats");
+  statLines(s).forEach(([k, v]) => { const d = el("div"); d.append(el("span", null, k), el("b", null, v)); st.appendChild(d); });
+  const ch = el("div", "rc-chips");
+  badges(r).forEach(x => ch.appendChild(el("span", "streak-chip" + (x.hot ? " on" : ""), x.t)));
+  const btn = el("button", "btn rc-share", "SHARE RESULT"); btn.type = "button"; btn.id = "shareBtn";
+  btn.addEventListener("click", () => openShareCard(r));
+  box.append(top, st, ch, btn);
 }
 
 /* ---- the share image ---- */

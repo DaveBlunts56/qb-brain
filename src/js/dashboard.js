@@ -1,6 +1,7 @@
 import { conceptFor } from "./coach.js";
 import { MODES, on } from "./config.js";
 import { BOOKS } from "./plays.js";
+import { has, requirePro } from "./pro.js";
 import { PROFILE, covDrill, profileMetrics, startDrill } from "./profile.js";
 import { QUALIFY, form, progressDoc, streakInfo, totals } from "./progress.js";
 import { rankFor } from "./score.js";
@@ -15,8 +16,6 @@ import { els } from "./state.js";
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 let range = 10;    // sessions shown in the chart (0 = all)
-let historyLimit = 10;   // Free shows the last 10; Pro can see the whole history (set by pro.js)
-function setHistoryLimit(n){ historyLimit = n; }
 
 /* ---- the rank badge: a pixel shield, one stripe per rank earned ---- */
 const TIER = ["#8a8f98", "#c27c3a", "#cfd6e3", "#5ab8ff", "#ffc933", "#e8412c"];
@@ -71,6 +70,7 @@ function renderTiles(){
 
 /* ---- score history chart (single series → no legend; tap a point for its session) ---- */
 function renderChart(){
+  const historyLimit = has("history") ? 0 : 10;   // Free: last 10 scored sessions · Pro: everything
   const all = progressDoc().sessions.filter(s => s.sc != null);
   const cap = historyLimit ? Math.min(historyLimit, all.length) : all.length;
   const n = range && range < cap ? range : cap;
@@ -106,7 +106,7 @@ function renderChart(){
   box.querySelector("svg").addEventListener("pointerleave", () => tip.classList.add("hidden"));
   const first = pts.slice(0, Math.min(5, Math.floor(pts.length / 2))), lastN = pts.slice(-first.length);
   const a = first.reduce((s, p) => s + p.sc, 0) / first.length, b = lastN.reduce((s, p) => s + p.sc, 0) / lastN.length;
-  els.dashChartNote.textContent = (historyLimit && all.length > historyLimit ? "Your last " + pts.length + " scored sessions. " : "") +
+  els.dashChartNote.textContent = (historyLimit && all.length > historyLimit ? "Your last " + pts.length + " scored sessions (Pro shows them all). " : "") +
     (pts.length >= 4 ? "First " + first.length + " shown: avg " + Math.round(a) + " → last " + lastN.length + ": avg " + Math.round(b) + (b - a >= 1 ? " (up " + Math.round(b - a) + ")." : b - a <= -1 ? " (down " + Math.round(a - b) + ")." : ".") : "");
 }
 
@@ -130,8 +130,6 @@ function conceptDrill(con){
   [5, 7].forEach(sq => (BOOKS.standard.plays[sq] || []).forEach(p => { const c = conceptFor(p); if(c && c.name === con && !names.includes(p.name)) names.push(p.name); }));
   return names.length ? { name: con + " Drill", mode: "quick_read", book: "standard", plan: { plays: names }, sub: "Reps of " + con + " against every coverage." } : null;
 }
-let drillGate = dr => startDrill(dr);
-function setDrillGate(fn){ drillGate = fn; }
 function renderWeak(){
   const box = els.dashWeak; box.innerHTML = "";
   if(PROFILE.recs.length < 10){ const p = document.createElement("div"); p.className = "help"; p.textContent = "After 10+ reps this lists your lowest coverages and concepts (3+ reps each), with a drill for each one."; box.appendChild(p); return; }
@@ -146,7 +144,7 @@ function renderWeak(){
     d.querySelector("b").textContent = it.what; d.querySelector(".tag").textContent = it.kind.toUpperCase();
     d.querySelector("small").textContent = it.pct + "% successful on " + it.n + " reps.";
     if(it.dr){ const b = document.createElement("button"); b.type = "button"; b.className = "btn sm"; b.dataset.pro = "drills"; b.textContent = "DRILL " + it.what.toUpperCase();
-      b.addEventListener("click", () => drillGate(it.dr)); d.appendChild(b); }
+      b.addEventListener("click", () => requirePro("drills", () => startDrill(it.dr))); d.appendChild(b); }
     box.appendChild(d);
   });
 }
@@ -199,4 +197,4 @@ export function init(){
   on("progress:session", renderTile);
   renderTile();
 }
-export { renderDashboard, renderTile, rankBadge, dayLabel, modeLabel, diffLabel, setHistoryLimit, setDrillGate };
+export { renderDashboard, renderTile, rankBadge, dayLabel, modeLabel, diffLabel };

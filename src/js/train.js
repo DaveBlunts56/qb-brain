@@ -1,4 +1,5 @@
 import { MODES, choice } from "./config.js";
+import { has } from "./pro.js";
 import { PROFILE, profileMetrics } from "./profile.js";
 import { state } from "./state.js";
 
@@ -33,7 +34,7 @@ const POOL_7=["Man","Cover 1","Cover 2","Cover 3","Cover 4","Robber","Bracket","
 function weighted(obj){ const ks=Object.keys(obj).filter(k=>obj[k]>0); let s=ks.reduce((a,k)=>a+obj[k],0), r=Math.random()*s; for(const k of ks){ r-=obj[k]; if(r<=0) return k; } return ks[ks.length-1]; }
 function currentPlan(){
   const p=Object.assign({}, state.plan||{});
-  if(state.adaptive && typeof adaptivePlan==="function" && !state.tut){ const a=adaptivePlan(); if(a) mergePlan(p,a); }
+  if(state.adaptive && has("adaptive") && typeof adaptivePlan==="function" && !state.tut){ const a=adaptivePlan(); if(a) mergePlan(p,a); }
   return p;
 }
 function mergePlan(p,a){

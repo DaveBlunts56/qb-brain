@@ -2,6 +2,7 @@ import { conceptFor } from "./coach.js";
 import { on } from "./config.js";
 import { familyOf } from "./film.js";
 import { closeManual } from "./learn.js";
+import { has, openUpgrade, requirePro } from "./pro.js";
 import { SCREENS, buildChoiceRow, refreshSetupUI, startSession } from "./setup.js";
 import { els, saveSettings, state } from "./state.js";
 import { load, save } from "./store.js";
@@ -149,18 +150,33 @@ function renderProfile(){
     tile(f(M.pressure.pct,"%"),"Success under pressure", M.pressure.clean!=null?"vs "+M.pressure.clean+"% clean · "+M.pressure.sacks+" sacks":""),
     tile(f(M.stare.pct,"%"),"Stare-down rate", M.stare.n?"of first-read throws":"")
   );
+  // the deeper breakdowns are Pro; Free keeps the tiles above
+  if(!has("analytics")){ renderLockedProfile(); return; }
+  [els.pfCov,els.pfCon].forEach(b=>b.closest(".group").classList.remove("hidden"));
   // diagnosis
   const D=profileDiagnose(M); els.pfDiag.innerHTML="";
   if(!D.length){ const p=document.createElement("div"); p.className="coach-note"; p.innerHTML="<p></p>";
     p.firstChild.textContent = M.n<10 ? "Get 10+ reps in and I'll start spotting patterns." : "No big leaks right now. Keep stacking reps on Varsity/Elite, or try Film Room with Adaptive on."; els.pfDiag.appendChild(p); }
   D.forEach(x=>{ const d=document.createElement("div"); d.className="coach-note"; const p=document.createElement("p"); p.textContent=x.text; d.appendChild(p);
     const s=document.createElement("small"); s.className="pf-dsub"; s.textContent="Recommended: "+x.dr.name+" — "+x.dr.sub; d.appendChild(s);
-    const b=document.createElement("button"); b.type="button"; b.className="btn sm"; b.textContent="START "+x.dr.name.toUpperCase(); b.addEventListener("click",()=>startDrill(x.dr)); d.appendChild(b);
+    const b=document.createElement("button"); b.type="button"; b.className="btn sm"; b.textContent="START "+x.dr.name.toUpperCase(); b.dataset.pro="drills"; b.addEventListener("click",()=>requirePro("drills",()=>startDrill(x.dr))); d.appendChild(b);
     els.pfDiag.appendChild(d); });
   bars(els.pfCov, M.covRank.concat(Object.keys(M.byShell).filter(k=>M.byShell[k].n>=3).map(k=>({k:k.replace("→rot"," rotated"),n:M.byShell[k].n,pct:pct(M.byShell[k].k,M.byShell[k].n)}))));
   const cr=M.conRank; bars(els.pfCon, cr.length>6 ? cr.slice(0,3).concat(cr.slice(-3)) : cr);
   els.pfTrend.textContent = M.trend.last==null ? "" : "Last 20 reps: "+M.trend.last+"% successful"+(M.trend.prev!=null?" (previous 20: "+M.trend.prev+"%)":"")+".";
   if(els.profileSummary) els.profileSummary.textContent = M.n ? M.n+" reps tracked" : "Your tendencies";
+  renderAdaptiveStatus();
+}
+
+function renderLockedProfile(){
+  els.pfDiag.innerHTML="";
+  const d=document.createElement("div"); d.className="coach-note locked";
+  d.innerHTML='<p><b>Coach\'s diagnosis, success by coverage and concept, rotations and one-tap drills are in QB Brain Pro.</b></p><p class="pf-dsub">Your reps are already being tracked — upgrading shows the full breakdown right away.</p>';
+  const b=document.createElement("button"); b.type="button"; b.className="btn sm"; b.textContent="SEE QB BRAIN PRO"; b.addEventListener("click",()=>openUpgrade("analytics")); d.appendChild(b);
+  els.pfDiag.appendChild(d);
+  [els.pfCov,els.pfCon].forEach(b=>{ b.innerHTML=""; b.closest(".group").classList.add("hidden"); });
+  els.pfTrend.textContent="";
+  if(els.profileSummary) els.profileSummary.textContent = PROFILE.recs.length+" reps tracked";
   renderAdaptiveStatus();
 }
 
@@ -177,12 +193,12 @@ function renderTrainingSettings(){
   if(els.adaptiveSwitch) els.adaptiveSwitch.classList.toggle("on",!!state.adaptive);
   if(els.rush7Row){ const show=state.squad===7; els.rush7Row.style.display=show?"":"none"; if(els.rush7Row.previousElementSibling) els.rush7Row.previousElementSibling.style.display=show?"":"none"; }
 }
-function flipAdaptive(){ state.adaptive=!state.adaptive; els.adaptiveSwitch.classList.toggle("on",state.adaptive); saveSettings(); refreshSetupUI(); }
+function flipAdaptive(){ if(!state.adaptive && !has("adaptive")){ openUpgrade("adaptive"); return; } state.adaptive=!state.adaptive; els.adaptiveSwitch.classList.toggle("on",state.adaptive); saveSettings(); refreshSetupUI(); }
 
 function renderAdaptiveStatus(){
   const box=els.pfAdaptive; if(!box) return;
   box.classList.remove("hidden");
-  box.firstChild.textContent = state.adaptive ? (adaptivePlan().note||"ADAPTIVE: on") + " (" + state.squad+"v"+state.squad+")" : "Adaptive training is off. Turn it on in Settings and every rep is built from this profile.";
+  box.firstChild.textContent = state.adaptive && has("adaptive") ? (adaptivePlan().note||"ADAPTIVE: on") + " (" + state.squad+"v"+state.squad+")" : "Adaptive training is off. Turn it on in Settings and every rep is built from this profile.";
 }
 
 /* ---- runs once at startup, in module order (see main.js) ---- */

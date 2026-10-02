@@ -2,7 +2,8 @@
 // is recorded when you tap END, and the dashboard shows rank, rating, streak, bests and recent sessions — and keeps them.
 const path=require('path'), fs=require('fs');
 const { chromium, devices } = require('playwright');
-const APP='file://'+path.resolve(__dirname,'../../dist/qb_brain.html');
+// served over http when the test runner's local server is up (file:// storage can come back empty on a reload)
+const APP=process.env.QB_SITE ? process.env.QB_SITE+'dist/qb_brain.html' : 'file://'+path.resolve(__dirname,'../../dist/qb_brain.html');
 const OUT=path.join(__dirname,'../out/'); fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
   const b=await chromium.launch(); const errs=[], log=[], bad=[];
@@ -62,7 +63,7 @@ const OUT=path.join(__dirname,'../out/'); fs.mkdirSync(OUT,{recursive:true});
   check(sw,'no sideways scrolling at phone width');
 
   // ---- it all survives a reload, and the old QB Profile is one tap away
-  check((await p.textContent('#dashRank'))===rank,'rank kept after reload');
+  check((await p.textContent('#dashRank'))===rank,'rank kept after reload ('+await p.textContent('#dashRank')+' vs '+rank+')');
   await p.tap('#dashScreen >> text=QB PROFILE'); await p.waitForTimeout(200);
   check(await p.isVisible('#profileScreen'),'QB Profile opens from the dashboard');
 

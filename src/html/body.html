@@ -51,6 +51,7 @@
         <div><b>SETTINGS</b><br><small id="settingsSummary">5v5 · Rookie · Pullback meter</small></div>
       </button>
     </div>
+    <button class="pro-link" id="proLink" type="button"><i class="pro-tag">PRO</i><span id="proLinkText">GO PRO · ADVANCED TRAINING</span><span aria-hidden="true">▸</span></button>
     <div class="home-foot"><span id="appVersion">v__VERSION____CHANNEL__</span></div>
   </div>
 
@@ -181,6 +182,30 @@
     <button class="btn alt sm" id="pfReset" type="button">RESET PROFILE</button>
   </div>
 
+  <!-- ============ QB BRAIN PRO ============ -->
+  <div id="upgradeScreen" class="screen hidden">
+    <div class="topbar"><button class="back" id="upBack" aria-label="Back">◀</button><h2>QB BRAIN <span class="pro-word">PRO</span></h2></div>
+    <div class="up-hero">
+      <b id="upHead">Train like a starter.</b>
+      <span>For QBs who've got the basics and want the defenses that actually fool them — plus the numbers to prove they're getting better.</span>
+    </div>
+    <div class="up-plans" id="upPlans"></div>
+    <button class="btn" id="upBuy" type="button">GET PRO</button>
+    <div class="up-status" id="upStatus"></div>
+    <div class="warn-line" id="upMsg" role="status"></div>
+    <div class="group">
+      <div class="section-label">PRO ADDS</div>
+      <ul class="up-list pro" id="upPro"></ul>
+    </div>
+    <div class="group">
+      <div class="section-label">ALWAYS FREE</div>
+      <ul class="up-list" id="upFree"></ul>
+      <div class="help">Free isn't a trial — it never runs out, and there are no ads.</div>
+    </div>
+    <button class="linkish" id="upRestore" type="button">Already have Pro? Check my account</button>
+    <div class="help small-print">Payment and cancellation are handled by the payment provider. Pro belongs to the parent or guardian's account and works on every device signed in to it.</div>
+  </div>
+
   <!-- ============ DASHBOARD ============ -->
   <div id="dashScreen" class="screen hidden">
     <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB DASHBOARD</h2></div>
@@ -267,7 +292,7 @@
       <div class="section-label sm7">7v7 PASS RUSH</div><div class="choice-row" id="rush7Row"></div></div>
     <div class="group"><div class="section-label">DIFFICULTY</div><div class="choice-row" id="diffRow"></div>
       <div class="toggle-row">
-        <div class="t-label"><b>ADAPTIVE TRAINING</b><span>Uses your QB Profile: more reps where you're weak, more disguises where you're strong, eyes and pressure tuned to your habits</span></div>
+        <div class="t-label"><b data-pro="adaptive">ADAPTIVE TRAINING</b><span>Uses your QB Profile: more reps where you're weak, more disguises where you're strong, eyes and pressure tuned to your habits</span></div>
         <div class="switch" id="adaptiveSwitch" role="switch" tabindex="0" aria-label="Adaptive training"><i></i></div>
       </div></div>
     <div class="group"><div class="section-label">THROW CONTROL</div><div class="choice-row" id="throwRow"></div>
@@ -280,6 +305,10 @@
       <div class="toggle-row" id="progToggleRow">
         <div class="t-label"><b>SHOW PROGRESSION</b><span>Flash 1-2-3 over the read before the snap</span></div>
         <div class="switch" id="progSwitch" role="switch" tabindex="0" aria-label="Show progression"><i></i></div>
+      </div>
+      <div class="toggle-row hidden" id="previewFreeRow">
+        <div class="t-label"><b>PREVIEW AS FREE (BETA)</b><span>Lock the Pro features on this device to check what Free players see</span></div>
+        <div class="switch" id="previewFreeSwitch" role="switch" tabindex="0" aria-label="Preview as Free"><i></i></div>
       </div>
       <div class="toggle-row" id="soundToggleRow">
         <div class="t-label"><b>SOUND</b><span>Whistle, catches, flag pulls and the crowd</span></div>

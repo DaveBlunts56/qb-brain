@@ -34,7 +34,7 @@ const files = [];
 if (which !== "e2e") files.push(...list("unit"));
 let srv = null, mockCloud = null;
 if (which !== "unit") {
-  for (const args of [["scripts/build.mjs"], ["scripts/build.mjs", "--with=accounts"]]) {   // the app + a copy with accounts on
+  for (const args of [["scripts/build.mjs"], ["scripts/build.mjs", "--with=accounts"], ["scripts/build.mjs", "--with=accounts", "--channel=stable"]]) {   // the app, a copy with accounts on, and one that behaves like the public release
     const b = spawnSync(process.execPath, args, { cwd: root, stdio: "inherit" });
     if (b.status !== 0) process.exit(1);
   }

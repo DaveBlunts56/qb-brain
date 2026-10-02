@@ -577,3 +577,40 @@ select.play-select{
 .rc-none span{font-size:13.5px;line-height:1.45;color:var(--chalk);}
 .share-box{align-items:stretch;}
 .share-box img{display:block;width:auto;max-width:100%;max-height:58vh;margin:0 auto;border:2px solid #000;background:var(--ink-2);aspect-ratio:9/16;-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto;}
+
+/* ---------- QB Brain Pro ---------- */
+.pro-tag{display:inline-block;font-family:var(--display);font-style:normal;font-weight:400;font-size:13px;line-height:1;letter-spacing:.06em;
+  padding:3px 4px 1px;background:var(--gold);color:#1b1300;border:1px solid #000;vertical-align:2px;margin-left:4px;}
+.choice.is-locked{background:#10151d;}
+.choice.is-locked b{color:var(--chalk-dim);}
+.choice.is-locked .pro-tag{background:transparent;color:var(--gold);border-color:var(--gold);}
+.btn.is-locked .pro-tag{background:#1b1300;color:var(--gold);}
+.pro-link{display:flex;align-items:center;gap:10px;width:100%;background:rgba(13,17,23,.86);border:2px solid var(--gold);color:var(--chalk);
+  padding:9px 12px 8px;font-family:var(--display);font-size:20px;letter-spacing:.04em;text-align:left;box-shadow:0 3px 0 #000;}
+.pro-link span:nth-of-type(1){flex:1;}
+.pro-link.on{border-color:var(--ink-3);color:var(--chalk-dim);}
+.pro-link .pro-tag{margin-left:0;}
+.pro-word{color:var(--gold);}
+.up-hero{background:rgba(13,17,23,.9);border:var(--px) solid var(--gold);box-shadow:0 4px 0 rgba(0,0,0,.45);padding:14px;display:flex;flex-direction:column;gap:6px;}
+.up-hero b{font-family:var(--display);font-weight:400;font-size:32px;line-height:1;color:#fff;}
+.up-hero span{font-size:14px;line-height:1.45;color:var(--chalk);}
+.up-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
+.up-list li{background:var(--ink-2);border:2px solid var(--ink-3);padding:7px 10px;font-size:13.5px;color:var(--chalk);}
+.up-list li::before{content:"✓ ";color:var(--good);}
+.up-list.pro li{display:flex;flex-direction:column;gap:1px;}
+.up-list.pro li::before{content:none;}
+.up-list.pro li b{font-family:var(--display);font-weight:400;font-size:21px;line-height:1;color:var(--gold);}
+.up-list.pro li span{font-size:12.5px;color:var(--chalk-dim);}
+.up-list li.focus{border-color:var(--gold);background:#2a2410;}
+.up-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.plan{background:rgba(13,17,23,.9);border:var(--px) solid var(--ink-3);color:var(--chalk);padding:10px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;box-shadow:0 4px 0 #000;}
+.plan.on{border-color:var(--gold);background:#2a2410;}
+.plan small{font-family:var(--display);font-size:16px;letter-spacing:.06em;color:var(--chalk-dim);}
+.plan b{font-family:var(--display);font-weight:400;font-size:38px;line-height:.9;color:var(--gold);}
+.plan span{font-size:12px;color:var(--chalk-dim);}
+.plan em{font-style:normal;font-size:11.5px;color:var(--chalk);line-height:1.3;margin-top:4px;}
+.up-status{font-size:13.5px;line-height:1.45;color:var(--chalk);background:rgba(13,17,23,.86);padding:10px 12px;border-left:4px solid var(--gold);}
+.up-status:empty{display:none;}
+.small-print{font-size:12px !important;color:var(--chalk-dim) !important;}
+.coach-note.locked{border-left-color:var(--gold);}
+.coach-note.locked p b{font-weight:400;}

@@ -4,6 +4,7 @@ import { downText, isDrive, newDrive, spotText } from "./drive.js";
 import { startRep } from "./loop.js";
 import { renderPlaybook } from "./playbook.js";
 import { BOOKS } from "./plays.js";
+import { has, openUpgrade, proTag } from "./pro.js";
 import { SFX } from "./sound.js";
 import { currentPlays, els, loadSettings, saveSettings, state } from "./state.js";
 import { endSession } from "./summary.js";
@@ -17,8 +18,10 @@ function buildChoiceRow(container, items, currentKey, onPick){
     const b=document.createElement("button");
     b.className="choice"+(item.key===currentKey?" active":"");
     b.disabled=!!item.disabled;
-    b.innerHTML="<b>"+item.title+"</b><small>"+item.sub+"</small>";
-    b.addEventListener("click",()=>{ onPick(item.key); refreshSetupUI(); });
+    b.innerHTML="<b>"+item.title+(item.pro?" "+proTag():"")+"</b><small>"+item.sub+"</small>";
+    if(item.pro){ b.dataset.pro=item.pro; b.classList.toggle("is-locked",!has(item.pro)); }
+    // a Pro choice without Pro opens the Upgrade screen instead of switching
+    b.addEventListener("click",()=>{ if(item.pro && !has(item.pro)){ openUpgrade(item.pro); return; } onPick(item.key); refreshSetupUI(); });
     container.appendChild(b);
   });
 }
@@ -45,14 +48,14 @@ function refreshSetupUI(){
   buildChoiceRow(els.diffRow,[
     {key:"rookie",title:"Rookie",sub:"Slow rush, simple looks"},
     {key:"varsity",title:"Varsity",sub:"Faster rush, some disguise"},
-    {key:"elite",title:"Elite",sub:"Fast rush, frequent disguise"}
+    {key:"elite",title:"Elite",sub:"Fast rush, frequent disguise",pro:"elite"}
   ], state.difficulty, k=>state.difficulty=k);
 
   buildChoiceRow(els.modeRow,[
     {key:"qb_brain",title:"QB Brain",sub:"Call the coverage, then make the read"},
     {key:"coverage_id",title:"Coverage ID",sub:"Identify the defense only, no throw"},
     {key:"quick_read",title:"Quick Read",sub:"Skip the ID question, find the throw fast"},
-    {key:"film",title:"Film Room",sub:"Read the look, name the key, pick the read — then see the rotation"}
+    {key:"film",title:"Film Room",sub:"Read the look, name the key, pick the read — then see the rotation",pro:"film"}
   ], state.drillMode, k=>state.drillMode=k);
 
   buildChoiceRow(els.throwRow,[
@@ -109,6 +112,8 @@ function showScreen(id){
 }
 
 function startSession(mode,extra){
+  if(mode==="film" && !has("film")){ openUpgrade("film"); return; }
+  if(state.difficulty==="elite" && !has("elite")){ state.difficulty="varsity"; refreshSetupUI(); }   // e.g. Pro ended
   state.mode=mode;
   state.forceCoverage = extra && extra.coverage || null;
   state.plan = extra && extra.plan || null;
@@ -152,6 +157,7 @@ export function init(){
   });
   loadSettings();
   on("data:changed",k=>{ if(k==="settings"){ loadSettings(); refreshSetupUI(); } });
+  on("pro:changed",()=>refreshSetupUI());
   refreshSetupUI();
   (function(){
     const tip=document.getElementById("installHint"); if(!tip || !window.QB_PWA) return;

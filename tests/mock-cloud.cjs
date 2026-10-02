@@ -12,7 +12,7 @@ function start(port){
     if(req.method==='OPTIONS') return send(204);
     let raw=''; req.on('data',d=>raw+=d); req.on('end',()=>{
       const u=new URL(req.url,'http://x'), body=raw?JSON.parse(raw):null, p=u.pathname;
-      if(p==='/__test/state') return send(200,{users:db.users.length,players:db.players,data:db.data.map(d=>({player_id:d.player_id,kind:d.kind,upd:d.upd}))});
+      if(p==='/__test/state') return send(200,{checkouts:db.checkouts||[],users:db.users.length,players:db.players,data:db.data.map(d=>({player_id:d.player_id,kind:d.kind,upd:d.upd}))});
       // test helpers: the "email" a reset request would send, and granting Pro the way the payment webhook would
       if(p==='/__test/mail') return send(200,db.mail);
       if(p==='/__test/grant'){ const usr=db.users.find(x=>x.email===u.searchParams.get('email')); if(usr) db.ent[usr.id]={plan:u.searchParams.get('plan')||'pro',status:'active',current_period_end:new Date(Date.now()+30*864e5).toISOString()}; return send(200,{ok:!!usr}); }
@@ -36,6 +36,10 @@ function start(port){
         if(req.method==='PUT'){ if(body.password!=null){ if(body.password.length<8) return send(422,{code:422,msg:'Password should be at least 8 characters.'}); usr.pw=body.password; }
           if(body.data) usr.md=Object.assign({},usr.md,body.data); }
         return send(200,pub(usr)); }
+      // checkout: the real function (supabase/functions/create-checkout) returns a Stripe page; here we go straight
+      // to the success address (with ?from=checkout so the browser loads it fresh, as it would coming back from Stripe)
+      if(p==='/functions/v1/create-checkout'){ if(!['monthly','yearly'].includes(body.plan)) return send(400,{error:'unknown plan'});
+        (db.checkouts=db.checkouts||[]).push({uid,plan:body.plan}); return send(200,{url:body.success_url.replace('#','?from=checkout#')}); }
       if(p==='/rest/v1/entitlements'){ const e=db.ent[uid]; return send(200,e?[Object.assign({user_id:uid},e)]:[]); }
       const mine=pid=>db.players.some(x=>x.id===pid&&x.parent_id===uid);
       const eq=k=>{ const v=u.searchParams.get(k); return v&&v.startsWith('eq.')?v.slice(3):null; };

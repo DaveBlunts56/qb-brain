@@ -12,7 +12,9 @@ Until it's set up, QB Brain works exactly as before: everything is saved on the 
 1. In the project, open **SQL Editor → New query**.
 2. Paste in everything from [`supabase/schema.sql`](../supabase/schema.sql) and click **Run**. It should say "Success. No rows returned."
 
-This creates two tables (players, and their training data) and switches on **row-level security**, so a signed-in parent can only ever read or change their own players.
+This creates the tables (players, their training data, and Pro entitlements) and switches on **row-level security**, so a signed-in parent can only ever read or change their own players, and can only *read* their own Pro status.
+
+**Already set up from an earlier version?** Run [`supabase/migrations/002_progress_and_pro.sql`](../supabase/migrations/002_progress_and_pro.sql) once instead. It adds session history (`progress`) and the `entitlements` table.
 
 ## 3. Sign-in settings
 In **Authentication → Sign In / Providers → Email**:
@@ -20,7 +22,11 @@ In **Authentication → Sign In / Providers → Email**:
 - **Confirm email:** leave it on (recommended). Parents tap a link in their email before their first sign-in.
 - **Minimum password length:** 8.
 
-In **Authentication → URL Configuration**, set **Site URL** to your app's address: `https://daveblunts56.github.io/qb-brain/`. Confirmation and password-reset emails link back there.
+In **Authentication → URL Configuration**:
+- set **Site URL** to your app's address: `https://daveblunts56.github.io/qb-brain/`
+- under **Redirect URLs**, add `https://daveblunts56.github.io/qb-brain/**`
+
+Confirmation and password-reset emails link back to the app. A reset link signs the parent in and asks for a new password right away; an expired link explains itself and they can request another.
 
 Optional: under **Authentication → Emails**, edit the templates so they say "QB Brain". The built-in email sender is rate-limited, so before a real launch connect your own email provider under **SMTP settings**.
 
@@ -46,3 +52,6 @@ Open the app, then go to **Settings → Account & Players** and answer the grown
   - a lesson finished anywhere counts as finished
   - settings take whichever change is newer
 - **Sign out** removes the account's players from that device, which matters on shared family or team phones. **Delete account** removes the account, every player and all their data from the server.
+
+## QB Brain Pro
+Pro status comes from the `entitlements` table, which only the payment webhook can write. Setting up payments is a separate step: see [PRO_SETUP.md](PRO_SETUP.md).
