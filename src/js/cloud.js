@@ -28,9 +28,12 @@ function loadSession(){ try{ session = JSON.parse(lsGet(SESSION_KEY) || "null");
 function setSession(r){
   session = { access_token: r.access_token, refresh_token: r.refresh_token,
     expires_at: r.expires_at || Math.floor(Date.now() / 1000) + (r.expires_in || 3600),
-    user: { id: r.user && r.user.id, email: r.user && r.user.email } };
+    user: userOf(r.user) };
   lsSet(SESSION_KEY, JSON.stringify(session));
 }
+// the account's own details: id, email and the display name kept in Supabase user_metadata
+function userOf(u){ u = u || {}; const md = u.user_metadata || {}; return { id: u.id, email: u.email, name: cleanName(md.display_name || "") }; }
+function cleanName(s){ return String(s || "").replace(/[<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 40); }
 function clearSession(){ session = null; try{ localStorage.removeItem(SESSION_KEY); }catch(_){} }
 function signedIn(){ return !!(session && session.access_token); }
 function account(){ return session ? session.user : null; }
@@ -75,8 +78,11 @@ async function refresh(){
 }
 
 /* ---- auth (the parent's account) ---- */
-async function signUp(email, password){
-  const r = await http("/auth/v1/signup", { method: "POST", auth: false, body: { email, password } });
+// where Supabase's emailed links (confirm account, reset password) send people back to
+function returnUrl(){ try{ return location.href.split("#")[0].split("?")[0]; }catch(_){ return ""; } }
+const back = () => returnUrl() ? "?redirect_to=" + encodeURIComponent(returnUrl()) : "";
+async function signUp(email, password, name){
+  const r = await http("/auth/v1/signup" + back(), { method: "POST", auth: false, body: { email, password, data: { display_name: cleanName(name) } } });
   if(r && r.access_token){ setSession(r); await afterSignIn(); return { signedIn: true }; }
   return { confirm: true };   // project requires email confirmation first
 }
@@ -85,7 +91,38 @@ async function signIn(email, password){
   await afterSignIn();
 }
 async function afterSignIn(){ await fetchPlayers(); emit("cloud:changed"); }
-async function resetPassword(email){ await http("/auth/v1/recover", { method: "POST", auth: false, body: { email } }); }
+async function resetPassword(email){ await http("/auth/v1/recover" + back(), { method: "POST", auth: false, body: { email } }); }
+/* ---- account settings ---- */
+async function updateUser(body){
+  const u = await http("/auth/v1/user", { method: "PUT", body });
+  if(session && u && u.id){ session.user = userOf(u); lsSet(SESSION_KEY, JSON.stringify(session)); }
+  emit("cloud:changed");
+  return u;
+}
+function setDisplayName(name){ return updateUser({ data: { display_name: cleanName(name) } }); }
+function changePassword(pw){
+  if(String(pw || "").length < 8) return Promise.reject(new CloudError("Use a password with at least 8 characters.", 0));
+  return updateUser({ password: pw });
+}
+/* ---- coming back from an emailed link ----
+   Supabase puts the result in the address after "#": access_token + refresh_token + type (signup | recovery | email_change | magiclink),
+   or error_description when the link is used up or expired. We sign the person in, tidy the address bar,
+   and for a password reset ask for the new password. */
+let linkResult = null;
+async function readAuthLink(){
+  let h = ""; try{ h = location.hash || ""; }catch(_){}
+  if(!/access_token=|error_description=/.test(h)) return null;
+  const q = new URLSearchParams(h.replace(/^#/, ""));
+  try{ history.replaceState(null, "", location.pathname + location.search); }catch(_){}
+  if(q.get("error_description")){ linkResult = { error: q.get("error_description").replace(/\+/g, " ") }; return linkResult; }
+  session = { access_token: q.get("access_token"), refresh_token: q.get("refresh_token"), expires_at: Math.floor(Date.now() / 1000) + (+q.get("expires_in") || 3600), user: {} };
+  try{
+    const u = await http("/auth/v1/user");
+    setSession({ access_token: session.access_token, refresh_token: session.refresh_token, expires_at: session.expires_at, user: u });
+  }catch(e){ clearSession(); linkResult = { error: e.message }; return linkResult; }
+  linkResult = { type: q.get("type") || "signin" };
+  return linkResult;
+}
 // signing out also removes the account's players from this device (shared family/team devices)
 async function signOut(){
   try{ if(signedIn()) await http("/auth/v1/logout", { method: "POST" }); }catch(_){}
@@ -182,6 +219,11 @@ export function init(){
   CFG = readConfig();
   loadSession();
   if(!configured()) return;
+  readAuthLink().then(r => {
+    if(!r) return;
+    if(r.error){ emit("cloud:link", r); return; }
+    afterSignIn().catch(() => {}).then(() => { emit("cloud:link", r); syncNow(); });
+  });
   on("data:saved", () => { if(signedIn() && activePlayer().cloud) scheduleSync(); });
   if(typeof window !== "undefined" && window.addEventListener){
     window.addEventListener("online", () => scheduleSync(0));
@@ -196,5 +238,5 @@ export function init(){
     }).catch(e => setStatus(e.status === 0 ? "offline" : "error", e.message));
   }
 }
-export { configured, signedIn, account, signUp, signIn, signOut, resetPassword, deleteAccount, BANDS, cleanNickname, nicknameProblem,
+export { configured, signedIn, account, signUp, setDisplayName, changePassword, cleanName, signIn, signOut, resetPassword, deleteAccount, BANDS, cleanNickname, nicknameProblem,
   fetchPlayers, addPlayer, updatePlayer, removePlayer, syncNow, scheduleSync, status, exportData, CloudError };

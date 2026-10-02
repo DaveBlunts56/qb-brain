@@ -14,7 +14,7 @@ create index if not exists players_parent_idx on public.players(parent_id);
 
 create table if not exists public.player_data (
   player_id   uuid not null references public.players(id) on delete cascade,
-  kind        text not null check (kind in ('settings','plays','tutorial','profile')),
+  kind        text not null check (kind in ('settings','plays','tutorial','profile','progress')),
   data        jsonb not null check (pg_column_size(data) < 1500000),
   upd         bigint not null,          -- last-changed time (ms) from the device, used for merging
   updated_at  timestamptz not null default now(),
@@ -60,3 +60,21 @@ create or replace function public.delete_my_account() returns void
 $$;
 revoke all on function public.delete_my_account() from public, anon;
 grant execute on function public.delete_my_account() to authenticated;
+
+-- ---------------------------------------------------------------------------
+-- QB Brain Pro: who has it. The app can only READ its own row; nothing the app sends can grant Pro.
+-- Rows are written by the server side only (a payment webhook running with the service-role key,
+-- see supabase/functions/README.md). No row = Free.
+create table if not exists public.entitlements (
+  user_id              uuid primary key references auth.users(id) on delete cascade,
+  plan                 text not null default 'free' check (plan in ('free','pro')),
+  status               text not null default 'inactive' check (status in ('active','trialing','past_due','canceled','inactive')),
+  provider             text,                 -- e.g. 'stripe'
+  provider_customer_id text,
+  current_period_end   timestamptz,
+  updated_at           timestamptz not null default now()
+);
+alter table public.entitlements enable row level security;
+drop policy if exists "read own entitlement" on public.entitlements;
+create policy "read own entitlement" on public.entitlements for select to authenticated using (user_id = auth.uid());
+-- (deliberately no insert/update/delete policies for app users)

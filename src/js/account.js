@@ -1,4 +1,4 @@
-import { BANDS, account, addPlayer, configured, deleteAccount, exportData, fetchPlayers, nicknameProblem, removePlayer, resetPassword, signIn, signOut, signUp, signedIn, status, syncNow, updatePlayer } from "./cloud.js";
+import { BANDS, account, addPlayer, changePassword, configured, deleteAccount, exportData, fetchPlayers, nicknameProblem, removePlayer, resetPassword, setDisplayName, signIn, signOut, signUp, signedIn, status, syncNow, updatePlayer } from "./cloud.js";
 import { on } from "./config.js";
 import { SCREENS, showScreen } from "./setup.js";
 import { els } from "./state.js";
@@ -67,13 +67,17 @@ function render(){
   els.acctIn.classList.toggle("hidden", !configured() || !signed);
   if(!configured()) return;
   if(!signed){ renderAuth(); return; }
-  els.acctEmail.textContent = account().email || "";
+  const a = account();
+  els.acctHello.textContent = a.name || a.email || "";
+  els.acctEmail.textContent = a.name ? a.email : "Add a display name below — it's how the account greets you.";
+  if(document.activeElement !== els.acctName) els.acctName.value = a.name || "";
   renderPlayers(); renderSync();
 }
 function renderAuth(){
   const create = authMode === "create";
   els.authTabs.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.k === authMode));
   els.authConsent.classList.toggle("hidden", !create);
+  els.authNameRow.classList.toggle("hidden", !create);
   els.authPw.setAttribute("autocomplete", create ? "new-password" : "current-password");
   els.authGo.textContent = create ? "CREATE ACCOUNT" : "SIGN IN";
   els.authForgot.classList.toggle("hidden", create);
@@ -155,7 +159,7 @@ async function submitAuth(){
   busy(els.authGo, true);
   try{
     if(authMode === "create"){
-      const r = await signUp(email, pw);
+      const r = await signUp(email, pw, els.authName.value);
       if(r.confirm){ els.authMsg.textContent = "Almost done: check " + email + " for a confirmation link, then come back and sign in."; authMode = "signin"; renderAuth(); }
     } else await signIn(email, pw);
     els.authPw.value = "";
@@ -165,10 +169,47 @@ async function submitAuth(){
   busy(els.authGo, false);
 }
 
+/* ---- account settings: name + password ---- */
+async function saveName(){
+  const v = els.acctName.value.trim(); els.acctMsg.textContent = "";
+  if(!v){ els.acctMsg.textContent = "Type a name first."; return; }
+  busy(els.acctNameSave, true);
+  try{ await setDisplayName(v); els.acctMsg.textContent = "Name saved."; render(); }catch(e){ els.acctMsg.textContent = e.message; }
+  busy(els.acctNameSave, false);
+}
+async function savePassword(input, btn, msg, done){
+  msg.textContent = "";
+  if(input.value.length < 8){ msg.textContent = "Use a password with at least 8 characters."; return; }
+  busy(btn, true);
+  try{ await changePassword(input.value); input.value = ""; msg.textContent = "Password updated."; if(done) done(); }catch(e){ msg.textContent = e.message; }
+  busy(btn, false);
+}
+/* ---- arriving from an emailed link (confirm account / reset password) ---- */
+function onLink(r){
+  if(r.error){
+    showScreen("accountScreen");
+    if(!signedIn()){ authMode = "signin"; renderAuth(); }
+    (signedIn() ? els.acctMsg : els.authMsg).textContent = "That email link didn't work (" + r.error + "). Links expire after a while — request a new one.";
+    return;
+  }
+  gatePassed = true;   // the grown-up just came from their own inbox
+  renderPlayerBar();
+  if(r.type === "recovery"){
+    els.pwFor.textContent = "For " + (account().email || "your account") + ". You're signed in on this device.";
+    els.pwMsg.textContent = ""; els.pwNew.value = "";
+    els.pwSheet.classList.remove("hidden");
+    setTimeout(() => { try{ els.pwNew.focus(); }catch(_){} }, 50);
+    return;
+  }
+  showScreen("accountScreen");
+  els.acctMsg.textContent = r.type === "signup" ? "Email confirmed — you're signed in." : "You're signed in.";
+  if(!players().length) openPlayerForm(null);
+}
+
 export function init(){
   SCREENS.push("accountScreen");
   ["accountScreen","acctNotSet","acctOut","acctIn","acctEmail","acctPlayers","addPlayerBtn","syncLine","syncNowBtn","exportBtn","signOutBtn","deleteAcctBtn",
-   "authTabs","authEmail","authPw","authConsent","authAgree","authGo","authForgot","authMsg",
+   "authTabs","authNameRow","authName","acctHello","acctName","acctNameSave","acctPw","acctPwSave","acctMsg","pwSheet","pwFor","pwNew","pwGo","pwCancel","pwMsg","authEmail","authPw","authConsent","authAgree","authGo","authForgot","authMsg",
    "gateSheet","gateQ","gateOpts","gateMsg","gateCancel","switchSheet","switchList","switchManage","switchClose","playerBar","playerName","playerSync","acctOpenBtn",
    "playerForm","pfTitle","pfNick","pfBands","pfBringRow","pfBring","pfBringText","pfSave","pfCancel","pfRemove","pfMsg"].forEach(id => { els[id] = $(id); });
   els.playerBar.addEventListener("click", openSwitcher);
@@ -185,6 +226,12 @@ export function init(){
     try{ await resetPassword(email); els.authMsg.textContent = "If there's an account for " + email + ", a reset link is on its way."; }catch(e){ els.authMsg.textContent = e.message; }
   });
   els.addPlayerBtn.addEventListener("click", () => openPlayerForm(null));
+  els.acctNameSave.addEventListener("click", saveName);
+  els.acctPwSave.addEventListener("click", () => savePassword(els.acctPw, els.acctPwSave, els.acctMsg));
+  els.pwGo.addEventListener("click", () => savePassword(els.pwNew, els.pwGo, els.pwMsg, () => setTimeout(() => els.pwSheet.classList.add("hidden"), 900)));
+  els.pwNew.addEventListener("keydown", e => { if(e.key === "Enter") els.pwGo.click(); });
+  els.pwCancel.addEventListener("click", () => els.pwSheet.classList.add("hidden"));
+  on("cloud:link", onLink);
   els.pfSave.addEventListener("click", savePlayerForm);
   els.pfCancel.addEventListener("click", () => els.playerForm.classList.add("hidden"));
   els.pfRemove.addEventListener("click", removeFromForm);
@@ -198,7 +245,7 @@ export function init(){
     if(delArm !== 2){ delArm = 2; els.deleteAcctBtn.textContent = "TAP AGAIN: DELETE THE ACCOUNT AND ALL PLAYERS FOR GOOD"; return; }
     try{ await deleteAccount(); reloadApp(); }catch(e){ els.syncLine.textContent = e.message; }
   });
-  on("screen", id => { if(id === "accountScreen"){ delArm = 0; els.deleteAcctBtn.textContent = "DELETE ACCOUNT"; render(); } if(id === "homeScreen") renderPlayerBar(); });
+  on("screen", id => { if(id === "accountScreen"){ delArm = 0; els.acctMsg.textContent = ""; els.deleteAcctBtn.textContent = "DELETE ACCOUNT"; render(); } if(id === "homeScreen") renderPlayerBar(); });
   on("cloud:status", () => { renderPlayerBar(); if(!els.accountScreen.classList.contains("hidden")) renderSync(); });
   on("cloud:changed", () => { renderPlayerBar(); if(!els.accountScreen.classList.contains("hidden")) render(); });
   renderPlayerBar();

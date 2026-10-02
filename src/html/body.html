@@ -124,6 +124,7 @@
     <div id="acctOut" class="group hidden">
       <p class="acct-lead"><b>For parents, guardians and coaches.</b> Create one account, then add a player for each kid. Kids just tap their name — no email, no real names needed — and their progress syncs across devices.</p>
       <div class="seg-row" id="authTabs"><button type="button" data-k="signin" class="on">SIGN IN</button><button type="button" data-k="create">CREATE ACCOUNT</button></div>
+      <label class="fld hidden" id="authNameRow"><span>Your name</span><input id="authName" class="text-in" type="text" autocomplete="name" maxlength="40" placeholder="e.g. Coach Dave"></label>
       <label class="fld"><span>Email</span><input id="authEmail" class="text-in" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false"></label>
       <label class="fld"><span>Password</span><input id="authPw" class="text-in" type="password" autocomplete="current-password" minlength="8"></label>
       <label class="check hidden" id="authConsent"><input type="checkbox" id="authAgree"><span>I'm a parent, guardian or coach — or I'm 13 or older and this account is for me.</span></label>
@@ -134,7 +135,18 @@
 
     <div id="acctIn" class="hidden">
       <div class="group">
-        <div class="help">Signed in as <b id="acctEmail"></b></div>
+        <div class="section-label">YOUR ACCOUNT</div>
+        <div class="acct-card">
+          <div class="acct-hello">Signed in as <b id="acctHello"></b></div>
+          <div class="help" id="acctEmail"></div>
+        </div>
+        <label class="fld"><span>Display name</span><input id="acctName" class="text-in" type="text" autocomplete="name" maxlength="40"></label>
+        <button class="btn alt sm" id="acctNameSave" type="button">SAVE NAME</button>
+        <label class="fld"><span>New password</span><input id="acctPw" class="text-in" type="password" autocomplete="new-password" minlength="8" placeholder="8+ characters"></label>
+        <button class="btn alt sm" id="acctPwSave" type="button">CHANGE PASSWORD</button>
+        <div class="warn-line" id="acctMsg" role="status"></div>
+      </div>
+      <div class="group">
         <div class="section-label">PLAYERS</div>
         <div id="acctPlayers" class="acct-players"></div>
         <button class="btn alt sm" id="addPlayerBtn" type="button">+ ADD PLAYER</button>
@@ -334,6 +346,16 @@
     </div>
   </div>
 <!--feature:accounts-->
+  <div id="pwSheet" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="pwTitle">
+    <div class="modal-box">
+      <h2 id="pwTitle">SET A NEW PASSWORD</h2>
+      <div class="help" id="pwFor"></div>
+      <label class="fld"><span>New password</span><input id="pwNew" class="text-in" type="password" autocomplete="new-password" minlength="8" placeholder="8+ characters"></label>
+      <button class="btn" id="pwGo" type="button">SAVE PASSWORD</button>
+      <button class="btn alt sm" id="pwCancel" type="button">NOT NOW</button>
+      <div class="warn-line" id="pwMsg" role="status"></div>
+    </div>
+  </div>
   <div id="gateSheet" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="modal-box">
       <h2 id="gateTitle">GROWN-UPS ONLY</h2>

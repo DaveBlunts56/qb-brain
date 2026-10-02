@@ -510,3 +510,6 @@ select.play-select{
 .tile,.btn.alt,.choice,.play-card,.learn-hero,.lesson,.newbie{position:relative;}
 .choice:disabled{opacity:1;background:#10151d;border-color:#1a212c;}
 .choice:disabled b,.choice:disabled small{color:#5d6672;}
+.acct-card{background:var(--ink-2);border:2px solid var(--ink-3);padding:10px 12px;display:flex;flex-direction:column;gap:2px;}
+.acct-hello{font-size:14px;color:var(--chalk-dim);}
+.acct-hello b{display:block;font-family:var(--display);font-size:26px;font-weight:400;color:var(--chalk);line-height:1.05;word-break:break-word;}
