@@ -3,7 +3,8 @@ import { MODES } from "./config.js";
 import { RESULT_COLORS, clearOverlays, isDrive, spotText } from "./drive.js";
 import { tutExit } from "./learn.js";
 import { rafId, studyTimer } from "./loop.js";
-import { recordSession } from "./progress.js";
+import { lastResult, recordSession } from "./progress.js";
+import { renderResultCard } from "./results.js";
 import { showScreen } from "./setup.js";
 import { els, state } from "./state.js";
 
@@ -47,6 +48,7 @@ function renderDriveSummary(){
 }
 function renderSummary(){
   renderCoachNotes();
+  renderResultCard();
   if(isDrive() && state.drive){ renderDriveSummary(); return; }
   els.summaryTitle.textContent=MODES[state.mode].label.toUpperCase(); els.logTitle.textContent="REP LOG"; els.againBtn.textContent="GO AGAIN";
   const log=state.session.log, reps=log.length;
@@ -58,7 +60,12 @@ function renderSummary(){
   const thrown=dec.filter(l=>l.result!=="SACKED");
   const avgTime = thrown.length ? thrown.reduce((s,l)=>s+l.time,0)/thrown.length : 0;
   els.statGrid.innerHTML="";
-  [[covPct===null?"—":covPct+"%","Coverage recognition"],[dec.length?goodPct+"%":"—","Good decisions"],[thrown.length?avgTime.toFixed(1)+"s":"—","Avg time to throw"],[state.session.score,"Total score"]].forEach(s=>{
+  // with a QB Brain Score card above, the grid shows what the card doesn't (so no number appears twice)
+  const R=lastResult(), scored=R && R.session && R.session.t===state.session.t0 && R.session.sc!=null;
+  const grid = scored
+    ? [[state.session.score,"Points"],[reps,"Reps"],[R.stats.sacks,"Sacks"],[R.stats.tw,"Turnover-worthy throws"]]
+    : [[covPct===null?"—":covPct+"%","Coverage recognition"],[dec.length?goodPct+"%":"—","Good reads"],[thrown.length?avgTime.toFixed(1)+"s":"—","Avg time to throw"],[state.session.score,"Total score"]];
+  grid.forEach(s=>{
     const c=document.createElement("div"); c.className="stat-card";
     c.innerHTML='<div class="n">'+s[0]+'</div><div class="l">'+s[1]+"</div>";
     els.statGrid.appendChild(c);

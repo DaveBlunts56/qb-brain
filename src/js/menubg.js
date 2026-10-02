@@ -150,4 +150,5 @@ export function init(){
   window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 120); });
   on("screen", id => { canvas.classList.toggle("off", id === "gameScreen"); if(id !== "gameScreen") draw(); });
 }
-export { draw as drawMenuBackground };
+const drawMenuBackground = draw, paintStadium = paint;
+export { drawMenuBackground, paintStadium };

@@ -366,6 +366,7 @@
   <div id="summaryScreen" class="screen hidden">
     <h2 id="summaryTitle">SESSION</h2>
     <div class="sub" id="summarySub">0 reps</div>
+    <div class="result-card hidden" id="resultCard"></div>
     <div class="stat-grid" id="statGrid"></div>
     <div class="strength-row" id="strengthRow"></div>
     <div class="group hidden" id="coachNotes"></div>
@@ -377,6 +378,14 @@
     <button class="btn alt" id="restartBtn">MAIN MENU</button>
   </div>
 
+  <div id="shareSheet" class="modal hidden" role="dialog" aria-modal="true" aria-label="Share your result">
+    <div class="modal-box share-box">
+      <img id="shareImg" alt="Your QB Brain Score card">
+      <div class="help" id="shareMsg" role="status"></div>
+      <button class="btn" id="shareGo" type="button">SHARE</button>
+      <button class="btn alt sm" id="shareClose" type="button">CLOSE</button>
+    </div>
+  </div>
   <div id="manual" class="hidden" role="dialog" aria-modal="true" aria-label="Coach's Manual">
     <div class="man-inner">
       <div class="topbar"><button class="back" id="manBack" aria-label="Back">◀</button><h2 id="manTitle">COACH'S MANUAL</h2><button class="quit man-x" id="manClose" aria-label="Close manual">✕</button></div>

@@ -34,7 +34,7 @@ function rankBadge(i, px){
     if(i === 4) star(1.5);
     if(i === 5){ star(1); bar(6.5, 3, 7); }
   }
-  return '<svg viewBox="-1 -1 12 11" width="' + (12 * px) + '" height="' + (11 * px) + '" shape-rendering="crispEdges"><g fill="#000" transform="translate(0.5 0.6)">' + r + '</g><g fill="' + c + '">' + r + "</g>" + marks + "</svg>";
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 11" width="' + (12 * px) + '" height="' + (11 * px) + '" shape-rendering="crispEdges"><g fill="#000" transform="translate(0.5 0.6)">' + r + '</g><g fill="' + c + '">' + r + "</g>" + marks + "</svg>";
 }
 
 function dayLabel(t){
