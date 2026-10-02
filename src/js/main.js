@@ -26,6 +26,8 @@ import { init as init_coach } from "./coach.js";
 import { init as init_film } from "./film.js";
 import { init as init_profile } from "./profile.js";
 import { init as init_learn } from "./learn.js";
+import { init as init_progress } from "./progress.js";
+import { init as init_dashboard } from "./dashboard.js";
 import { init as init_cloud } from "./cloud.js";
 import { init as init_account } from "./account.js";
 import { installTestHooks } from "./testhooks.js";
@@ -55,6 +57,8 @@ init_playbook();
 init_coach();
 init_film();
 init_profile();
+init_progress();
+init_dashboard();
 init_learn();
 init_menubg();
 // Parent accounts + cloud sync are built but switched off for the beta (package.json → "features").

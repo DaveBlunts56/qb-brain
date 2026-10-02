@@ -23,3 +23,10 @@ const S=mergeDocs('settings',{upd:3,data:{difficulty:'elite'}},{upd:9,data:{diff
 ok(mergeDocs('settings',null,{upd:1,data:{a:1}}).data.a===1 && mergeDocs('settings',{upd:1,data:{a:2}},null).data.a===2,'one side missing');
 ok(sameDoc({data:{a:1}},{data:{a:1}}) && !sameDoc({data:{a:1}},{data:{a:2}}),'sameDoc');
 if(fails) process.exitCode=1;
+// progress: every session from both devices, training days, and the best of each record
+const gA={upd:4,data:{v:1,sessions:[{t:1,n:6,sc:70},{t:5,n:3,e:10,sc:null}],days:{'2026-10-01':1},best:{score:{v:70,t:1},spd:{v:1.9,t:1}}}};
+const gB={upd:6,data:{v:1,sessions:[{t:5,n:8,e:12,sc:75},{t:9,n:7,sc:81}],days:{'2026-10-01':2,'2026-10-02':1},best:{score:{v:81,t:9},spd:{v:2.1,t:9},streak:{v:2,t:9}}}};
+const G=mergeDocs('progress',gA,gB);
+ok(G.data.sessions.map(s=>s.t+':'+s.n).join()==='1:6,5:8,9:7','progress: sessions from both, the fuller copy of a shared session wins');
+ok(G.data.days['2026-10-01']===2 && G.data.days['2026-10-02']===1,'progress: training days from both');
+ok(G.data.best.score.v===81 && G.data.best.spd.v===1.9 && G.data.best.streak.v===2,'progress: best score (higher), best release (lower), best streak');

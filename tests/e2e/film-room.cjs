@@ -38,7 +38,7 @@ const { chromium, devices } = require('playwright');
     await p.tap('#nextRepBtn');
   }
   await p.tap('#quitBtn'); await p.waitForTimeout(200); await p.tap('#restartBtn'); await p.waitForTimeout(200);
-  await p.tap('text=QB PROFILE'); await p.waitForTimeout(200); await p.screenshot({path:OUT+'profile.png', fullPage:true});
+  await p.tap('text=DASHBOARD'); await p.waitForTimeout(150); await p.tap('#dashScreen >> text=QB PROFILE'); await p.waitForTimeout(200); await p.screenshot({path:OUT+'profile.png', fullPage:true});
   log.push('profile recs '+await p.evaluate(()=>window.__qbProfile.recs.length));
   console.log(log.join('\n')); console.log(errs);
   if(errs.length || (!log.some(l=>/profile recs 4/.test(l)) || !log.some(l=>/PRE-SNAP LOOK/.test(l)))) { console.error('FAIL: film-room'); process.exitCode=1; }

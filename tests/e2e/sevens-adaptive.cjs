@@ -24,7 +24,7 @@ const { chromium, devices } = require('playwright');
   await p.tap('#filmBox .film-opt >> nth=0'); await p.waitForTimeout(100);
   await p.screenshot({path:OUT+'v18_clock.png'});
   const coach=await p.textContent('#coachCard');
-  await p.tap('#quitBtn'); await p.waitForTimeout(200); await p.tap('#restartBtn'); await p.tap('text=QB PROFILE'); await p.waitForTimeout(200);
+  await p.tap('#quitBtn'); await p.waitForTimeout(200); await p.tap('#restartBtn'); await p.tap('text=DASHBOARD'); await p.waitForTimeout(150); await p.tap('#dashScreen >> text=QB PROFILE'); await p.waitForTimeout(200);
   const ad=await p.textContent('#pfAdaptive');
   console.log(JSON.stringify({r,res,coach:coach.slice(0,260),ad,errs},null,1));
   if(errs.length || (r.sq!==7 || r.n!==7 || r.clock!==4)) { console.error('FAIL: sevens-adaptive'); process.exitCode=1; }

@@ -113,7 +113,7 @@ function startSession(mode,extra){
   state.forceCoverage = extra && extra.coverage || null;
   state.plan = extra && extra.plan || null;
   saveSettings();
-  state.session={reps:0, score:0, log:[]};
+  state.session={reps:0, score:0, log:[], t0:Date.now(), challenge: extra && extra.challenge || null};
   state.drive = mode==="drive" ? newDrive() : null;
   showScreen("gameScreen");
   updateHud();

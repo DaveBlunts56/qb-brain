@@ -38,9 +38,9 @@
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="1" width="8" height="10" fill="#c8a36a"/><rect x="3" y="3" width="6" height="7" fill="#f4f0e2"/><rect x="4" y="0" width="4" height="2" fill="#8a8f98"/><g fill="#e8412c"><rect x="4" y="4" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/></g><g fill="#2a6fd6"><rect x="6" y="7" width="2" height="2"/></g></svg>
         <b>PLAYBOOK</b><small>Your plays · Create a play</small>
       </button>
-      <button class="tile" data-go="profileScreen">
-        <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="7" width="2" height="4" fill="#5ab8ff"/><rect x="5" y="4" width="2" height="7" fill="#ffc933"/><rect x="9" y="1" width="2" height="10" fill="#5fe08a"/><rect x="0" y="11" width="12" height="1" fill="#f4f0e2"/></svg>
-        <b>QB PROFILE</b><small id="profileSummary">Your tendencies</small>
+      <button class="tile dash-tile" data-go="dashScreen">
+        <span class="ico rank-ico" id="dashTileBadge" aria-hidden="true"></span>
+        <b>DASHBOARD</b><small id="dashTileSub">Score · rank · progress</small>
       </button>
       <button class="tile learn" data-go="learnScreen">
         <svg class="ico" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="2" width="10" height="8" fill="#f4f0e2"/><rect x="5" y="2" width="2" height="8" fill="#c8a36a"/><g fill="#2a6fd6"><rect x="2" y="4" width="2" height="1"/><rect x="2" y="6" width="2" height="1"/></g><g fill="#e8412c"><rect x="8" y="4" width="2" height="1"/><rect x="8" y="6" width="2" height="1"/></g></svg>
@@ -179,6 +179,44 @@
     <div class="coach-note hidden" id="pfAdaptive"><p></p></div>
     <div class="help">These are training metrics from your own reps — not ratings. They're stored only on this device.</div>
     <button class="btn alt sm" id="pfReset" type="button">RESET PROFILE</button>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="dashScreen" class="screen hidden">
+    <div class="topbar"><button class="back" data-go="homeScreen" aria-label="Back">◀</button><h2>QB DASHBOARD</h2></div>
+    <div class="dash-hero">
+      <div class="dh-top">
+        <span class="dh-badge" id="dashBadge" aria-hidden="true"></span>
+        <div class="dh-rank"><small>RANK</small><b id="dashRank">UNRANKED</b></div>
+        <div class="dh-rating"><b id="dashRating">—</b><small>QB BRAIN<br>RATING</small></div>
+      </div>
+      <div class="dh-bar" aria-hidden="true"><i id="dashBar"></i></div>
+      <div class="dh-next" id="dashNext"></div>
+      <div class="dh-streak" id="dashStreak"></div>
+    </div>
+    <div class="pf-tiles" id="dashTiles"></div>
+    <div class="group">
+      <div class="section-label">QB BRAIN SCORE</div>
+      <div class="chip-row hidden" id="dashRange"></div>
+      <div class="dash-chart" id="dashChart"></div>
+      <div class="help" id="dashChartNote"></div>
+    </div>
+    <div class="group"><div class="section-label">PERSONAL BESTS</div><div class="best-grid" id="dashBests"></div></div>
+    <div class="group"><div class="section-label">WORK ON THIS</div><div id="dashWeak" class="pf-diag"></div></div>
+    <div class="group"><div class="section-label">RECENT SESSIONS</div><div class="rep-log" id="dashRecent"></div></div>
+    <button class="btn alt" type="button" data-go="profileScreen">QB PROFILE · TENDENCIES &amp; DRILLS</button>
+    <div class="group">
+      <div class="section-label">HOW THE SCORE WORKS</div>
+      <div class="help how">Every session with 5+ reps gets a <b>QB Brain Score</b> from 0–100, built only from what the game measures on each rep:
+        <ul>
+          <li><b>Decisions 45%</b> — plays where you made the right read without a turnover-worthy throw</li>
+          <li><b>Coverage ID 25%</b> — coverages you named correctly when asked</li>
+          <li><b>Speed 15%</b> — release time: 1.4s or quicker is full marks, 3.2s or a sack is none</li>
+          <li><b>Ball security 15%</b> — each 1% of throws that were turnover-worthy costs 3 points</li>
+        </ul>
+        Parts a mode doesn't measure are left out. Then difficulty: Rookie ×0.88, Varsity ×0.95, Elite ×1.
+        Your <b>rating</b> is the average of your last 10 scored sessions, and it sets your rank. Captain and Field General need regular Varsity or Elite sessions; Franchise QB needs Elite.</div>
+    </div>
   </div>
 
   <!-- ============ LEARN ============ -->

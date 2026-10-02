@@ -3,6 +3,7 @@ import { MODES } from "./config.js";
 import { RESULT_COLORS, clearOverlays, isDrive, spotText } from "./drive.js";
 import { tutExit } from "./learn.js";
 import { rafId, studyTimer } from "./loop.js";
+import { recordSession } from "./progress.js";
 import { showScreen } from "./setup.js";
 import { els, state } from "./state.js";
 
@@ -14,6 +15,7 @@ function endSession(){
   cancelAnimationFrame(rafId);
   clearInterval(studyTimer);
   clearOverlays();
+  recordSession(true);
   showScreen("summaryScreen");
   renderSummary();
 }

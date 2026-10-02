@@ -4,6 +4,7 @@
      profile  — every rep from both (matched by time + play + result), oldest first, last 600 kept
      plays    — each play keeps its newest edit; a play deleted on any device stays deleted
      tutorial — a lesson finished anywhere counts as finished
+     progress — every session from both (the longer copy of one session wins), training days, the best of each record
      settings — whichever device changed them last
    Documents are {upd, data}; either side may be null.
 ============================================================ */
@@ -17,6 +18,7 @@ function mergeDocs(kind, a, b){
   switch(kind){
     case "profile":  return { upd, data: mergeProfile(a.data, b.data) };
     case "plays":    return { upd, data: mergePlays(a.data, b.data, newer === a) };
+    case "progress": return { upd, data: mergeProgress(a.data, b.data) };
     case "tutorial": return { upd, data: Object.assign({}, b.data || {}, a.data || {}) };
     default:         return clone(newer);
   }
@@ -29,6 +31,19 @@ function mergeProfile(x, y){
   });
   recs.sort((p, q) => p.t - q.t);
   return { v: 1, recs: recs.slice(-PROFILE_CAP) };
+}
+const LOWER_WINS = { spd: true };
+function mergeProgress(x, y){
+  x = x || {}; y = y || {};
+  const byT = new Map();
+  [].concat(x.sessions || [], y.sessions || []).forEach(s => { if(!s || s.t == null) return; const c = byT.get(s.t); if(!c || (s.n || 0) > (c.n || 0) || ((s.n || 0) === (c.n || 0) && (s.e || 0) > (c.e || 0))) byT.set(s.t, s); });
+  const sessions = Array.from(byT.values()).sort((p, q) => p.t - q.t).slice(-400);
+  const days = Object.assign({}, x.days || {});
+  Object.keys(y.days || {}).forEach(k => { days[k] = Math.max(days[k] || 0, y.days[k]); });
+  const best = Object.assign({}, x.best || {});
+  Object.keys(y.best || {}).forEach(k => { const a = best[k], b = y.best[k]; if(!b) return;
+    if(!a || (LOWER_WINS[k] ? b.v < a.v : b.v > a.v)) best[k] = b; });
+  return clone({ v: 1, sessions, days, best });
 }
 function mergePlays(x, y, xIsNewer){
   x = x || {}; y = y || {};
@@ -49,4 +64,4 @@ function sameDoc(a, b){ return JSON.stringify(a ? a.data : null) === JSON.string
 function clone(o){ return o == null ? o : JSON.parse(JSON.stringify(o)); }
 
 export function init(){}
-export { mergeDocs, mergeProfile, mergePlays, sameDoc };
+export { mergeDocs, mergeProfile, mergeProgress, mergePlays, sameDoc };

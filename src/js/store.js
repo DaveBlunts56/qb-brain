@@ -3,12 +3,12 @@ import { emit } from "./config.js";
 /* ============================================================
    STORE — everything QB Brain saves, per player.
    Each kind of data is one document {upd, data} (upd = last-changed time, used to merge with the cloud).
-   Kinds: settings · plays (My Plays + audibles) · tutorial · profile (QB Profile reps)
+   Kinds: settings · plays (My Plays + audibles) · tutorial · profile (QB Profile reps) · progress (sessions, streak days, bests)
    Players: "local" is the no-account player on this device; cloud players come from a parent's account.
    Device-only flags (install tip, "new here" card) stay outside this and never sync.
 ============================================================ */
 
-const KINDS = ["settings", "plays", "tutorial", "profile"];
+const KINDS = ["settings", "plays", "tutorial", "profile", "progress"];
 const LEGACY = { settings: "qbbrain.settings.v1", tutorial: "qbbrain.tutorial.v1", profile: "qbbrain.profile.v1" };
 const ACTIVE_KEY = "qbbrain.active", PLAYERS_KEY = "qbbrain.players";
 
