@@ -125,7 +125,9 @@ function boxBlur(src, W, H, r){
   return out;
 }
 
-function draw(){
+// the backdrop is decoration: if anything about drawing it fails, the menus just keep their plain background
+function draw(){ try{ drawScene(); }catch(_){} }
+function drawScene(){
   if(!canvas || !canvas.getContext) return;
   const vw = window.innerWidth || 390, vh = window.innerHeight || 844;
   const scale = Math.max(3, Math.min(6, Math.round(Math.min(vw, vh) / 120)));   // ~3–4 screen px per art pixel on phones
@@ -134,7 +136,8 @@ function draw(){
   lastKey = key;
   const g = canvas.getContext("2d"); if(!g || !g.createImageData) return;
   canvas.width = W; canvas.height = H;
-  const px = paint(W, H), img = g.createImageData(W, H);
+  const img = g.createImageData(W, H); if(!img || !img.data) return;
+  const px = paint(W, H);
   for(let i = 0, j = 0; i < W * H; i++, j += 3){ img.data[i * 4] = px[j]; img.data[i * 4 + 1] = px[j + 1]; img.data[i * 4 + 2] = px[j + 2]; img.data[i * 4 + 3] = 255; }
   g.putImageData(img, 0, 0);
 }
