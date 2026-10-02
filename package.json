@@ -1,6 +1,6 @@
 {
   "name": "qb-brain",
-  "version": "1.10.1",
+  "version": "1.11.0",
   "private": true,
   "description": "Flag football QB decision-making and coverage-recognition trainer (installable web app).",
   "type": "module",

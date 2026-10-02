@@ -488,3 +488,25 @@ select.play-select{
 .switch-row i{grid-column:2;grid-row:1 / span 2;font-style:normal;font-family:var(--display);color:var(--gold);font-size:15px;}
 .switch-row.on{border-color:var(--gold);}
 #acctOpenBtn{align-self:stretch;}
+
+/* ---------- menu backdrop: pixel stadium (menubg.js) ---------- */
+#menuBg{position:fixed;inset:0;width:100%;height:100%;z-index:0;image-rendering:pixelated;image-rendering:crisp-edges;pointer-events:none;}
+#menuBg.off{display:none;}
+#app{z-index:1;}
+#gameScreen{background:var(--ink);}
+/* home: the logo sits in the sky instead of its own box */
+.marquee{background:none;border:0;box-shadow:none;padding:18px 4px 6px;}
+.marquee::after{display:none;}
+.marquee p{box-shadow:0 3px 0 rgba(0,0,0,.45);}
+/* text that sits straight on the scene gets a chunky pixel outline */
+.topbar h2,.section-label,#summaryTitle{
+  text-shadow:2px 0 0 #000,-2px 0 0 #000,0 2px 0 #000,0 -2px 0 #000,2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 4px 0 rgba(0,0,0,.55);}
+.topbar h2{color:#fff;}
+/* settings groups and loose help text become dark panels over the field */
+.screen > .group,.screen > .help,.screen > .sub,#acctIn > .group{
+  background:rgba(13,17,23,.84);border:var(--px) solid #000;box-shadow:0 4px 0 rgba(0,0,0,.45);padding:12px;}
+.screen > .group > .section-label{margin-bottom:0;}
+.home-foot{background:rgba(13,17,23,.78);padding:6px 10px;color:var(--chalk);}
+.tile,.btn.alt,.choice,.play-card,.learn-hero,.lesson,.newbie{position:relative;}
+.choice:disabled{opacity:1;background:#10151d;border-color:#1a212c;}
+.choice:disabled b,.choice:disabled small{color:#5d6672;}

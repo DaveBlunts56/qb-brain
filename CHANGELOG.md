@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.11.0 — Pixel stadium menus (beta)
+
+- **Every menu now sits in a pixel-art stadium:**
+  - a bright blue sky with pixel clouds
+  - stands, crowd and light towers in the distance, softly blurred for depth
+  - a striped green field with yard lines running to the horizon and a goalpost at the far end
+- The scene is drawn by the app at a low resolution and scaled up with crisp pixels, so it's sharp on every screen size and adds no image files. It's hidden during plays, where the game field keeps its own look.
+- **The QB BRAIN logo floats in the sky** instead of sitting in its own box.
+- Menu headings get a chunky pixel outline, and settings groups sit on dark panels so everything stays readable over the field.
+- Greyed-out options stay solid instead of going see-through.
+
 ## v1.10.1 — Beta build
 
 This is the build for beta testers.

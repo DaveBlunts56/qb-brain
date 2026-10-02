@@ -1,6 +1,7 @@
 // QB Brain entry: every module only declares things at load time; init() calls run the app in this order.
 import { init as init_config } from "./config.js";
 import { init as init_store } from "./store.js";
+import { init as init_menubg } from "./menubg.js";
 import { init as init_plays } from "./plays.js";
 import { init as init_myplays } from "./myplays.js";
 import { init as init_paths } from "./paths.js";
@@ -55,6 +56,7 @@ init_coach();
 init_film();
 init_profile();
 init_learn();
+init_menubg();
 // Parent accounts + cloud sync are built but switched off for the beta (package.json → "features").
 // eslint-disable-next-line no-undef
 if(__QB_FEATURES__.accounts){ init_cloud(); init_account(); }
