@@ -25,7 +25,11 @@ It launches full-screen from its own icon, remembers your settings, and works of
 - **Sound:** synthesized whistle, catch, flag pull and crowd sounds. Toggle it in Settings.
 - **Key defender reads:** the coach tells you who to read, what he did, the correct read and whether your ball came out on time.
 - **Film Room:** pre-snap quiz (man/zone, coverage, key, first read) → live rep → PRE-SNAP → POST-SNAP reveal with the clue.
-- **QB Profile:** your tendencies across sessions and recommended drills. No ratings — training metrics only.
+- **QB Dashboard:** your rank, QB Brain Rating, training streak, recent form, score chart, personal bests, what to work on and recent sessions. Every session with 5+ reps gets a **QB Brain Score** (0–100) built only from measured reps; the formula is on the dashboard.
+- **Share Result:** after a session, share a phone-sized score card (or save the image).
+- **Daily challenge:** one short fixed-length session a day, the same for everyone. Optional, never pops up.
+- **QB Brain Pro:** Elite, Film Room, Adaptive, targeted drills, the full QB Profile and full history. Free covers everything else. Beta builds unlock Pro for testers. Payments setup: [docs/PRO_SETUP.md](docs/PRO_SETUP.md).
+- **QB Profile:** your tendencies across sessions and recommended drills.
 - **Adaptive training:** optional; reps are built from your profile (weak coverages more often, strong ones disguised, eyes and pressure tuned to your habits).
 - **5v5 vs 7v7:** 5v5 = quick game vs simple shells and a fast rush; 7v7 = no rush, 4-second clock, seven in coverage with robbers, brackets, quarters and rotations.
 - **Learn:** Home → Learn has the interactive Tutorial (8 lessons) and the Coach's Manual (coverages, routes, reads, progressions, concepts — with diagrams and sources).

@@ -18,6 +18,7 @@ import { LIB_ORDER, myToPlay, QB_ACTIONS } from "./myplays.js";
 import { profileMetrics, profileDiagnose, DRILLS, startDrill, PROFILE } from "./profile.js";
 import { adaptivePlan, currentPlan, coveragePool } from "./train.js";
 import { rankBadge } from "./dashboard.js";
+import { CHALLENGES, todays, met } from "./challenge.js";
 import { progressDoc, recordSession, streakInfo } from "./progress.js";
 import { rankFor, sessionStats } from "./score.js";
 
@@ -35,5 +36,6 @@ export function installTestHooks(){
   window.__qbCode = {encodePlay, decodePlay};
   window.__qbProfile = {profileMetrics, profileDiagnose, DRILLS, startDrill, get recs(){ return PROFILE.recs; }};
   window.__qbTrain = {adaptivePlan, currentPlan, coveragePool};
+  window.__qbChallenge = {CHALLENGES, todays, met};
   window.__qbProgress = {progressDoc, recordSession, streakInfo, rankFor, sessionStats, rankBadge};
 }

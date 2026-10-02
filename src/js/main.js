@@ -30,6 +30,7 @@ import { init as init_progress } from "./progress.js";
 import { init as init_dashboard } from "./dashboard.js";
 import { init as init_results } from "./results.js";
 import { init as init_pro } from "./pro.js";
+import { init as init_challenge } from "./challenge.js";
 import { init as init_cloud } from "./cloud.js";
 import { init as init_account } from "./account.js";
 import { installTestHooks } from "./testhooks.js";
@@ -63,6 +64,7 @@ init_progress();
 init_dashboard();
 init_results();
 init_pro();
+init_challenge();
 init_learn();
 init_menubg();
 // Parent accounts + cloud sync are built but switched off for the beta (package.json → "features").

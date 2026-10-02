@@ -32,6 +32,9 @@ function badges(r){
   if(r.records.includes("cov")) out.push({ t: "BEST COVERAGE ID", hot: true });
   if(r.records.includes("spd")) out.push({ t: "QUICKEST RELEASE", hot: true });
   if(r.records.includes("drive")) out.push({ t: "LONGEST DRIVE", hot: true });
+  if(r.challenge){ const c = r.challenge;
+    if(c.done && !c.already) out.push({ t: "DAILY CHALLENGE COMPLETE", hot: true });
+    else if(!c.done) out.push({ t: c.finished ? "CHALLENGE: " + c.got + " — TRY AGAIN TODAY" : "CHALLENGE NOT FINISHED", hot: false }); }
   if(r.streak.current > 1 && r.streak.current > (r.streakBefore || 0)) out.push({ t: r.streak.current + "-DAY STREAK", hot: false });
   return out;
 }

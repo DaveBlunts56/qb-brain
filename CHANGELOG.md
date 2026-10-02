@@ -1,5 +1,62 @@
 # Changelog
 
+## v1.12.0 — Dashboard, QB Brain Score, Pro and accounts foundation (beta)
+
+**Progress you can see**
+- **QB Dashboard** (home → Dashboard) shows:
+  - your rank, QB Brain Rating and streak
+  - coverage recognition, read accuracy, success under pressure and average decision time, each compared with your previous 10 sessions
+  - a score chart and personal bests
+  - your weakest coverages and concepts, each with a drill
+  - recent sessions
+- **QB Brain Score:** every session with 5+ reps gets a score from 0–100, built only from what the game measures. The formula is on the dashboard:
+  - decisions 45%
+  - coverage ID 25%
+  - release speed 15%
+  - ball security 15%
+  - then a difficulty factor
+- **Ranks:** Scout Team, Backup, Starter, Captain, Field General and Franchise QB, based on your last 10 scored sessions. The top three need regular Varsity or Elite sessions, so they can't be earned on Rookie.
+- **Streaks and personal bests:** best score, best coverage ID, quickest release, longest streak, most reps in a session and longest drive.
+- **Your history carries over:** reps you played before this update are turned into sessions automatically.
+- **Sessions are kept if you swipe the app away** before tapping END.
+
+**Results and sharing**
+- The session summary now opens with your **QB Brain Score**, rank and the stats that session measured, plus chips for new records, rank-ups and streaks.
+- **Share Result** makes a phone-sized (1080×1920) score card on the pixel stadium, with a QB Brain link. It uses your phone's share sheet, or saves the image.
+
+**Daily challenge**
+- A card on the home screen offers one short session a day, the same challenge for everyone. Examples: Coverage Check, Beat Cover 2, Ball Out Fast.
+- The rep counter shows how many reps are left, FINISH ends it, and the result is judged against the goal. It's optional, never pops up, and missing a day costs nothing.
+
+**QB Brain Pro**
+- **Pro features:** Elite difficulty, Film Room, Adaptive training, one-tap targeted drills, the full QB Profile breakdowns and full score history.
+  - Each one has a small **PRO** tag. Without Pro, tapping it opens the new **Upgrade** screen.
+- **Free still includes:** every other mode on Rookie and Varsity, 5v5 and 7v7, Full Drive, the tutorial, Create a Play, the dashboard, streaks and sharing. There are no session limits and no ads.
+- **Beta testers have every Pro feature unlocked.** Settings → **Preview as Free** shows the Free version.
+- **Payments are set up but not switched on.** Pro is granted only by the server (a Stripe webhook writing a read-only `entitlements` table), never by the app, and no secret keys are in the app. Setup is in `docs/PRO_SETUP.md`.
+
+**Accounts (built in, still switched off in the beta)**
+- **Display name** at sign-up, plus account settings to rename and change the password.
+- **Password reset links now work end to end:** the emailed link opens a "Set a new password" screen. Confirmation links sign the parent in, and expired links explain what to do.
+- **Database:**
+  - session history syncs between devices with its own merge rules
+  - new `entitlements` table
+  - existing projects run `supabase/migrations/002_progress_and_pro.sql`
+
+**Under the hood**
+- New modules:
+  - `score.js` (the score maths)
+  - `progress.js` (sessions, streaks and bests)
+  - `dashboard.js`, `results.js`, `pro.js` and `challenge.js`
+- 26 automated tests, up from 20:
+  - score and rank maths
+  - progress merging
+  - the dashboard on a phone
+  - results and sharing
+  - Pro in both a beta and a release-style build
+  - the daily challenge
+  - account settings and password reset
+
 ## v1.11.1 — Big Dawz playbook removed
 
 - The **Big Dawz** preset playbook (15 plays) is gone from the playbook tabs, the drill and drive book pickers, the play-call screen and audible lists. The home screen footer no longer says "Big Dawz edition".

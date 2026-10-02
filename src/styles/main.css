@@ -614,3 +614,14 @@ select.play-select{
 .small-print{font-size:12px !important;color:var(--chalk-dim) !important;}
 .coach-note.locked{border-left-color:var(--gold);}
 .coach-note.locked p b{font-weight:400;}
+
+/* ---------- daily challenge card ---------- */
+.daily-card{display:grid;grid-template-columns:1fr auto;grid-template-areas:"l s" "n s" "t t";column-gap:10px;row-gap:2px;width:100%;text-align:left;
+  background:rgba(13,17,23,.88);border:2px solid var(--sky);color:var(--chalk);padding:9px 12px 10px;box-shadow:0 3px 0 #000;}
+.daily-card:active{transform:translateY(2px);box-shadow:0 1px 0 #000;}
+.dc-label{grid-area:l;font-family:var(--display);font-size:14px;letter-spacing:.08em;color:var(--sky);}
+.daily-card b{grid-area:n;font-family:var(--display);font-weight:400;font-size:24px;line-height:1;color:#fff;}
+.daily-card small{grid-area:t;font-size:12.5px;line-height:1.35;color:var(--chalk-dim);margin-top:3px;}
+.daily-card i{grid-area:s;align-self:center;font-style:normal;font-family:var(--display);font-size:17px;letter-spacing:.04em;padding:5px 8px 3px;border:2px solid var(--sky);color:var(--sky);}
+.daily-card.done{border-color:var(--ink-3);}
+.daily-card.done i{background:var(--good);border-color:#000;color:#0d1117;}

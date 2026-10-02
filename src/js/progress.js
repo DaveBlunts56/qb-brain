@@ -56,7 +56,7 @@ function recordSession(final){
   const st = sessionStats(recs), d = state.drive;
   const s = { t: S.t0, e: Date.now(), m: state.mode, sq: st.squad, d: st.diff, n: recs.length, plays: st.plays,
     sc: st.score, read: st.read, cov: st.cov, covN: st.covN, spd: st.spd, spdN: st.spdN, press: st.press, pressN: st.pressN, tw: st.tw,
-    pts: S.score, plan: state.plan && state.plan.name || null, ch: S.challenge || null,
+    pts: S.score, plan: state.plan && state.plan.name || null, ch: S.challenge ? S.challenge.key : null,
     drive: d ? { res: d.result || null, yards: d.yards, plays: d.plays.length } : null };
   // the first time this session is saved, remember the rank and which bests already existed (for "new record!")
   if(!S.before) S.before = { rank: rankFor(DOC.sessions), had: Object.keys(DOC.best).filter(k => DOC.best[k] != null), streak: streakInfo().current };

@@ -172,7 +172,7 @@ function finalizeCoverageOnly(){
     const d=document.createElement("div"); d.className="score-chip";
     d.innerHTML=c[0]+": <b>"+c[1]+"</b>"; els.scoreRow.appendChild(d);
   });
-  els.nextRepBtn.textContent="NEXT REP"; els.driveLine.classList.add("hidden");
+  els.nextRepBtn.textContent=nextRepLabel(); els.driveLine.classList.add("hidden");
   rep.endT=2.8; renderCoach(rep,"COVERAGE");
   showBanner(correct?"CORRECT!":"WRONG LOOK", correct?"good":"bad", ()=>els.resultSheet.classList.remove("hidden"));
   updateHud();
@@ -216,7 +216,7 @@ function renderResult(resultType, subtitle, explain, chips, points, rep, driveIn
     els.driveLine.innerHTML="<b>"+driveInfo.headline+"</b> "+driveInfo.status;
     els.driveLine.classList.remove("hidden");
     els.nextRepBtn.textContent = driveInfo.over ? "DRIVE SUMMARY" : "NEXT PLAY";
-  } else { els.driveLine.classList.add("hidden"); els.nextRepBtn.textContent="NEXT REP"; }
+  } else { els.driveLine.classList.add("hidden"); els.nextRepBtn.textContent=nextRepLabel(); }
   els.resultTag.querySelector(".dot").style.background = RESULT_COLORS[resultType];
   let sub = subtitle;
   if(rep.askCoverage && rep.coverageGuess!==undefined){
@@ -255,12 +255,16 @@ function clearOverlays(){
   els.primaryBtn.classList.remove("hidden");
 }
 
+/* ---- sessions with a set number of reps (the daily challenge) end on their own ---- */
+function sessionComplete(){ const S=state.session; return !!(S && S.target && S.reps>=S.target); }
+function nextRepLabel(){ return sessionComplete() ? "FINISH" : "NEXT REP"; }
+
 /* ---- runs once at startup, in module order (see main.js) ---- */
 export function init(){
   els.nextRepBtn.addEventListener("click",()=>{
     els.resultSheet.classList.add("hidden");
     if(state.tut){ tutAfterResult(); return; }
-    if(isDrive() && state.drive && state.drive.over) endSession(); else startRep();
+    if((isDrive() && state.drive && state.drive.over) || sessionComplete()) endSession(); else startRep();
   });
 }
 

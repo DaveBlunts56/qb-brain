@@ -43,7 +43,9 @@ function mergeProgress(x, y){
   const best = Object.assign({}, x.best || {});
   Object.keys(y.best || {}).forEach(k => { const a = best[k], b = y.best[k]; if(!b) return;
     if(!a || (LOWER_WINS[k] ? b.v < a.v : b.v > a.v)) best[k] = b; });
-  return clone({ v: 1, sessions, days, best });
+  const ch = Object.assign({}, x.ch || {});
+  Object.keys(y.ch || {}).forEach(k => { const a = ch[k], b = y.ch[k]; ch[k] = !a ? b : { key: a.key, done: !!(a.done || b.done), tries: Math.max(a.tries || 0, b.tries || 0), best: Math.max(a.best || 0, b.best || 0) }; });
+  return clone({ v: 1, sessions, days, best, ch });
 }
 function mergePlays(x, y, xIsNewer){
   x = x || {}; y = y || {};

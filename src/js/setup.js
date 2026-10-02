@@ -118,7 +118,7 @@ function startSession(mode,extra){
   state.forceCoverage = extra && extra.coverage || null;
   state.plan = extra && extra.plan || null;
   saveSettings();
-  state.session={reps:0, score:0, log:[], t0:Date.now(), challenge: extra && extra.challenge || null};
+  state.session={reps:0, score:0, log:[], t0:Date.now(), challenge: extra && extra.challenge || null, target: extra && extra.target || 0};
   state.drive = mode==="drive" ? newDrive() : null;
   showScreen("gameScreen");
   updateHud();
@@ -134,9 +134,9 @@ function updateHud(){
     els.hudRepLbl.textContent="PLAY";
     els.hudRep.textContent = d.over ? d.plays.length : d.plays.length+1;
   } else {
-    els.hudSub.textContent = state.plan && state.plan.name ? state.plan.name : state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.adaptive?" · Adaptive":state.book==="custom"?" · My Plays":"");
+    els.hudSub.textContent = state.session.challenge ? "Daily challenge · "+state.session.challenge.name : state.plan && state.plan.name ? state.plan.name : state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.adaptive?" · Adaptive":state.book==="custom"?" · My Plays":"");
     els.hudRepLbl.textContent="REP";
-    els.hudRep.textContent = state.session.reps+1;
+    els.hudRep.textContent = Math.min(state.session.reps+1, state.session.target||Infinity)+(state.session.target?"/"+state.session.target:"");
   }
   els.hudScore.textContent = state.session.score;
 }
@@ -173,7 +173,7 @@ export function init(){
   els.startBtn.addEventListener("click",()=>startSession(state.drillMode));
   els.driveStartBtn.addEventListener("click",()=>startSession("drive"));
   els.restartBtn.addEventListener("click",()=>showScreen("homeScreen"));
-  els.againBtn.addEventListener("click",()=>startSession(state.mode,{coverage:state.forceCoverage, plan:state.plan}));
+  els.againBtn.addEventListener("click",()=>startSession(state.mode,{coverage:state.forceCoverage, plan:state.plan, challenge:state.session.challenge, target:state.session.target}));
   els.quitBtn.addEventListener("click", endSession);
 }
 
