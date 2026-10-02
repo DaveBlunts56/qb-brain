@@ -1,6 +1,6 @@
 # QB Brain
 
-A flag football quarterback trainer for 5v5 and 7v7: pre-snap coverage recognition, progressions, reads with bullet/lob throws, and a Full Drive mode with downs, yards and touchdowns. Includes the **Big Dawz** 5v5 playbook.
+A flag football quarterback trainer for 5v5 and 7v7: pre-snap coverage recognition, progressions, reads with bullet/lob throws, and a Full Drive mode with downs, yards and touchdowns.
 
 It's a web app — no App Store needed. Everything is in `index.html`; there's nothing to build.
 

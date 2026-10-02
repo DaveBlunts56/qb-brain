@@ -1,7 +1,7 @@
 /* QB Brain offline support.
    The app page is fetched fresh when online (so updates show up right away) and served from cache when offline.
    VERSION is filled in by scripts/build.mjs from package.json, so every release refreshes installed copies. */
-const VERSION = "qb-brain-v1.11.0";
+const VERSION = "qb-brain-v1.11.1";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png", "./icons/favicon-64.png"];
 

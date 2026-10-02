@@ -2,7 +2,7 @@ require('./_stub.cjs');
 const S=window.__qbSim, K=window.__qbKey, st=window.__qbState;
 st.mode="quick_read";
 const out={}, stats={};
-for(const sq of [5,7]) for(const bk of ["standard","bigdawz"]){ const plays=S.BOOKS[bk].plays[sq]; if(!plays) continue;
+for(const sq of [5,7]) for(const bk of ["standard"]){ const plays=S.BOOKS[bk].plays[sq]; if(!plays) continue;
   for(const pl of plays) for(const cov of ["Man","Cover 1","Cover 2","Cover 3","Underneath Zone"]) for(let i=0;i<6;i++){
     st.squad=sq; st.difficulty="varsity";
     const rep=S.buildRep({squad:sq,play:pl,coverage:cov}); st.rep=rep;

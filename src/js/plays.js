@@ -59,13 +59,6 @@ function mk7(name,form,types,prog){
 }
 let STANDARD7;
 
-/* ============================================================
-   BIG DAWZ  — the user's own 5v5 playbook, transcribed from the diagrams.
-   Coordinates in yards: x across (0-30, ball at 15), y downfield from the LOS.
-   passer: who throws the ball; a later entry means a lateral/pitch to that player.
-============================================================ */
-let BIGDAWZ;
-
 let BOOKS;
 
 /* ---- runs once at startup, in module order (see main.js) ---- */
@@ -93,120 +86,9 @@ export function init(){
     mk7("Spacing","Trips",["hitch","sit","sit","sit","hitch","flat"],[2,3,1,4,0,5]),
     mk7("Snag","Bunch",["go","sit","snag","flat","corner","flat"],[4,2,3,1,0,5])
   ];
-  BIGDAWZ = [
-    {name:"Mesh", form:"Offset", kind:"pass", prog:["Y","X","Z","C"],
-     note:"Beats man (the crossers rub the defenders). Vs zone, sit the center in the hole.",
-     players:[QB(),
-      pl("C",15,0,C_([[15,0],[17.5,2],[18.5,4.5],[18.1,7]],"seam")),
-      pl("X",10.5,0,C_([[10.5,0],[12.5,1.8],[21.6,2.4]],"mesh cross")),
-      pl("Z",18.7,0,C_([[18.7,0],[18.1,2.3],[15,3.8],[11.2,4.3]],"mesh cross")),
-      pl("Y",17,-2.3,C_([[17,-2.3],[23.5,-0.3],[25.8,10]],"wheel"))]},
-    {name:"Drive", form:"Offset", kind:"pass", prog:["Z","Y","X","C"],
-     note:"High-low on the middle defender: shallow and dig go the same way. If he sinks, hit the shallow; if he jumps it, hit the dig.",
-     players:[QB(),
-      pl("C",15,0,C_([[15,0],[13.5,2],[11,3],[6.7,3.4]],"drag")),
-      pl("Z",8.6,0,C_([[8.6,0],[10.5,2.5],[13,3.8],[20.7,4.3]],"shallow")),
-      pl("Y",11.6,-1.2,C_([[11.6,-1.2],[11.5,8.5],[20.6,8.1]],"dig")),
-      pl("X",18.2,0,C_([[18.2,0],[21.6,1.6],[24,3.5],[24.9,9.3]],"out-and-up"))]},
-    {name:"Post Between Corners", form:"Offset", kind:"pass", prog:["Z","Y","X","C"],
-     note:"Post between two corners: the deep middle defender can only take one. Center's out is the checkdown.",
-     players:[QB(),
-      pl("C",15,0,C_([[15,0],[15.3,4.2],[23.5,4.3]],"out")),
-      pl("X",11.4,0,C_([[11.4,0],[11.6,10.3],[7,12.8]],"corner")),
-      pl("Z",19.4,0,C_([[19.4,0],[19.6,11],[15.4,14]],"post")),
-      pl("Y",17.3,-2,C_([[17.3,-2],[17.6,9.8],[25.3,12.8]],"corner"))]},
-    {name:"Spread V-In", form:"Spread", kind:"pass", prog:["Z","Y","C","X"],
-     note:"Corner over the in: read the defender on Y's side. If he carries the corner, the in is open underneath.",
-     players:[QB(),
-      pl("C",15,0,C_([[15,0],[15.5,1.8],[18,2.6],[27.4,2.7]],"drag")),
-      pl("X",10,0,C_([[10,0],[9.1,8.8],[8,7.3]],"curl","sit")),
-      pl("Z",19.9,0,C_([[19.9,0],[19.9,8.8],[25.8,12.2]],"corner")),
-      pl("Y",26.3,0,C_([[26.3,0],[27.8,6.7],[20.2,7.8]],"in"))]},
-    {name:"Triangle 1", form:"Pistol (T)", kind:"trick", prog:["Y","X","Q","C"],
-     passer:[{id:"Q",until:0.75},{id:"T"}],
-     note:"Q pitches to T and releases, so the rusher has to redirect. T throws.",
-     players:[pl("Q",15,-4.3,C_([[15,-4.3],[18,-3.5],[23,-1],[27.7,2]],"QB release"),{target:true,delay:0.8}),
-      pl("T",11,-7.3,null),
-      pl("C",15,0,C_([[15,0],[10,1.5],[2.9,2.3]],"flat")),
-      pl("X",3.8,0,C_([[3.8,0],[6,2.5],[10,4],[21.2,4.6]],"shallow cross")),
-      pl("Y",26.2,0,C_([[26.2,0],[26.1,8.7],[15.2,13.3]],"post"))]},
-    {name:"Goaline", form:"Stack right", kind:"pass", prog:["Y","Z","X","C"],
-     note:"Stack gives free releases vs man. QB rolls toward the stack, which shortens the throws.",
-     players:[pl("Q",15,-4.3,C_([[15,-4.3],[19.3,-5]],"rollout","stop")),
-      pl("C",15,0,C_([[15,0],[13,2.5],[8.1,4]],"shallow")),
-      pl("Y",26.2,0,C_([[26.2,0],[26.2,3.1],[24,5.5],[21,6.8]],"slant")),
-      pl("Z",26.2,-2.5,C_([[26.2,-2.5],[26.6,2],[25.5,7],[22.8,10.8]],"fade-post")),
-      pl("X",26.1,-4.9,C_([[26.1,-4.9],[25.2,-1.5],[24.5,0.7]],"quick hitch","sit"))]},
-    {name:"PA Jet Sweep", form:"Under center", kind:"pass", prog:["Y","X","C","Z"],
-     note:"Jet fake pulls the underneath defenders left, then the QB boots right. Shot play to Y.",
-     players:[pl("Q",15,-1.6,C_([[15,-1.6],[15.2,-3.5],[17,-5.2],[21.2,-5.6]],"bootleg","stop")),
-      pl("C",15,0,C_([[15,0],[22.2,2.7]],"angle")),
-      pl("X",3.8,0,C_([[3.8,0],[4.3,6.5],[10.4,10.7]],"post")),
-      pl("Z",21.4,0,C_([[21.4,0],[21.3,-1.5],[19,-2.6],[15,-2.8],[6.4,-2.8]],"jet fake"),{dashed:true}),
-      pl("Y",26.3,0,C_([[26.3,0],[26.4,15]],"go"))]},
-    {name:"Stack Smash", form:"Stack right", kind:"pass", prog:["Z","Y","C","X"],
-     note:"Classic smash high-low on the corner: corner route over the out. Throw opposite what the corner does.",
-     players:[QB(),
-      pl("C",15,0,C_([[15,0],[15.2,6.2],[22.8,6.2]],"out")),
-      pl("X",10,0,C_([[10,0],[10.5,13.5],[14.6,17]],"deep post")),
-      pl("Z",20.3,0,C_([[20.3,0],[20.6,11.6],[27.4,16.8]],"corner")),
-      pl("Y",20.2,-2,C_([[20.2,-2],[21.5,1.5],[24,4.5],[27,6.2]],"arrow"))]},
-    {name:"Jet Sweep", form:"Spread", kind:"run", prog:["Z","Y","X","C"],
-     note:"Run play. Give the jet (throw/pitch to Z behind the line) unless the edge defender is already there.",
-     players:[pl("Q",15,-4.1,null),
-      pl("C",15,0,C_([[15,0],[15,11.9],[10,16]],"corner (clear)")),
-      pl("X",3.8,0,C_([[3.8,0],[3.5,13.5],[7.9,17]],"post (clear)")),
-      pl("Z",9.3,0,C_([[9.3,0],[9.8,-1.5],[13,-2.8],[20,-3],[23,-2],[24.9,0.9]],"jet sweep"),{dashed:true}),
-      pl("Y",26.4,0,C_([[26.4,0],[26.4,15]],"go (clear)"))]},
-    {name:"Bunch - Goaline", form:"Tight bunch", kind:"pass", prog:["Z","X","Y","C"],
-     note:"Bunch creates natural picks vs man. Short, quick throws — ball out fast.",
-     players:[pl("Q",15,-4.3,C_([[15,-4.3],[17,-5.5],[18.1,-6]],"slide","stop")),
-      pl("X",13.2,0,C_([[13.2,0],[13.2,4.3],[19.1,4.5]],"out")),
-      pl("C",15,0,C_([[15,0],[13,1.8],[8,3.3],[3.2,4]],"drag")),
-      pl("Z",16.8,0,C_([[16.8,0],[16.8,4.7],[21.9,8.3]],"corner")),
-      pl("Y",18.6,0,C_([[18.6,0],[17.5,1.8],[13,2.2],[7.4,2.2]],"shallow"))]},
-    {name:"Misdirection Run", form:"Offset", kind:"run", prog:["X","C","Y","Z"],
-     note:"Run play. Center's drag pulls defenders left; X runs right behind the line.",
-     players:[pl("Q",15,-1.6,null),
-      pl("Z",13.2,0,C_([[13.2,0],[13.3,15]],"go (clear)")),
-      pl("C",15,0,C_([[15,0],[14.9,3],[12,5.5],[2.3,6.7]],"drag")),
-      pl("X",5.8,-1.6,C_([[5.8,-1.6],[9.5,-2.6],[13,-3.1],[21.9,-3]],"misdirection run"),{dashed:true}),
-      pl("Y",26.3,0,C_([[26.3,0],[26.4,15]],"go (clear)"))]},
-    {name:"Disguise Triangle", form:"Offset", kind:"trick", prog:["Y","Z","X"],
-     passer:[{id:"Q",until:1.15},{id:"C"}],
-     note:"Center snaps, drops into the backfield and gets the pitch. The rusher has to chase a second passer.",
-     players:[pl("Q",15,-4.3,C_([[15,-4.3],[10.8,-4.8]],"pitch","stop")),
-      pl("C",15,0,C_([[15,0],[19.2,-6.1]],"drop to pass","stop"),{target:false}),
-      pl("X",3.8,0,C_([[3.8,0],[4.2,8.4],[15.5,15.3]],"deep post")),
-      pl("Z",19.2,-6.1,C_([[19.2,-6.1],[23.5,-4.6],[26.3,-2.5],[27.2,16.6]],"wheel")),
-      pl("Y",26.2,0,C_([[26.2,0],[25.4,3.8],[20.5,3.8],[28.5,3.8]],"whip"))]},
-    {name:"Fake Sweep Center Shovel", form:"Offset", kind:"pass", prog:["C","Z","X","Y"],
-     note:"Sweep fake right, QB slides left: flood the left side with three routes at three depths.",
-     players:[pl("Q",15,-1.9,C_([[15,-1.9],[7.4,-1.9]],"slide left","stop")),
-      pl("X",3.8,0,C_([[3.8,0],[2.1,4.9],[2,16]],"fade")),
-      pl("Z",8.8,0,C_([[8.8,0],[7.7,2.6],[7.5,13.7]],"go")),
-      pl("C",15,0,C_([[15,0],[12,4],[8.5,7.5],[6.5,9.5]],"angle")),
-      pl("Y",8,-3.7,C_([[8,-3.7],[9,-3.7],[18,-3.7],[23,-2.5],[25.5,1.5],[26.7,6]],"fake sweep → wheel"),{dashed:true})]},
-    {name:"Center Wheel", form:"Trips left", kind:"pass", prog:["C","Y","X","Z"],
-     note:"Trips left draws the defense over; the center wheels down the left sideline behind it.",
-     players:[QB(),
-      pl("X",3.8,0,C_([[3.8,0],[3.8,11.9],[8.1,15.1]],"post")),
-      pl("Y",7.8,0,C_([[7.8,0],[7.7,7.7],[10.7,10.7]],"short post")),
-      pl("Z",11.5,0,C_([[11.5,0],[11.5,3.3],[21.3,5.6]],"drag")),
-      pl("C",15,0,C_([[15,0],[13,-1.2],[8,-1.8],[3,-1.6],[1.2,3],[0.8,13]],"wheel"))]},
-    {name:"The Matilda Special", form:"Offset", kind:"trick", prog:["Y","X","Z"],
-     passer:[{id:"Q",until:1.35},{id:"C"}],
-     note:"QB drifts right to pull the rusher, then laterals back to the center who throws.",
-     players:[pl("Q",15,-5.3,C_([[15,-5.3],[20.5,-6]],"drift right","stop")),
-      pl("C",15,0,C_([[15,0],[9.8,-7.4]],"drop to pass","stop"),{target:false}),
-      pl("X",8.9,0,C_([[8.9,0],[9,3.7],[16.2,4.4]],"quick in")),
-      pl("Y",11.9,0,C_([[11.9,0],[11.8,6.5],[15.7,9.1]],"short post")),
-      pl("Z",17.3,-2.8,C_([[17.3,-2.8],[14,-4.2],[10.4,-4.4],[5,-2],[1.9,0.9]],"swing"))]}
-  ];
   BOOKS = {
-    standard: {label:"Standard concepts", sub:"Mesh, Smash, Flood, Stick…", plays:{5:STANDARD5,7:STANDARD7}},
-    bigdawz:  {label:"Big Dawz", sub:"Your 15 plays (5v5)", plays:{5:BIGDAWZ}}
+    standard: {label:"Standard concepts", sub:"Mesh, Smash, Flood, Stick…", plays:{5:STANDARD5,7:STANDARD7}}
   };
 }
 
-export { sideIn, R, C_, pl, QB, STANDARD5, IDS7, FORM7, r7, mk7, STANDARD7, BIGDAWZ, BOOKS };
+export { sideIn, R, C_, pl, QB, STANDARD5, IDS7, FORM7, r7, mk7, STANDARD7, BOOKS };

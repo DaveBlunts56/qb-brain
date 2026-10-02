@@ -394,8 +394,8 @@ function openPlay(p){
 }
 
 function renderPlaybook(){
-  const books=[{key:"custom",title:"My Plays",sub:MY_PLAYS.length+" saved"},{key:"bigdawz",title:"Big Dawz",sub:"15 plays · 5v5"},{key:"standard",title:"Standard",sub:"Concepts · "+state.squad+"v"+state.squad}];
-  buildChoiceRow(els.pbTabs,books,state.book,k=>{ state.book=k; state.playPick="random"; if(k==="bigdawz") state.squad=5; });
+  const books=[{key:"custom",title:"My Plays",sub:MY_PLAYS.length+" saved"},{key:"standard",title:"Standard",sub:"Concepts · "+state.squad+"v"+state.squad}];
+  buildChoiceRow(els.pbTabs,books,state.book,k=>{ state.book=k; state.playPick="random"; });
   els.pbGrid.innerHTML="";
   const c=document.createElement("button"); c.className="play-card create"; c.type="button";
   c.innerHTML='<b>+ CREATE A PLAY</b><small>5v5 or 7v7 · your routes</small>';

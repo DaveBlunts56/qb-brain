@@ -26,14 +26,12 @@ function refreshSetupUI(){
   const myN=(BOOKS.custom.plays[state.squad]||[]).length;
   buildChoiceRow(els.bookRow,[
     {key:"standard",title:BOOKS.standard.label,sub:BOOKS.standard.sub},
-    {key:"bigdawz",title:BOOKS.bigdawz.label,sub:BOOKS.bigdawz.sub},
     {key:"custom",title:"My Plays",sub: myN ? myN+" for "+state.squad+"v"+state.squad : "None for "+state.squad+"v"+state.squad+" yet", disabled:!myN && state.book!=="custom"}
-  ], state.book, k=>{ state.book=k; state.playPick="random"; if(k==="bigdawz") state.squad=5; });
+  ], state.book, k=>{ state.book=k; state.playPick="random"; });
 
-  const lock7 = state.book==="bigdawz";
   buildChoiceRow(els.squadRow,[
     {key:5,title:"5v5",sub:"QB, center + 3 receivers"},
-    {key:7,title:"7v7",sub:lock7?"Big Dawz is a 5v5 book":"6 eligible receivers",disabled:lock7}
+    {key:7,title:"7v7",sub:"6 eligible receivers"}
   ], state.squad, k=>{ state.squad=k; state.playPick="random"; if(!state.driveCfg.widthTouched) state.driveCfg.width = k===7?40:30; });
 
   const dc=state.driveCfg;
@@ -131,7 +129,7 @@ function updateHud(){
     els.hudRepLbl.textContent="PLAY";
     els.hudRep.textContent = d.over ? d.plays.length : d.plays.length+1;
   } else {
-    els.hudSub.textContent = state.plan && state.plan.name ? state.plan.name : state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.adaptive?" · Adaptive":state.book==="bigdawz"?" · Big Dawz":state.book==="custom"?" · My Plays":"");
+    els.hudSub.textContent = state.plan && state.plan.name ? state.plan.name : state.squad+"v"+state.squad+" · "+DIFFICULTY[state.difficulty].label+(state.adaptive?" · Adaptive":state.book==="custom"?" · My Plays":"");
     els.hudRepLbl.textContent="REP";
     els.hudRep.textContent = state.session.reps+1;
   }

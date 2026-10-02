@@ -34,7 +34,7 @@ function driveOnce(cfg){
   return d;
 }
 const cfgs=[];
-for(const book of ['std','dawz']) for(const len of [50,100]) for(const width of [20,30,53]) for(const fd of ['mid','ten']) for(const diff of ['rookie','elite'])
+for(const book of ['std']) for(const len of [50,100]) for(const width of [20,30,53]) for(const fd of ['mid','ten']) for(const diff of ['rookie','elite'])
   cfgs.push({book,squad:5,len,width,fd,diff,throwAt:1.3});
 cfgs.push({book:'std',squad:7,len:70,width:40,fd:'mid',diff:'varsity',throwAt:1.4});
 let sample=null;

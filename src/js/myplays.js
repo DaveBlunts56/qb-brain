@@ -112,12 +112,11 @@ function rebuildCustomBook(){
 function booksForSquad(sq){
   const list=[];
   if(BOOKS.custom.plays[sq] && BOOKS.custom.plays[sq].length) list.push({key:"custom",label:"My Plays",plays:BOOKS.custom.plays[sq]});
-  if(sq===5) list.push({key:"bigdawz",label:"Big Dawz",plays:BOOKS.bigdawz.plays[5]});
   list.push({key:"standard",label:"Standard",plays:BOOKS.standard.plays[sq]});
   return list;
 }
 function playByKey(key){
-  for(const bk of ["custom","bigdawz","standard"]){ const b=BOOKS[bk]; for(const sq in b.plays){ const f=b.plays[sq].find(p=>p.key===key); if(f) return f; } }
+  for(const bk of ["custom","standard"]){ const b=BOOKS[bk]; for(const sq in b.plays){ const f=b.plays[sq].find(p=>p.key===key); if(f) return f; } }
   return null;
 }
 function audiblesFor(play){ return (AUDIBLES[play.key]||[]).map(playByKey).filter(p=>p && p.squad===play.squad && p.key!==play.key); }
@@ -125,7 +124,7 @@ function audiblesFor(play){ return (AUDIBLES[play.key]||[]).map(playByKey).filte
 /* ---- runs once at startup, in module order (see main.js) ---- */
 export function init(){
   BOOKS.custom={label:"My Plays", sub:"Plays you built", plays:{5:[],7:[]}};
-  ["standard","bigdawz"].forEach(bk=>{ const b=BOOKS[bk]; Object.keys(b.plays).forEach(sq=>b.plays[sq].forEach(p=>{ p.key=bk+":"+sq+":"+p.name; p.squad=+sq; })); });
+  ["standard"].forEach(bk=>{ const b=BOOKS[bk]; Object.keys(b.plays).forEach(sq=>b.plays[sq].forEach(p=>{ p.key=bk+":"+sq+":"+p.name; p.squad=+sq; })); });
   loadMyPlays();
   on("data:changed",k=>{ if(k==="plays"){ loadMyPlays(); emit("plays:changed"); } });
 }

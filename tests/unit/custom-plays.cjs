@@ -28,7 +28,7 @@ for(const sq of [5,7]){
     const p=sp.players.find(q=>q.id===id); p.route={mode:"draw",rel:[[-3,-3],[-6,-3.5]]}; p.after="stop"; run(sp); });
   const sp=M.newStoredPlay(sq); sp.name=sq+" empty draw"; sp.players.forEach(p=>{ if(p.id!=="Q"){ p.route={mode:"draw",rel:[]}; p.delay=1.5; } }); run(sp);
   // copies of every built-in play
-  ["standard","bigdawz"].forEach(bk=>{ (S.BOOKS[bk].plays[sq]||[]).forEach(pl=>{ const c=M.playToStored(pl); c.squad=sq; run(c); }); });
+  ["standard"].forEach(bk=>{ (S.BOOKS[bk].plays[sq]||[]).forEach(pl=>{ const c=M.playToStored(pl); c.squad=sq; run(c); }); });
 }
 console.log("reps",n,"bad",bad);
 

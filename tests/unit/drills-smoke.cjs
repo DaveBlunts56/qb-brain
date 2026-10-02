@@ -29,7 +29,7 @@ function run(book,squad,diff,mode,tm,tt){
   }
   E('quitBtn')._h.click(); E('restartBtn')._h.click();
 }
-for(const book of ['std','dawz']) for(const squad of (book==='std'?[5,7]:[5])) for(const diff of ['rookie','elite']) for(const mode of ['qb','cov','quick']) for(const tm of ['pull','tap']) for(const tt of ['bullet','lob']){
+for(const book of ['std']) for(const squad of [5,7]) for(const diff of ['rookie','elite']) for(const mode of ['qb','cov','quick']) for(const tm of ['pull','tap']) for(const tt of ['bullet','lob']){
   try{ run(book,squad,diff,mode,tm,tt);}catch(e){errors++; console.log('ERR',book,squad,diff,mode,tm,tt,e.stack.split('\n').slice(0,3).join(' | '));}
 }
 console.log('errors',errors,results);

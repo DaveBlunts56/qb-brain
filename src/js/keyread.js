@@ -65,7 +65,7 @@ function findKeyPair(rep){
       const b=pick(con.b), a=b&&pick(con.a,b); if(a&&b&&a!==b) return {type:"inout", a, b};
     }
   }
-  // generic: a high-low or a horizontal pair on one side (works for custom and Big Dawz plays)
+  // generic: a high-low or a horizontal pair on one side (works for custom plays too)
   if(rep.play.kind==="trick") return null;
   let best=null;
   for(let i=0;i<T.length;i++) for(let j=0;j<T.length;j++){ if(i===j) continue;

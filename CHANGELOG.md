@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.11.1 — Big Dawz playbook removed
+
+- The **Big Dawz** preset playbook (15 plays) is gone from the playbook tabs, the drill and drive book pickers, the play-call screen and audible lists. The home screen footer no longer says "Big Dawz edition".
+- If Big Dawz was your selected book, you're moved to **Standard concepts** automatically. Plays you built or copied into **My Plays** are untouched.
+
 ## v1.11.0 — Pixel stadium menus (beta)
 
 - **Every menu now sits in a pixel-art stadium:**
