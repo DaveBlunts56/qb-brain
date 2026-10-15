@@ -1,0 +1,95 @@
+# Publishes the GitHub Pages site from Actions:
+#   /                   QB Brain, exactly as committed on main (index.html, sw.js, icons, …)
+#   /pocket-gridiron/   Pocket Gridiron, built with Vite for that base path
+#
+# One-time setup: Settings → Pages → Build and deployment → Source: GitHub Actions.
+# Until then this workflow builds and tests, then stops with a warning instead of deploying.
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Pages source and base path
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if ! info=$(gh api "repos/${GITHUB_REPOSITORY}/pages" 2>/dev/null); then info='{}'; fi
+          type=$(echo "$info" | jq -r '.build_type // "none"')
+          url=$(echo "$info" | jq -r '.html_url // ""')
+          if [ -n "$url" ]; then
+            path=$(echo "$url" | sed -E 's#^https?://[^/]+##')
+          else
+            repo="${GITHUB_REPOSITORY#*/}"
+            case "$repo" in *.github.io) path="/" ;; *) path="/${repo}/" ;; esac
+          fi
+          base="${path%/}/pocket-gridiron/"
+          echo "Pages source: $type, site path: $path, game base: $base"
+          echo "PG_BASE=$base" >> "$GITHUB_ENV"
+          if [ "$type" = "workflow" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Pages not deploying from Actions::Settings → Pages → Build and deployment → Source is '$type'. Switch it to 'GitHub Actions', then re-run this workflow to publish QB Brain + Pocket Gridiron."
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: pocket-gridiron/package-lock.json
+
+      - name: Build Pocket Gridiron
+        working-directory: pocket-gridiron
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          npm run build
+
+      - name: Assemble site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          # QB Brain: the committed files, exactly what the branch deploy used to serve.
+          git archive --format=tar HEAD | tar -x -C _site
+          rm -rf _site/.github _site/pocket-gridiron
+          mkdir -p _site/pocket-gridiron
+          cp -R pocket-gridiron/dist/. _site/pocket-gridiron/
+          touch _site/.nojekyll
+          ls -la _site _site/pocket-gridiron
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.enabled == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}pocket-gridiron/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

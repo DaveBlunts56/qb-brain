@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Pocket Gridiron</title>
+<meta name="description" content="Pocket Gridiron — an original retro pixel-art football game. Read the defense, throw with touch, and drive for the score.">
+<meta name="theme-color" content="#0b1a12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gridiron">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<style>
+  html, body {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; background: #0b1a12; color: #f4f1de;
+    overscroll-behavior: none; touch-action: none;
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+  #game { position: fixed; inset: 0; overflow: hidden; touch-action: none; }
+  #game canvas { display: block; touch-action: none; image-rendering: pixelated; image-rendering: crisp-edges; }
+  /* Measures env(safe-area-inset-*) so the game can keep controls clear of the notch / home bar. */
+  #safe-probe {
+    position: fixed; visibility: hidden; pointer-events: none; left: 0; top: 0; width: 0; height: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  #rotate {
+    position: fixed; inset: 0; z-index: 10; display: none;
+    flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+    background: #0b1a12; text-align: center; padding: 24px; box-sizing: border-box;
+    letter-spacing: 1px; font-size: 15px; line-height: 1.5;
+  }
+  #rotate b { color: #ffd166; font-size: 18px; letter-spacing: 2px; }
+  #rotate .phone {
+    width: 46px; height: 80px; border: 4px solid #f4f1de; border-radius: 8px; position: relative;
+    animation: pg-rotate 2.2s ease-in-out infinite; image-rendering: pixelated;
+  }
+  #rotate .phone::after {
+    content: ""; position: absolute; left: 50%; bottom: 5px; width: 10px; height: 4px; margin-left: -5px; background: #f4f1de;
+  }
+  @keyframes pg-rotate { 0%, 20% { transform: rotate(0deg); } 55%, 100% { transform: rotate(-90deg); } }
+  @media (orientation: portrait) and (max-width: 900px) { #rotate { display: flex; } }
+  #boot {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; letter-spacing: 3px; color: #8fbf9f; pointer-events: none;
+  }
+  #fatal {
+    position: fixed; inset: 0; z-index: 20; display: none; padding: 24px; box-sizing: border-box;
+    background: #2b0d0d; color: #ffd6d6; font-size: 13px; white-space: pre-wrap; overflow: auto; touch-action: auto;
+  }
+</style>
+</head>
+<body>
+  <div id="safe-probe"></div>
+  <div id="boot">LOADING…</div>
+  <div id="game"></div>
+  <div id="rotate">
+    <div class="phone"></div>
+    <b>ROTATE YOUR PHONE</b>
+    <div>Pocket Gridiron plays in landscape.<br>If the screen won't turn, switch off<br>Portrait Orientation Lock in Control Center.</div>
+  </div>
+  <div id="fatal"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

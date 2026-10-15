@@ -1,0 +1,66 @@
+# Pocket Gridiron: typecheck, unit tests, production build, and a browser smoke test that plays the
+# game on an emulated iPhone screen. Screenshots are uploaded as an artifact you can view on a phone.
+name: Pocket Gridiron CI
+
+on:
+  push:
+    paths:
+      - "pocket-gridiron/**"
+      - ".github/workflows/pocket-gridiron-ci.yml"
+      - ".github/workflows/pages.yml"
+  pull_request:
+    paths:
+      - "pocket-gridiron/**"
+      - ".github/workflows/pocket-gridiron-ci.yml"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: pocket-gridiron
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: pocket-gridiron/package-lock.json
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Build (GitHub Pages base path)
+        run: npm run build
+        env:
+          PG_BASE: /${{ github.event.repository.name }}/pocket-gridiron/
+
+      - name: Build (relative base, for the smoke test)
+        run: npm run build
+
+      - name: Browser smoke test (emulated iPhone, multitouch)
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+          npm run smoke
+        env:
+          SMOKE_OUT: ${{ github.workspace }}/pocket-gridiron/smoke-out
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pocket-gridiron-screenshots
+          path: pocket-gridiron/smoke-out/
+          if-no-files-found: ignore
