@@ -4,6 +4,8 @@ A flag football quarterback trainer for 5v5 and 7v7: pre-snap coverage recogniti
 
 It's a web app — no App Store needed. Everything is in `index.html`; there's nothing to build.
 
+> **Also in this repo: [Pocket Gridiron](pocket-gridiron/)**, an original retro pixel-art football game (Phaser + TypeScript) in the `pocket-gridiron/` folder. It deploys alongside QB Brain to `https://<your-username>.github.io/<repo-name>/pocket-gridiron/`. See [pocket-gridiron/README.md](pocket-gridiron/README.md).
+
 ## Install on iPhone
 
 1. Open the site link in **Safari**.
@@ -43,8 +45,8 @@ It launches full-screen from its own icon, remembers your settings, and works of
 
 ## Hosting (GitHub Pages)
 
-Settings → Pages → *Deploy from a branch* → `main` / root. The site appears at
-`https://<your-username>.github.io/<repo-name>/`.
+Settings → Pages → Source: **GitHub Actions**. The `Deploy GitHub Pages` workflow publishes QB Brain (the committed root files, unchanged) and builds Pocket Gridiron into `/pocket-gridiron/`. The site appears at
+`https://<your-username>.github.io/<repo-name>/`. (Before switching the source it was *Deploy from a branch* → `main` / root; the workflow serves the same files.)
 
 When you publish an update, bump `VERSION` in `sw.js` so installed copies refresh their offline cache. Every update gets a GitHub release automatically: add a `## vX.Y.Z — Title` section to the top of `CHANGELOG.md`, push, and `.github/workflows/release.yml` publishes it.
 

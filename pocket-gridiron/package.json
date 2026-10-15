@@ -1,0 +1,27 @@
+{
+  "name": "pocket-gridiron",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pocket Gridiron — an original retro pixel-art American football simulation for mobile browsers (Phaser + TypeScript).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "icons": "node scripts/gen-icons.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "phaser": "3.90.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.1",
+    "typescript": "5.9.3",
+    "vite": "6.4.4",
+    "vitest": "3.2.7"
+  },
+  "license": "MIT"
+}
