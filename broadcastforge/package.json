@@ -1,0 +1,41 @@
+{
+  "name": "broadcastforge-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first real-time sports broadcast graphics: import a scorebug, make it live, animate it, and drive it in OBS Studio.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "workspaces": [
+    "packages/shared",
+    "packages/server",
+    "packages/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @bf/server",
+    "build": "npm run build -w @bf/web && npm run build -w @bf/server",
+    "start": "node packages/server/dist/server.mjs",
+    "start:lan": "node packages/server/dist/server.mjs --lan",
+    "typecheck": "tsc -p packages/shared --noEmit && tsc -p packages/server --noEmit && tsc -p packages/web --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node scripts/e2e.mjs",
+    "mock:obs": "tsx scripts/mock-obs.ts",
+    "check": "npm run typecheck && npm run lint && npm test"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "22.20.5",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "playwright": "1.56.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "3.2.7"
+  }
+}
