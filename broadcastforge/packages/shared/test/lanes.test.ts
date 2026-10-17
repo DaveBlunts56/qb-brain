@@ -264,3 +264,16 @@ describe('synchronous runners', () => {
     expect(settled).toEqual([true]);
   });
 });
+
+describe('ValueLane snapshots during a transition', () => {
+  it('a non-animated re-apply of the current value does not cut the running roll', () => {
+    const clock = new FakeClock();
+    const log: FakeAnim[] = [];
+    const set: number[] = [];
+    const lane = new ValueLane<number>(0, fakeRunner(log, (f: number, t: number) => `${f}->${t}`), (v) => set.push(v), clock, 0);
+    lane.update(6, true);
+    lane.update(6, false); // snapshot arriving right after the event
+    expect(log[0]!.cancelled).toBe(false);
+    expect(set).toEqual([]);
+  });
+});

@@ -256,3 +256,50 @@ export function CopyField({ value }: { value: string }) {
     </div>
   );
 }
+
+/**
+ * A button that fires only after being held for `holdMs` — fast enough for
+ * emergencies, but immune to accidental taps. Shows a fill progress bar.
+ */
+export function HoldButton({ holdMs = 700, onConfirm, className = '', children, title }: { holdMs?: number; onConfirm: () => void; className?: string; children: ReactNode; title?: string }) {
+  const [progress, setProgress] = useState(0);
+  const raf = useRef(0);
+  const start = useRef(0);
+  const cancel = () => {
+    cancelAnimationFrame(raf.current);
+    setProgress(0);
+  };
+  const begin = () => {
+    start.current = performance.now();
+    const tick = () => {
+      const p = Math.min(1, (performance.now() - start.current) / holdMs);
+      setProgress(p);
+      if (p >= 1) {
+        onConfirm();
+        setTimeout(() => setProgress(0), 300);
+        return;
+      }
+      raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+  };
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
+  return (
+    <button
+      className={`relative overflow-hidden ${className}`}
+      title={title}
+      onPointerDown={begin}
+      onPointerUp={cancel}
+      onPointerLeave={cancel}
+      onPointerCancel={cancel}
+      onKeyDown={(e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) begin();
+      }}
+      onKeyUp={cancel}
+      onContextMenu={(e) => e.preventDefault()}
+    >
+      <span className="pointer-events-none absolute inset-y-0 left-0 bg-live" style={{ width: `${progress * 100}%`, transition: progress === 0 ? 'width 150ms' : 'none' }} />
+      <span className="relative flex items-center justify-center gap-2">{children}</span>
+    </button>
+  );
+}

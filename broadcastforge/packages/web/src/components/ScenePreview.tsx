@@ -62,5 +62,7 @@ export function ScenePreview({
     rendererRef.current?.setShowRestHidden(showRestHidden);
   }, [showRestHidden]);
 
-  return <div ref={ref} className={`relative overflow-hidden ${className}`} />;
+  // Callers usually pass "absolute inset-0"; only default to relative positioning otherwise.
+  const position = /\b(absolute|fixed)\b/.test(className) ? '' : 'relative';
+  return <div ref={ref} className={`${position} overflow-hidden ${className}`} />;
 }

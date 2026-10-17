@@ -111,6 +111,14 @@ export function ClockPanel({ state, now, send, hotkeyHint }: { state: GameState;
         </div>
         <div className="flex items-center gap-2">
           <div className={`w-16 text-center font-display text-4xl font-bold tabular-nums ${state.playClock.running ? (play.ms <= 5000 ? 'text-live' : 'text-accent') : 'text-ink-200'}`}>{play.text}</div>
+          <div className="flex flex-col gap-0.5">
+            <button className="rounded bg-ink-750 px-1.5 text-[10px] hover:bg-ink-700" onClick={() => send({ type: 'clock.adjust', clock: 'play', deltaMs: 1000 })} aria-label="Play clock +1 second">
+              +1
+            </button>
+            <button className="rounded bg-ink-750 px-1.5 text-[10px] hover:bg-ink-700" onClick={() => send({ type: 'clock.adjust', clock: 'play', deltaMs: -1000 })} aria-label="Play clock −1 second">
+              −1
+            </button>
+          </div>
           <div className="grid flex-1 grid-cols-4 gap-1">
             <button className="rounded bg-accent/20 py-2 font-display text-lg font-bold text-accent hover:bg-accent/30" onClick={() => send({ type: 'clock.reset', clock: 'play', seconds: state.config.playClockSeconds, autoStart: true })} title="Reset and start">
               {state.config.playClockSeconds}

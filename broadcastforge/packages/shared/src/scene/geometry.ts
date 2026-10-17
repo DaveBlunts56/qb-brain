@@ -57,11 +57,16 @@ export function hitTestElement(el: GraphicElement, p: Point, tolerance = 0): boo
  * Topmost selectable element under a point. Groups are never returned
  * directly (their children are); hidden and locked elements are skipped.
  */
-export function hitTestScene(scene: Scene, p: Point, opts: { includeLocked?: boolean; tolerance?: number } = {}): GraphicElement | null {
+export function hitTestScene(
+  scene: Scene,
+  p: Point,
+  opts: { includeLocked?: boolean; tolerance?: number; skip?: (el: GraphicElement) => boolean } = {},
+): GraphicElement | null {
   for (let i = scene.elements.length - 1; i >= 0; i--) {
     const el = scene.elements[i]!;
     if (el.type === 'group') continue;
     if (!isEffectivelyVisible(scene, el)) continue;
+    if (opts.skip?.(el)) continue;
     if (!opts.includeLocked && isEffectivelyLocked(scene, el)) continue;
     if (hitTestElement(el, p, opts.tolerance ?? 0)) return el;
   }

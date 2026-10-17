@@ -100,10 +100,25 @@ export function generateAnimations(input: Scene, options: Partial<GeneratorOptio
   return { scene, report };
 }
 
+/**
+ * Where the resting scorebug is. Live (role-mapped) elements define it best;
+ * a flattened base image usually spans the whole canvas, so it is only used
+ * when nothing else is available.
+ */
 export function bugBounds(scene: Scene): Rect | null {
-  const roots = scene.elements.filter((e) => e.parentId === null && e.visible && !e.restHidden && !e.meta?.component);
-  return boundsOf(roots.map((e) => rotatedBounds(e)));
+  const usable = (e: GraphicElement) => e.visible && !e.restHidden && !e.meta?.component && !e.role?.startsWith('event');
+  const live = scene.elements.filter((e) => e.role && usable(e) && e.type !== 'group');
+  const liveBounds = live.length >= 2 ? boundsOf(live.map((e) => rotatedBounds(e))) : null;
+  if (liveBounds) return liveBounds;
+  const roots = scene.elements.filter((e) => e.parentId === null && usable(e));
+  const nonBase = roots.filter((e) => !e.meta?.isBaseArt);
+  const b = boundsOf((nonBase.length ? nonBase : roots).map((e) => rotatedBounds(e)));
+  // A full-canvas base image says nothing about where the bug is.
+  if (b && b.width >= scene.width * 0.95 && b.height >= scene.height * 0.9) return liveBounds ?? null;
+  return b;
 }
+
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 // ---------------------------------------------------------------------------
 // Per-element update / enter / exit animations
@@ -385,7 +400,13 @@ function ensureFlagPanel(c: Ctx, bug: Rect) {
   const { scene } = c;
   if (byRole(scene, 'flag').length || hasComponent(scene, 'flagPanel')) return;
   const situation = scene.elements.filter((e) => ['down', 'distance', 'downDistance', 'ballOn'].includes(e.role ?? ''));
-  const area = boundsOf(situation.map((e) => rotatedBounds(e))) ?? { x: bug.x + bug.width + 8, y: bug.y, width: Math.max(160, bug.height * 2.4), height: bug.height };
+  const fallbackW = Math.round(clamp(bug.height * 2.4, 120, scene.width * 0.25));
+  const area = boundsOf(situation.map((e) => rotatedBounds(e))) ?? {
+    x: Math.round(clamp(bug.x + bug.width + 8, 0, scene.width - fallbackW)),
+    y: Math.round(clamp(bug.y, 0, scene.height - 40)),
+    width: fallbackW,
+    height: Math.round(clamp(bug.height, 30, 120)),
+  };
   const g = group('Flag panel', area, 'flagPanel', false);
   g.role = 'flag';
   g.bindings = ROLE_MAP.flag.bindings();
@@ -404,10 +425,15 @@ function ensureFlagPanel(c: Ctx, bug: Rect) {
 function ensureEventBanner(c: Ctx, bug: Rect) {
   const { scene } = c;
   if (hasComponent(scene, 'eventBanner')) return;
-  const h = Math.max(48, Math.round(bug.height * 0.75));
-  const w = Math.min(Math.round(bug.width * 0.62), Math.round(scene.width * 0.45));
+  const h = Math.round(clamp(bug.height * 0.75, 44, scene.height * 0.12));
+  const w = Math.round(clamp(bug.width * 0.62, h * 6, scene.width * 0.45));
   const above = bug.y - h - 10 >= 0;
-  const r: Rect = { x: Math.round(bug.x + (bug.width - w) / 2), y: above ? Math.round(bug.y - h - 10) : Math.round(bug.y + bug.height + 10), width: w, height: h };
+  const r: Rect = {
+    x: Math.round(clamp(bug.x + (bug.width - w) / 2, 0, scene.width - w)),
+    y: Math.round(clamp(above ? bug.y - h - 10 : bug.y + bug.height + 10, 0, scene.height - h)),
+    width: w,
+    height: h,
+  };
   const meta = (part: string) => ({ source: 'generator' as const, component: 'eventBanner' as const, part });
   const g = group('Event banner', r, 'eventBanner', true);
   const panel = createElement('rect', {
@@ -453,14 +479,15 @@ function ensureEventBanner(c: Ctx, bug: Rect) {
 function ensureTdTakeover(c: Ctx, bug: Rect) {
   const { scene, opts } = c;
   if (hasComponent(scene, 'tdTakeover')) return;
-  const H = Math.max(110, Math.round(bug.height * 1.9));
+  const H = Math.round(clamp(bug.height * 1.9, 100, scene.height * 0.3));
+  const fitX = (w: number) => Math.round(clamp(bug.x + (bug.width - w) / 2, 0, Math.max(0, scene.width - w)));
   let r: Rect;
   if (opts.touchdownStyle === 'replace') {
-    const w = Math.max(bug.width, 600);
-    r = { x: Math.round(bug.x + (bug.width - w) / 2), y: Math.round(bug.y + bug.height - H), width: w, height: H };
+    const w = Math.round(clamp(bug.width, H * 4.5, scene.width));
+    r = { x: fitX(w), y: Math.round(clamp(bug.y + bug.height - H, 0, scene.height - H)), width: w, height: H };
   } else {
-    const w = Math.max(Math.round(bug.width * 0.8), 560);
-    r = { x: Math.round(bug.x + (bug.width - w) / 2), y: Math.max(0, Math.round(bug.y - H - 12)), width: w, height: H };
+    const w = Math.round(clamp(bug.width * 0.8, H * 4.5, scene.width));
+    r = { x: fitX(w), y: Math.round(clamp(bug.y - H - 12, 0, scene.height - H)), width: w, height: H };
   }
   const meta = (part: string) => ({ source: 'generator' as const, component: 'tdTakeover' as const, part });
   const g = group('Touchdown takeover', r, 'tdTakeover', true);

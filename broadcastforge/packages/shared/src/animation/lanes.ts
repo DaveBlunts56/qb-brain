@@ -67,6 +67,8 @@ export class ValueLane<T> {
 
   update(value: T, animate: boolean): void {
     if (!animate) {
+      // Re-applying the value already shown (e.g. a snapshot after the event) must not cut a running transition.
+      if (!this.pending && this.equals(value, this.displayed)) return;
       this.stop(false);
       this.displayed = value;
       this.setInstant(value);

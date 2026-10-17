@@ -205,3 +205,23 @@ describe('football template', () => {
     expect(validateScene(s).ok).toBe(false);
   });
 });
+
+describe('generator with flattened artwork', () => {
+  it('places graphics around the live elements, not the full-canvas base image, and keeps every size valid', () => {
+    const scene = createScene();
+    scene.elements.push(createElement('image', { x: 0, y: 0, width: 1920, height: 1080, locked: true, image: { assetId: 'a', fit: 'fill' }, meta: { isBaseArt: true } }));
+    scene.elements.push(createElement('text', { x: 900, y: 960, width: 60, height: 44, role: 'homeScore', bindings: [{ field: 'home.score', target: 'text' }] }));
+    scene.elements.push(createElement('text', { x: 700, y: 960, width: 60, height: 44, role: 'awayScore', bindings: [{ field: 'away.score', target: 'text' }] }));
+    const { scene: out } = generateAnimations(scene);
+    const v = validateScene(JSON.parse(JSON.stringify(out)));
+    expect(v.ok, v.ok ? '' : v.error).toBe(true);
+    for (const el of out.elements) {
+      expect(el.width).toBeGreaterThan(0);
+      expect(el.x).toBeGreaterThanOrEqual(0);
+      expect(el.x + el.width).toBeLessThanOrEqual(1920);
+      expect(el.y + el.height).toBeLessThanOrEqual(1080);
+    }
+    const banner = out.elements.find((e) => e.meta?.component === 'eventBanner' && e.type === 'group')!;
+    expect(banner.y).toBeGreaterThan(700); // near the bug at the bottom, not off-canvas
+  });
+});

@@ -42,7 +42,7 @@ export function ControlRoom() {
   const [hotkeysOn, setHotkeysOn] = usePref('bf.hotkeys', true);
   const [offerGraphics, setOfferGraphics] = usePref('bf.offerGraphics', true);
   const [showProgram, setShowProgram] = usePref('bf.showProgram', true);
-  const [confirm, setConfirm] = useState<null | 'reset' | 'newGame' | 'clear'>(null);
+  const [confirm, setConfirm] = useState<null | 'reset' | 'newGame'>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [history, setHistory] = useState<CommandHistory | null>(null);
   const now = useCallback(() => live.conn?.serverNow() ?? performance.now(), [live.conn]);
@@ -137,7 +137,16 @@ export function ControlRoom() {
               <TeamCard side="away" state={state} projectId={id} send={send} offerGraphics={offerGraphics} hotkeyHint={hotkeyHint} />
               <TeamCard side="home" state={state} projectId={id} send={send} offerGraphics={offerGraphics} hotkeyHint={hotkeyHint} />
             </div>
-            <GraphicsPanel state={state} scene={scene?.scene ?? null} send={send} onEmergency={() => setConfirm('clear')} hotkeyHint={hotkeyHint} />
+            <GraphicsPanel
+              state={state}
+              scene={scene?.scene ?? null}
+              send={send}
+              onEmergency={() => {
+                run({ type: 'graphics.clear' });
+                toast.warn('All graphics cleared. Press SHOW BUG to bring the scorebug back.');
+              }}
+              hotkeyHint={hotkeyHint}
+            />
           </div>
           <div className="flex min-w-0 flex-col gap-3">
             {showProgram && <ProgramMonitor projectId={id} live={onAir} />}
@@ -158,18 +167,6 @@ export function ControlRoom() {
         </div>
       </div>
 
-      <ConfirmDialog
-        open={confirm === 'clear'}
-        title="Emergency clear"
-        danger
-        confirmLabel="CLEAR NOW"
-        message={<p>Immediately removes every graphic from air and hides the scorebug. Scores and clocks are not touched. Press SHOW BUG to bring it back.</p>}
-        onCancel={() => setConfirm(null)}
-        onConfirm={() => {
-          setConfirm(null);
-          run({ type: 'graphics.clear' });
-        }}
-      />
       <ConfirmDialog
         open={confirm === 'reset'}
         title="Reset game state?"

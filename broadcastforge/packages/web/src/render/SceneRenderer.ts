@@ -201,8 +201,8 @@ export class SceneRenderer {
   }
 
   /** Play any timeline by id (Animation Editor preview). */
-  previewTimeline(timelineId: string, team: TeamSide | null, onDone?: () => void): Cancelable | null {
-    const tl = this.scene?.timelines.find((t) => t.id === timelineId);
+  previewTimeline(timeline: EventTimeline | string, team: TeamSide | null, onDone?: () => void): Cancelable | null {
+    const tl = typeof timeline === 'string' ? this.scene?.timelines.find((t) => t.id === timeline) : timeline;
     if (!tl) return null;
     this.clearGraphics(false);
     if (tl.mode === 'takeover') {
@@ -232,6 +232,17 @@ export class SceneRenderer {
   setShowRestHidden(show: boolean) {
     this.opts.showRestHidden = show;
     for (const rec of this.nodes.values()) this.updateDisplay(rec);
+  }
+
+  /** Whether an element is actually drawn right now (not hidden by bindings, rest-hidden or a hidden parent). */
+  isRendered(id: string): boolean {
+    let node: HTMLElement | null = this.nodes.get(id)?.outer ?? null;
+    if (!node) return false;
+    while (node && node !== this.stage) {
+      if (node.style.display === 'none') return false;
+      node = node.parentElement;
+    }
+    return true;
   }
 
   /** Bounding box of the stage in client pixels (for editor overlays). */

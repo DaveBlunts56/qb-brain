@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff, OctagonX, Send } from 'lucide-react';
 import type { GameCommand, GameState, GraphicKind, Scene, TeamSide } from '@bf/shared';
+import { HoldButton } from '../../components/ui';
 
 const TEAM_GRAPHICS: { kind: GraphicKind; label: string; tone: string }[] = [
   { kind: 'touchdown', label: 'TOUCHDOWN', tone: 'bg-ok/85 hover:bg-ok text-ink-950' },
@@ -65,9 +66,13 @@ export function GraphicsPanel({
             {state.overlayVisible ? 'HIDE BUG' : 'SHOW BUG'}
             {hotkeyHint('overlay.toggle') && <span className="font-mono text-[10px] font-normal opacity-60">{hotkeyHint('overlay.toggle')}</span>}
           </button>
-          <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-live bg-live/20 py-3 font-display text-lg font-bold text-red-200 transition hover:bg-live hover:text-white active:scale-95" onClick={onEmergency}>
-            <OctagonX className="h-5 w-5" /> CLEAR ALL
-          </button>
+          <HoldButton
+            className="flex-1 rounded-lg border-2 border-live bg-live/20 py-3 font-display text-lg font-bold text-red-200 transition hover:text-white"
+            onConfirm={onEmergency}
+            title="Emergency: hold to remove every graphic from air immediately"
+          >
+            <OctagonX className="h-5 w-5" /> HOLD TO CLEAR
+          </HoldButton>
         </div>
       </div>
       <div className="mt-2 grid gap-2 md:grid-cols-2">
