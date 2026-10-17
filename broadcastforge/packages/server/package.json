@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --clear-screen=false --ignore ../web/** src/index.ts --dev",
+    "dev": "tsx watch --clear-screen=false --ignore \"../web/**\" --ignore \"../../data/**\" src/index.ts --dev",
     "build": "node build.mjs",
     "start": "node dist/server.mjs"
   },

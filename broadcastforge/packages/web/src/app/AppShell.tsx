@@ -74,6 +74,19 @@ export function AppShell() {
     void load();
   }, [load]);
 
+  // Nav links need a project: default to the most recently edited one (or forget a deleted one).
+  useEffect(() => {
+    endpoints
+      .projects()
+      .then((list) => {
+        const st = useCurrentProject.getState();
+        const known = list.find((p) => p.id === st.id);
+        if (known) st.set(known.id, known.name);
+        else if (list[0]) st.set(list[0].id, list[0].name);
+      })
+      .catch(() => {});
+  }, [loc.pathname]);
+
   useEffect(() => {
     if (match?.params.id && match.params.id !== current.id) {
       endpoints

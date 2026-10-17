@@ -21,12 +21,13 @@ const showStatus = params.get('status') === '1' || (!isObs && params.get('status
 document.documentElement.classList.toggle('checker', params.get('checker') === '1');
 const container = document.getElementById('overlay')!;
 
-let conn: LiveConnection;
+// The renderer needs server time from the connection, and the connection drives the renderer.
+const live: { conn: LiveConnection | null } = { conn: null };
 const renderer = new SceneRenderer(container, {
   mode: 'overlay',
   fit: 'contain',
   assetUrl: (id) => `/assets/${encodeURIComponent(id)}`,
-  now: () => conn.serverNow(),
+  now: () => live.conn?.serverNow() ?? performance.now(),
   onMissingAsset: (id) => console.warn(`[BroadcastForge] missing asset ${id}`),
   onQualityChange: (q) => console.info(`[BroadcastForge] render quality: ${q}`),
 });
@@ -34,7 +35,7 @@ const renderer = new SceneRenderer(container, {
 const statusEl = document.getElementById('status')!;
 statusEl.hidden = !showStatus;
 
-conn = new LiveConnection(projectId, 'overlay', {
+const conn = new LiveConnection(projectId, 'overlay', {
   onScene: (pub) => {
     renderer.setScene(pub.scene);
     if (conn.snapshot) renderer.setState(conn.snapshot.state, false);
@@ -51,6 +52,7 @@ conn = new LiveConnection(projectId, 'overlay', {
   },
   onReload: () => location.reload(),
 });
+live.conn = conn;
 
 if (!projectId) {
   statusEl.hidden = false;

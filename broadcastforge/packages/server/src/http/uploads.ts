@@ -24,7 +24,7 @@ export function detectType(buf: Buffer): DetectedType | null {
 }
 
 function looksLikeSvg(buf: Buffer): boolean {
-  const head = buf.subarray(0, Math.min(buf.length, 4096)).toString('utf8').replace(/^﻿/, '').trimStart();
+  const head = buf.subarray(0, Math.min(buf.length, 4096)).toString('utf8').replace(/^\uFEFF/, '').trimStart();
   if (!head.startsWith('<')) return false;
   // Strip XML declaration, comments and doctype before looking for the root element.
   const body = head
