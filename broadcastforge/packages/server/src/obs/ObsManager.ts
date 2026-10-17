@@ -1,4 +1,5 @@
-import OBSWebSocket, { EventSubscription } from 'obs-websocket-js';
+// The JSON transport (obs-websocket supports JSON and MessagePack); Node's default export is MessagePack.
+import OBSWebSocket, { EventSubscription } from 'obs-websocket-js/json';
 import type { ObsStatus } from '@bf/shared';
 import type { Store } from '../db/store.js';
 import { logger } from '../logger.js';
@@ -358,6 +359,8 @@ export function describeObsError(err: unknown): string {
   if (/ECONNREFUSED|connect ECONN|socket hang up|closed before/i.test(msg) || e?.code === 1006)
     return 'Could not reach OBS. Is OBS running, and is the WebSocket server enabled (Tools → WebSocket Server Settings)?';
   if (/ENOTFOUND|EAI_AGAIN/i.test(msg)) return 'Host not found. Check the OBS host/IP address.';
+  if (/subprotocol|Unexpected server response/i.test(msg))
+    return 'Something answered on that port, but it is not obs-websocket v5. Use OBS 28 or newer with Tools → WebSocket Server Settings enabled, and check the port.';
   if (/ETIMEDOUT|EHOSTUNREACH|ENETUNREACH/i.test(msg)) return 'OBS did not respond (timeout). Check the host/IP and firewall.';
   return msg || 'Unknown OBS error';
 }
