@@ -98,6 +98,14 @@ export class Realtime {
         ack({ ok: true, snapshot: rt.snapshot(), scene: deps.published(projectId), serverInfo: { bootId: hub.bootId, version: APP_VERSION } });
       });
 
+      socket.on(SOCKET.staffJoin, (_payload: unknown, ackFn: unknown) => {
+        const ack = asAck<{ ok: boolean }>(ackFn);
+        if (!data.authorized) return ack({ ok: false });
+        socket.join(STAFF);
+        socket.emit(SOCKET.obsStatus, deps.obsStatus());
+        ack({ ok: true });
+      });
+
       socket.on(SOCKET.command, (payload: unknown, ackFn: unknown) => {
         const ack = asAck<CommandAck>(ackFn);
         if (!data.authorized || (data.role !== 'control' && data.role !== 'editor')) return ack({ ok: false, error: 'Not allowed' });

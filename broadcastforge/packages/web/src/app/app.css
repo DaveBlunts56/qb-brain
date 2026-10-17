@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+
+  --color-ink-950: #08090c;
+  --color-ink-900: #0d0f13;
+  --color-ink-850: #12151a;
+  --color-ink-800: #171b21;
+  --color-ink-750: #1d2229;
+  --color-ink-700: #252b33;
+  --color-ink-600: #313843;
+  --color-ink-500: #46505d;
+  --color-ink-400: #687483;
+  --color-ink-300: #97a2b0;
+  --color-ink-200: #c5ccd6;
+  --color-ink-100: #e8ecf1;
+
+  --color-live: #e5243b;
+  --color-live-dim: #5c1520;
+  --color-accent: #f5b301;
+  --color-accent-dim: #4a3800;
+  --color-ok: #22c55e;
+  --color-warn: #f59e0b;
+  --color-info: #3b9eff;
+  --color-preview: #22c55e;
+}
+
+@layer base {
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink-950 text-ink-100 font-sans antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-600) transparent;
+  }
+  input,
+  select,
+  textarea {
+    color-scheme: dark;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-ink-850 border border-ink-700 rounded-lg;
+  }
+  .panel-title {
+    @apply text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-300;
+  }
+  .field {
+    @apply w-full rounded-md bg-ink-900 border border-ink-600 px-2.5 py-1.5 text-sm text-ink-100 placeholder:text-ink-500 focus:border-accent focus:outline-none;
+  }
+  .field-sm {
+    @apply w-full rounded bg-ink-900 border border-ink-600 px-1.5 py-1 text-xs text-ink-100 focus:border-accent focus:outline-none;
+  }
+  .label {
+    @apply block text-[11px] font-medium uppercase tracking-wider text-ink-400 mb-1;
+  }
+  .kbd {
+    @apply inline-flex items-center rounded border border-ink-500 bg-ink-800 px-1.5 py-0.5 font-mono text-[11px] text-ink-200;
+  }
+  .checker {
+    background-color: #2a2d33;
+    background-image:
+      linear-gradient(45deg, #353941 25%, transparent 25%),
+      linear-gradient(-45deg, #353941 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #353941 75%),
+      linear-gradient(-45deg, transparent 75%, #353941 75%);
+    background-size: 20px 20px;
+    background-position:
+      0 0,
+      0 10px,
+      10px -10px,
+      -10px 0;
+  }
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.live-pulse {
+  animation: live-pulse 1.6s ease-in-out infinite;
+}

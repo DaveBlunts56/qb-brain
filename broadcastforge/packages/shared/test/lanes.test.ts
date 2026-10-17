@@ -245,3 +245,22 @@ describe('TakeoverController (touchdown & banners)', () => {
     expect(ctl.active).toBeNull();
   });
 });
+
+describe('synchronous runners', () => {
+  it('ValueLane and ToggleLane do not stay "animating" when a runner finishes immediately', () => {
+    const v = new ValueLane<number>(0, (_f, _t, done) => {
+      done();
+      return { cancel() {} };
+    }, () => {}, new FakeClock(), 0);
+    v.update(1, true);
+    expect(v.isAnimating).toBe(false);
+    const settled: boolean[] = [];
+    const t = new ToggleLane(false, (_s, done) => {
+      done();
+      return { cancel() {} };
+    }, (s) => settled.push(s));
+    t.set(true, true);
+    expect(t.isAnimating).toBe(false);
+    expect(settled).toEqual([true]);
+  });
+});

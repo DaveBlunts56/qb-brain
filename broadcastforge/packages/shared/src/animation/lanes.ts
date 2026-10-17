@@ -111,9 +111,13 @@ export class ValueLane<T> {
     this.displayed = value;
     this.lastStart = this.clock.now();
     const token = ++this.token;
-    this.running = this.run(from, value, () => {
+    let finished = false;
+    const handle = this.run(from, value, () => {
+      finished = true;
       if (token === this.token) this.running = null;
     });
+    // A runner may finish synchronously (nothing to animate).
+    if (!finished && token === this.token) this.running = handle;
   }
 }
 
@@ -142,8 +146,10 @@ export class ToggleLane {
     if (show === this.shown) return;
     this.shown = show;
     const token = ++this.token;
+    let finished = false;
     const done = () => {
-      if (token !== this.token) return;
+      if (token !== this.token || finished) return;
+      finished = true;
       this.running = null;
       this.setInstant(this.shown);
     };
@@ -156,7 +162,9 @@ export class ToggleLane {
     // Reverse the in-flight animation smoothly from its current point.
     if (this.running?.reverse && this.running.reverse(done)) return;
     this.running?.cancel();
-    this.running = this.run(show, done);
+    this.running = null;
+    const handle = this.run(show, done);
+    if (!finished && token === this.token) this.running = handle;
   }
 
   stop(): void {

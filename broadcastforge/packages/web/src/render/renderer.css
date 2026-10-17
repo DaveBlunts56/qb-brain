@@ -1,0 +1,64 @@
+/* Scene renderer: shared by the OBS overlay, the Studio canvas and previews. */
+.bf-root {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  overflow: hidden;
+  contain: layout paint;
+  pointer-events: none;
+  user-select: none;
+}
+.bf-stage {
+  position: absolute;
+  inset: 0;
+}
+.bf-el {
+  position: absolute;
+  transform-origin: center center;
+}
+.bf-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: center center;
+}
+.bf-body {
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+}
+.bf-text {
+  position: absolute;
+  inset: 0;
+}
+.bf-tv {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: var(--bf-justify, center);
+  align-items: var(--bf-align, center);
+  white-space: inherit;
+}
+.bf-tt {
+  display: inline-block;
+  white-space: inherit;
+  transform-origin: var(--bf-origin, center center);
+}
+.bf-img {
+  position: absolute;
+  inset: 0;
+}
+.bf-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* Graceful fallback on slow machines: no blur-based effects. */
+.bf-root[data-quality='low'] .bf-text {
+  text-shadow: none !important;
+}
+.bf-root[data-quality='low'] .bf-body {
+  box-shadow: none !important;
+  filter: none !important;
+}

@@ -103,6 +103,8 @@ export interface ObsStatus {
 /** Socket.IO event names. */
 export const SOCKET = {
   hello: 'hello',
+  /** Authorized dashboards that are not tied to one project (projects list, OBS page). */
+  staffJoin: 'staff:join',
   command: 'command',
   timePing: 'time:ping',
   snapshot: 'match:snapshot',
